@@ -1,4 +1,6 @@
+<div align="center">
 ![snake gif](https://github.com/Dhuvie/Dhuvie/blob/output/github-snake-dark.svg)
+</div>
 
 # 💫 About Me:
  Hi, I’m a Computer Science student with a passion for programming, hardware optimization, and building cool tech projects.<br><br>🌱 Currently diving into operating systems, assembly language, and local AI setup.<br><br>🎮 Gaming keeps me sharp; I love exploring strategy and mechanics in titles like Hitman and mobile games.<br><br>💻 I enjoy solving tough problems, optimizing systems, and experimenting with hardware-software interactions.<br><br>📚 Always learning, always building—let’s connect and create something awesome!
