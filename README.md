@@ -8,7 +8,7 @@
 
 A results-oriented software developer with a diverse portfolio spanning **system tools**, **interactive graphics**, and **data intelligence**. I specialize in taking complex technical requirements and turning them into robust, working software.
 
-** Feature Projects:**
+### Feature Projects:
 
 | Domain | Project | Tech Stack |
 | :--- | :--- | :--- |
