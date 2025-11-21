@@ -4,21 +4,33 @@
 
 </div>
 
-# About Me
+# Hi, I'm Dhruv Narayan Bajaj 👋
 
-A results-oriented software developer with a diverse portfolio spanning **system tools**, **interactive graphics**, and **data intelligence**. I specialize in taking complex technical requirements and turning them into robust, working software.
+**Full-Stack Engineer • AI Enthusiast • Systems Programmer**
+
+Turning ideas into production-grade systems — from kernel-level tools and real-time OpenGL engines to AI-powered platforms serving real users in agriculture and finance.
+
+## What I Do Best
+- Build performant systems in **C++**, **C**, and **Assembly** (yes, I’ve written my own shell and logic simulators in 8086).
+- Design and ship modern full-stack applications with **Next.js 15**, **TypeScript**, and scalable backends.
+- Solve real-world problems using **Machine Learning** and **Generative AI** (XGBoost, PyTorch, Google Gemini).
+- Create beautiful, interactive experiences with **OpenGL**, particle systems, and advanced AI behaviors (A*, Dijkstra).
 
 ## Featured Projects
 
-| Domain                | Project                                      | Description                                                                                             | Tech Stack                          |
-|-----------------------|----------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------|
-| **AI & Agriculture**  | [AgriVision AI](https://github.com/Dhuvie/agrivision-ai) | AI-powered platform for Indian farmers offering crop yield prediction, pest detection, soil analysis, and market insights | Next.js 15, Google Gemini, TypeScript |
-| **Graphics & Gaming** | [Pac-Man](https://github.com/Dhuvie/Pac-man)         | Modern C++ recreation of Pac-Man with advanced AI pathfinding (Dijkstra, A*), OpenGL graphics, particle effects, and unique ghost personalities | C++, OpenGL                        |
-| **Developer Tools**   | [DashCode](https://github.com/Dhuvie/DashCode)       | Full-stack analytics dashboard for competitive programmers, tracking LeetCode, Codeforces, and more with real-time visualizations | TypeScript, Next.js                |
-| **FinTech & ML**      | [UPI Fraud Detection](https://github.com/Dhuvie/UPI-ML-Fraud-Detection) | Machine learning system detecting fraud in UPI transactions (87% F1-score) with real-time predictions and interactive notebooks | Python, XGBoost, Flask             |
-| **Social Platforms**  | [UniSlot](https://github.com/Dhuvie/UniSlot)         | Slot-based collaboration platform for university students featuring real-time chat and AI-powered content moderation | JavaScript, Node.js, Firebase      |
+| Domain                | Project                                            | Highlights                                                                                             | Tech Stack                          |
+|-----------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------|-------------------------------------|
+|  **AI for Agriculture** | [AgriVision AI](https://github.com/Dhuvie/agrivision-ai) | Crop yield prediction, pest & disease detection, soil analysis, and market intelligence for Indian farmers | Next.js 15, Google Gemini, TypeScript |
+|  **Graphics & Game AI** | [Pac-Man (C++ + OpenGL)](https://github.com/Dhuvie/Pac-man) | Fully featured Pac-Man with smart ghost AI, particle effects, power pellets, and original soundtrack | C++17, OpenGL, CMake                |
+|  **Developer Analytics** | [DashCode](https://github.com/Dhuvie/DashCode)     | Competitive programming dashboard with LeetCode/Codeforces tracking, streaks, and global leaderboards | Next.js, TypeScript, PostgreSQL     |
+|  **FinTech Security**   | [UPI Fraud Detection](https://github.com/Dhuvie/UPI-ML-Fraud-Detection) | Real-time fraud detection model (87% F1-score) on Indian UPI transactions                     | Python, XGBoost, Scikit-learn, Flask|
+|  **Campus Collaboration** | [UniSlot](https://github.com/Dhuvie/UniSlot)     | Real-time slot booking + chat app with AI content moderation for university students             | Node.js, Firebase, JavaScript       |
 
 I am committed to writing clean, maintainable, and efficient code that solves real-world problems.
+
+## Currently Exploring
+- **Adaptive quantization techniques in TinyML**: Researching dynamic, per-layer, and runtime-aware quantization strategies to push state-of-the-art accuracy on microcontrollers (< 512 KB RAM) while reducing energy consumption by 3–5× compared to static 8-bit methods.
+- **Post-mortem and live memory forensics**: Developing lightweight tooling and algorithms for data recovery, anomaly detection, and reverse engineering in constrained embedded environments.
 
 ## Socials:
 [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/thedhruvbajaj) [![email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:dhruvnarayanbajaj@gmail.com) 
