@@ -8,14 +8,15 @@
 
 A results-oriented software developer with a diverse portfolio spanning **system tools**, **interactive graphics**, and **data intelligence**. I specialize in taking complex technical requirements and turning them into robust, working software.
 
-### Feature Projects:
+## Featured Projects
 
-| Domain | Project | Tech Stack |
-| :--- | :--- | :--- |
-| **OS & Systems** | **Custom Shell & Coding Dashboard** | C, Python |
-| **Graphics** | **2D Rendering Engine (Pac-Man)** | C++, OpenGL |
-| **FinTech** | **UPI Fraud Detection Model** | Python, ML |
-| **Low-Level** | **Assembly Logic Implementation** | 8086 Assembly |
+| Domain                | Project                                      | Description                                                                                             | Tech Stack                          |
+|-----------------------|----------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------|
+| **AI & Agriculture**  | [AgriVision AI](https://github.com/Dhuvie/agrivision-ai) | AI-powered platform for Indian farmers offering crop yield prediction, pest detection, soil analysis, and market insights | Next.js 15, Google Gemini, TypeScript |
+| **Graphics & Gaming** | [Pac-Man](https://github.com/Dhuvie/Pac-man)         | Modern C++ recreation of Pac-Man with advanced AI pathfinding (Dijkstra, A*), OpenGL graphics, particle effects, and unique ghost personalities | C++, OpenGL                        |
+| **Developer Tools**   | [DashCode](https://github.com/Dhuvie/DashCode)       | Full-stack analytics dashboard for competitive programmers, tracking LeetCode, Codeforces, and more with real-time visualizations | TypeScript, Next.js                |
+| **FinTech & ML**      | [UPI Fraud Detection](https://github.com/Dhuvie/UPI-ML-Fraud-Detection) | Machine learning system detecting fraud in UPI transactions (87% F1-score) with real-time predictions and interactive notebooks | Python, XGBoost, Flask             |
+| **Social Platforms**  | [UniSlot](https://github.com/Dhuvie/UniSlot)         | Slot-based collaboration platform for university students featuring real-time chat and AI-powered content moderation | JavaScript, Node.js, Firebase      |
 
 I am committed to writing clean, maintainable, and efficient code that solves real-world problems.
 
