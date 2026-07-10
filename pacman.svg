@@ -1,74 +1,157 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220" width="1200" height="220" role="img" aria-label="a small looping Pac-Man scene chomping along the tech stack">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" width="1200" height="280" role="img" aria-label="Pac-Man scene with ghost AI">
   <defs>
-    <linearGradient id="pcbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B1018"/><stop offset="1" stop-color="#070A0F"/></linearGradient>
-    <radialGradient id="pacGlow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FFB454" stop-opacity="0.5"/><stop offset="1" stop-color="#FFB454" stop-opacity="0"/></radialGradient>
-    <filter id="blur1"><feGaussianBlur stdDeviation="6"/></filter>
+    <linearGradient id="pcbg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0B1018"/>
+      <stop offset="1" stop-color="#070A0F"/>
+    </linearGradient>
+    <radialGradient id="pacGlow2" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFB454" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#FFB454" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mazeWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1F4F6F"/>
+      <stop offset="1" stop-color="#0E2A3A"/>
+    </linearGradient>
+    <filter id="pcglow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <filter id="pcglow2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
   </defs>
   <style>
     .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;}
     @media (prefers-reduced-motion:reduce){animate,animateTransform,animateMotion{display:none}}
   </style>
 
-  <rect width="1200" height="220" fill="url(#pcbg)"/>
+  <rect width="1200" height="280" fill="url(#pcbg2)"/>
 
-  <line x1="0" y1="120" x2="1200" y2="120" stroke="#161D2B" stroke-width="1" stroke-dasharray="2 8"/>
+  <!-- header -->
+  <text x="40" y="30" class="mono" font-size="13" fill="#7D8590">// my own C++ build, running on a README · A* + Dijkstra ghost AI</text>
+  <text x="1160" y="30" class="mono" font-size="11" fill="#4A5668" text-anchor="end">4 ghost personalities · loop 9s</text>
 
-  <g class="mono" font-size="11" fill="#4A5668" text-anchor="middle">
-    <g><circle cx="180" cy="100" r="5" fill="#4FD6FF"/><text x="180" y="148">ts</text></g>
-    <g><circle cx="300" cy="100" r="5" fill="#FF7B72"/><text x="300" y="148">rust</text></g>
-    <g><circle cx="420" cy="100" r="5" fill="#7EE787"/><text x="420" y="148">cpp</text></g>
-    <g><circle cx="540" cy="100" r="5" fill="#FFB454"/><text x="540" y="148">python</text></g>
-    <g><circle cx="660" cy="100" r="5" fill="#4FD6FF"/><text x="660" y="148">nextjs</text></g>
-    <g><circle cx="780" cy="100" r="5" fill="#FF7B9C"/><text x="780" y="148">opengl</text></g>
-    <g><circle cx="900" cy="100" r="5" fill="#C678DD"/><text x="900" y="148">pytorch</text></g>
-    <g><circle cx="1020" cy="100" r="5" fill="#7EE787"/><text x="1020" y="148">wasm</text></g>
+  <!-- maze floor -->
+  <rect x="0" y="50" width="1200" height="180" fill="#05080C"/>
+
+  <!-- maze walls (top and bottom borders) -->
+  <rect x="0" y="48" width="1200" height="3" fill="url(#mazeWall)" opacity="0.6"/>
+  <rect x="0" y="229" width="1200" height="3" fill="url(#mazeWall)" opacity="0.6"/>
+
+  <!-- dashed center line -->
+  <line x1="0" y1="140" x2="1200" y2="140" stroke="#161D2B" stroke-width="1" stroke-dasharray="2 10" opacity="0.5"/>
+
+  <!-- tech stack dots (the pellets Pac-Man eats) -->
+  <g>
+    <g><circle cx="140" cy="120" r="5" fill="#4FD6FF"/><text x="140" y="160" class="mono" font-size="10" fill="#4A5668" text-anchor="middle">ts</text></g>
+    <g><circle cx="250" cy="120" r="5" fill="#FF7B72"/><text x="250" y="160" class="mono" font-size="10" fill="#4A5668" text-anchor="middle">rust</text></g>
+    <g><circle cx="360" cy="120" r="5" fill="#7EE787"/><text x="360" y="160" class="mono" font-size="10" fill="#4A5668" text-anchor="middle">cpp</text></g>
+    <g><circle cx="470" cy="120" r="5" fill="#FFB454"/><text x="470" y="160" class="mono" font-size="10" fill="#4A5668" text-anchor="middle">python</text></g>
+    <g><circle cx="580" cy="120" r="5" fill="#4FD6FF"/><text x="580" y="160" class="mono" font-size="10" fill="#4A5668" text-anchor="middle">nextjs</text></g>
+    <g><circle cx="690" cy="120" r="5" fill="#FF7B9C"/><text x="690" y="160" class="mono" font-size="10" fill="#4A5668" text-anchor="middle">opengl</text></g>
+    <g><circle cx="800" cy="120" r="5" fill="#C678DD"/><text x="800" y="160" class="mono" font-size="10" fill="#4A5668" text-anchor="middle">pytorch</text></g>
+    <g><circle cx="910" cy="120" r="5" fill="#7EE787"/><text x="910" y="160" class="mono" font-size="10" fill="#4A5668" text-anchor="middle">wasm</text></g>
   </g>
 
+  <!-- power pellets (larger, pulsing) at intervals -->
   <g>
-    <circle cx="180" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.10;0.14;0.2" dur="9s" repeatCount="indefinite"/></circle>
-    <circle cx="300" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.20;0.24;0.30" dur="9s" repeatCount="indefinite"/></circle>
-    <circle cx="420" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.31;0.35;0.41" dur="9s" repeatCount="indefinite"/></circle>
-    <circle cx="540" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.41;0.45;0.51" dur="9s" repeatCount="indefinite"/></circle>
-    <circle cx="660" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.52;0.56;0.62" dur="9s" repeatCount="indefinite"/></circle>
-    <circle cx="780" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.62;0.66;0.72" dur="9s" repeatCount="indefinite"/></circle>
-    <circle cx="900" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.73;0.77;0.83" dur="9s" repeatCount="indefinite"/></circle>
-    <circle cx="1020" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.83;0.87;0.93" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="140" cy="120" r="8" fill="none" stroke="#FFB454" stroke-width="1.5" opacity="0">
+      <animate attributeName="r" values="5;14;5" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0.6" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="470" cy="120" r="8" fill="none" stroke="#FFB454" stroke-width="1.5" opacity="0">
+      <animate attributeName="r" values="5;14;5" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0.6" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="800" cy="120" r="8" fill="none" stroke="#FFB454" stroke-width="1.5" opacity="0">
+      <animate attributeName="r" values="5;14;5" dur="1.5s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0.6" dur="1.5s" begin="1s" repeatCount="indefinite"/>
+    </circle>
   </g>
 
+  <!-- dot chomp effect: pellets disappear as pac passes -->
   <g>
-    <circle cx="0" cy="100" r="34" fill="url(#pacGlow)" filter="url(#blur1)"/>
-    <g transform="translate(60,0)">
-      <animateTransform attributeName="transform" type="translate" values="60 0;1060 0;60 0" keyTimes="0;0.93;1" dur="9s" repeatCount="indefinite"/>
-      <path fill="#FFB454" d="M 0 100 L 16.85 85.86 A 22 22 0 1 1 16.85 114.14 Z">
-        <animate attributeName="d" values="M 0 100 L 16.85 85.86 A 22 22 0 1 1 16.85 114.14 Z;M 0 100 L 22 100 A 22 22 0 1 1 22 100.01 Z;M 0 100 L 16.85 85.86 A 22 22 0 1 1 16.85 114.14 Z" dur="0.32s" repeatCount="indefinite"/>
+    <circle cx="140" cy="120" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.08;0.12;0.2" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="250" cy="120" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.18;0.22;0.3" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="360" cy="120" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.28;0.32;0.4" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="470" cy="120" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.38;0.42;0.5" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="580" cy="120" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.48;0.52;0.6" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="690" cy="120" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.58;0.62;0.7" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="800" cy="120" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.68;0.72;0.8" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="910" cy="120" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.78;0.82;0.9" dur="9s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- PAC-MAN with glow trail -->
+  <g>
+    <!-- glow trail -->
+    <circle cx="0" cy="120" r="40" fill="url(#pacGlow2)" filter="url(#pcglow)" opacity="0.5"/>
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="60,0;1060,0;60,0" keyTimes="0;0.93;1" dur="9s" repeatCount="indefinite"/>
+      <!-- chomping pac-man -->
+      <path fill="#FFB454" d="M 0 120 L 18 104 A 22 22 0 1 1 18 136 Z" filter="url(#pcglow2)">
+        <animate attributeName="d" values="M 0 120 L 18 104 A 22 22 0 1 1 18 136 Z;M 0 120 L 22 120 A 22 22 0 1 1 22 120.01 Z;M 0 120 L 18 104 A 22 22 0 1 1 18 136 Z" dur="0.28s" repeatCount="indefinite"/>
       </path>
-      <circle cx="-6" cy="92" r="2.5" fill="#0B1018"/>
+      <!-- eye -->
+      <circle cx="-4" cy="110" r="2.5" fill="#0B1018"/>
     </g>
   </g>
 
+  <!-- GHOSTS: 4 distinct personalities, staggered -->
+  <!-- Blinky (red) - direct chase -->
   <g>
-
-    <g transform="translate(20,0)">
-      <animateTransform attributeName="transform" type="translate" values="20 0;1020 0;20 0" keyTimes="0;0.93;1" dur="9s" repeatCount="indefinite"/>
-      <g transform="translate(0,100)">
-        <animateTransform attributeName="transform" type="translate" values="0 100;0 94;0 100;0 96;0 100" dur="0.8s" additive="sum" repeatCount="indefinite"/>
-        <path fill="#FF5F57" d="M -16 4 A 16 16 0 1 1 16 4 L 16 12 L 10 6 L 5 12 L 0 6 L -5 12 L -10 6 L -16 12 Z"/>
-        <circle cx="-5" cy="-4" r="4" fill="#fff"/><circle cx="6" cy="-4" r="4" fill="#fff"/>
-        <circle cx="-5" cy="-4" r="2" fill="#0B1018"/><circle cx="6" cy="-4" r="2" fill="#0B1018"/>
-      </g>
-    </g>
-
-    <g transform="translate(-20,0)">
-      <animateTransform attributeName="transform" type="translate" values="-20 0;980 0;-20 0" keyTimes="0;0.93;1" dur="9s" repeatCount="indefinite"/>
-      <g transform="translate(0,100)">
-        <animateTransform attributeName="transform" type="translate" values="0 100;0 96;0 100;0 94;0 100" dur="0.9s" additive="sum" repeatCount="indefinite"/>
-        <path fill="#4FD6FF" d="M -16 4 A 16 16 0 1 1 16 4 L 16 12 L 10 6 L 5 12 L 0 6 L -5 12 L -10 6 L -16 12 Z"/>
-        <circle cx="-5" cy="-4" r="4" fill="#fff"/><circle cx="6" cy="-4" r="4" fill="#fff"/>
-        <circle cx="-5" cy="-4" r="2" fill="#0B1018"/><circle cx="6" cy="-4" r="2" fill="#0B1018"/>
-      </g>
+    <animateTransform attributeName="transform" type="translate" values="10,0;1010,0;10,0" keyTimes="0;0.93;1" dur="9s" begin="-0.2s" repeatCount="indefinite"/>
+    <g transform="translate(0,120)">
+      <animateTransform attributeName="transform" type="translate" values="0,120;0,114;0,120;0,116;0,120" dur="0.7s" additive="sum" repeatCount="indefinite"/>
+      <path fill="#FF5F57" d="M -15 4 A 15 15 0 1 1 15 4 L 15 12 L 10 6 L 5 12 L 0 6 L -5 12 L -10 6 L -15 12 Z" filter="url(#pcglow2)"/>
+      <circle cx="-5" cy="-4" r="3.5" fill="#fff"/><circle cx="5" cy="-4" r="3.5" fill="#fff"/>
+      <circle cx="-5" cy="-4" r="1.8" fill="#0B1018"/><circle cx="5" cy="-4" r="1.8" fill="#0B1018"/>
     </g>
   </g>
 
-  <text x="40" y="30" class="mono" font-size="13" fill="#7D8590">// a* chasing dots — my own C++ build, running on a README</text>
-  <text x="1160" y="200" class="mono" font-size="11" fill="#4A5668" text-anchor="end">loop · 9s</text>
+  <!-- Pinky (pink) - ambush ahead -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="-30,0;980,0;-30,0" keyTimes="0;0.93;1" dur="9s" begin="-0.5s" repeatCount="indefinite"/>
+    <g transform="translate(0,120)">
+      <animateTransform attributeName="transform" type="translate" values="0,120;0,116;0,120;0,114;0,120" dur="0.8s" additive="sum" repeatCount="indefinite"/>
+      <path fill="#FF7B9C" d="M -15 4 A 15 15 0 1 1 15 4 L 15 12 L 10 6 L 5 12 L 0 6 L -5 12 L -10 6 L -15 12 Z" filter="url(#pcglow2)"/>
+      <circle cx="-5" cy="-4" r="3.5" fill="#fff"/><circle cx="5" cy="-4" r="3.5" fill="#fff"/>
+      <circle cx="-5" cy="-4" r="1.8" fill="#0B1018"/><circle cx="5" cy="-4" r="1.8" fill="#0B1018"/>
+    </g>
+  </g>
+
+  <!-- Inky (cyan) - flanks with reflected target -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="-60,0;950,0;-60,0" keyTimes="0;0.93;1" dur="9s" begin="-0.8s" repeatCount="indefinite"/>
+    <g transform="translate(0,120)">
+      <animateTransform attributeName="transform" type="translate" values="0,120;0,114;0,120;0,116;0,120" dur="0.9s" additive="sum" repeatCount="indefinite"/>
+      <path fill="#4FD6FF" d="M -15 4 A 15 15 0 1 1 15 4 L 15 12 L 10 6 L 5 12 L 0 6 L -5 12 L -10 6 L -15 12 Z" filter="url(#pcglow2)"/>
+      <circle cx="-5" cy="-4" r="3.5" fill="#fff"/><circle cx="5" cy="-4" r="3.5" fill="#fff"/>
+      <circle cx="-5" cy="-4" r="1.8" fill="#0B1018"/><circle cx="5" cy="-4" r="1.8" fill="#0B1018"/>
+    </g>
+  </g>
+
+  <!-- Clyde (orange) - scatters when close -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="-90,0;920,0;-90,0" keyTimes="0;0.93;1" dur="9s" begin="-1.1s" repeatCount="indefinite"/>
+    <g transform="translate(0,120)">
+      <animateTransform attributeName="transform" type="translate" values="0,120;0,116;0,120;0,114;0,120" dur="1s" additive="sum" repeatCount="indefinite"/>
+      <path fill="#FFB454" d="M -15 4 A 15 15 0 1 1 15 4 L 15 12 L 10 6 L 5 12 L 0 6 L -5 12 L -10 6 L -15 12 Z" filter="url(#pcglow2)"/>
+      <circle cx="-5" cy="-4" r="3.5" fill="#fff"/><circle cx="5" cy="-4" r="3.5" fill="#fff"/>
+      <circle cx="-5" cy="-4" r="1.8" fill="#0B1018"/><circle cx="5" cy="-4" r="1.8" fill="#0B1018"/>
+    </g>
+  </g>
+
+  <!-- ghost labels at bottom -->
+  <g class="mono" font-size="9" fill="#4A5668">
+    <text x="40" y="265">blinky · direct chase</text>
+    <text x="320" y="265">pinky · ambush</text>
+    <text x="560" y="265">inky · flank</text>
+    <text x="800" y="265">clyde · scatter</text>
+  </g>
+
+  <!-- score counter that ticks up -->
+  <text x="1160" y="265" class="mono" font-size="11" fill="#FFB454" text-anchor="end" opacity="0">
+    score: 0
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="0.1s" fill="freeze"/>
+    <animate attributeName="x" values="1160;1160" dur="9s" repeatCount="indefinite"/>
+  </text>
 </svg>

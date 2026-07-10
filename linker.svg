@@ -1,8 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" width="1200" height="440" role="img" aria-label="linker map: shared languages resolved into repositories">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="1200" height="520" role="img" aria-label="linker dependency graph">
   <defs>
-    <linearGradient id="lbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B1018"/><stop offset="1" stop-color="#070A0F"/></linearGradient>
-    <radialGradient id="hub" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#4FD6FF"/><stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/></radialGradient>
-    <filter id="soft"><feGaussianBlur stdDeviation="4"/></filter>
+    <linearGradient id="lbg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0B1018"/>
+      <stop offset="1" stop-color="#070A0F"/>
+    </linearGradient>
+    <radialGradient id="hubGlow2" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="scanBeam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="edgeFlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="lglow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <filter id="lglow2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
   </defs>
   <style>
     .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;font-weight:700;}
@@ -10,57 +31,188 @@
     @media (prefers-reduced-motion:reduce){animate,animateTransform,animateMotion{display:none}}
   </style>
 
-  <rect width="1200" height="440" fill="url(#lbg)"/>
-  <text x="40" y="46" class="mono" font-size="22" fill="#E6EDF3">.dynamic — linker map</text>
-  <text x="40" y="68" class="lbl" font-size="12" fill="#7D8590">shared symbols resolved: languages → repositories</text>
-  <line x1="40" y1="84" x2="1160" y2="84" stroke="#1E2735"/>
+  <rect width="1200" height="520" fill="url(#lbg2)"/>
 
-  <g stroke="#1E2735" stroke-width="1" fill="none">
-    <line x1="600" y1="240" x2="250" y2="150"/>
-    <line x1="600" y1="240" x2="190" y2="240"/>
-    <line x1="600" y1="240" x2="250" y2="330"/>
-    <line x1="600" y1="240" x2="380" y2="370"/>
-    <line x1="600" y1="240" x2="780" y2="140"/>
-    <line x1="600" y1="240" x2="970" y2="110"/>
-    <line x1="600" y1="240" x2="1030" y2="210"/>
-    <line x1="600" y1="240" x2="960" y2="310"/>
-    <line x1="600" y1="240" x2="820" y2="370"/>
+  <!-- header -->
+  <text x="40" y="44" class="mono" font-size="22" fill="#E6EDF3">.dynamic</text>
+  <text x="40" y="66" class="lbl" font-size="12" fill="#5B6675">linker map · shared symbols resolved at runtime · 13 nodes · 14 edges</text>
+  <text x="1160" y="44" class="lbl" font-size="12" fill="#4A5668" text-anchor="end">ld --live</text>
+  <line x1="40" y1="80" x2="1160" y2="80" stroke="#1A2332"/>
+
+  <!-- ambient grid -->
+  <g opacity="0.06">
+    <path d="M0 160H1200M0 260H1200M0 360H1200M0 440H1200" stroke="#1A2332"/>
   </g>
 
+  <!-- vertical scanning beam -->
+  <rect x="40" y="90" width="1120" height="400" fill="url(#scanBeam)" opacity="0.5">
+    <animate attributeName="x" values="40;40;1000;1000;40" keyTimes="0;0.1;0.5;0.6;1" dur="8s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- LAYER LABELS -->
+  <g class="lbl" font-size="10" fill="#4A5668" letter-spacing="2">
+    <text x="60" y="135">LANGUAGES</text>
+    <text x="560" y="135" text-anchor="middle">CORE</text>
+    <text x="1140" y="135" text-anchor="end">REPOSITORIES</text>
+  </g>
+  <line x1="40" y1="145" x2="1160" y2="145" stroke="#1A2332" stroke-dasharray="2 4"/>
+
+  <!-- STATIC EDGES (thin background) -->
+  <g stroke="#1A2332" stroke-width="1" fill="none" opacity="0.6">
+    <!-- lang -> core -->
+    <line x1="140" y1="220" x2="540" y2="280"/>
+    <line x1="140" y1="280" x2="540" y2="280"/>
+    <line x1="140" y1="340" x2="540" y2="280"/>
+    <line x1="140" y1="400" x2="540" y2="280"/>
+    <!-- core -> repos -->
+    <line x1="660" y1="280" x2="1060" y2="200"/>
+    <line x1="660" y1="280" x2="1060" y2="260"/>
+    <line x1="660" y1="280" x2="1060" y2="320"/>
+    <line x1="660" y1="280" x2="1060" y2="380"/>
+    <line x1="660" y1="280" x2="1060" y2="440"/>
+  </g>
+
+  <!-- FLOWING EDGES (dashed, animated) -->
   <g fill="none" stroke-width="2" stroke-linecap="round">
-
-    <path d="M250 150 Q 600 90 970 110" stroke="#4FD6FF" stroke-dasharray="6 10"><animate attributeName="stroke-dashoffset" from="0" to="-160" dur="2s" repeatCount="indefinite"/></path>
-    <path d="M250 150 Q 600 220 960 310" stroke="#4FD6FF" stroke-dasharray="6 10"><animate attributeName="stroke-dashoffset" from="0" to="-160" dur="2.4s" repeatCount="indefinite"/></path>
-
-    <path d="M250 330 Q 600 280 1030 210" stroke="#7EE787" stroke-dasharray="6 10"><animate attributeName="stroke-dashoffset" from="0" to="-160" dur="2.2s" repeatCount="indefinite"/></path>
-
-    <path d="M380 370 Q 600 400 820 370" stroke="#FFB454" stroke-dasharray="6 10"><animate attributeName="stroke-dashoffset" from="0" to="-160" dur="2.6s" repeatCount="indefinite"/></path>
-
-    <path d="M190 240 Q 480 200 780 140" stroke="#FF7B72" stroke-dasharray="6 10"><animate attributeName="stroke-dashoffset" from="0" to="160" dur="2.8s" repeatCount="indefinite"/></path>
+    <!-- TS -> core (cyan) -->
+    <path d="M140,220 Q340,240 540,280" stroke="#4FD6FF" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2s" repeatCount="indefinite"/>
+    </path>
+    <!-- Rust -> core (red) -->
+    <path d="M140,280 Q340,275 540,280" stroke="#FF7B72" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2.3s" repeatCount="indefinite"/>
+    </path>
+    <!-- C++ -> core (green) -->
+    <path d="M140,340 Q340,315 540,280" stroke="#7EE787" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2.1s" repeatCount="indefinite"/>
+    </path>
+    <!-- Python -> core (amber) -->
+    <path d="M140,400 Q340,345 540,280" stroke="#FFB454" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2.5s" repeatCount="indefinite"/>
+    </path>
+    <!-- core -> agrivision (green) -->
+    <path d="M660,280 Q860,235 1060,200" stroke="#7EE787" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2.2s" repeatCount="indefinite"/>
+    </path>
+    <!-- core -> pac-man (green) -->
+    <path d="M660,280 Q860,268 1060,260" stroke="#7EE787" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2.4s" repeatCount="indefinite"/>
+    </path>
+    <!-- core -> dashcode (cyan) -->
+    <path d="M660,280 Q860,298 1060,320" stroke="#4FD6FF" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2.6s" repeatCount="indefinite"/>
+    </path>
+    <!-- core -> upi-ml (red) -->
+    <path d="M660,280 Q860,328 1060,380" stroke="#FF7B9C" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2.3s" repeatCount="indefinite"/>
+    </path>
+    <!-- core -> unislot (green) -->
+    <path d="M660,280 Q860,358 1060,440" stroke="#7EE787" stroke-dasharray="6 8" opacity="0.7">
+      <animate attributeName="stroke-dashoffset" from="0" to="-140" dur="2.7s" repeatCount="indefinite"/>
+    </path>
   </g>
 
-  <circle r="4" fill="#4FD6FF"><animateMotion dur="3s" repeatCount="indefinite" path="M600 240 Q 780 180 970 110"/></circle>
-  <circle r="3" fill="#7EE787"><animateMotion dur="3.4s" repeatCount="indefinite" path="M600 240 Q 800 260 1030 210"/></circle>
-
-  <circle cx="600" cy="240" r="42" fill="url(#hub)" filter="url(#soft)"/>
-  <circle cx="600" cy="240" r="26" fill="#0B1018" stroke="#4FD6FF" stroke-width="2"/>
-  <circle cx="600" cy="240" r="26" fill="none" stroke="#4FD6FF" stroke-width="2" opacity="0.6"><animate attributeName="r" values="26;42;26" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.6;0;0.6" dur="2.4s" repeatCount="indefinite"/></circle>
-  <text x="600" y="245" class="mono" font-size="15" fill="#E6EDF3" text-anchor="middle">dhruv</text>
-
-  <g class="lbl" font-size="12" fill="#E6EDF3" text-anchor="middle">
-    <g><circle cx="250" cy="150" r="22" fill="#0E1A2A" stroke="#4FD6FF" stroke-width="1.5"/><circle cx="250" cy="150" r="22" fill="none" stroke="#4FD6FF" opacity="0.4"><animate attributeName="r" values="22;28;22" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.2s" repeatCount="indefinite"/></circle><text x="250" y="154">TS</text></g>
-    <g><circle cx="190" cy="240" r="22" fill="#2A1110" stroke="#FF7B72" stroke-width="1.5"/><text x="190" y="244" fill="#FF7B72">Rust</text></g>
-    <g><circle cx="250" cy="330" r="22" fill="#0E2A1A" stroke="#7EE787" stroke-width="1.5"/><text x="250" y="334" fill="#7EE787">C++</text></g>
-    <g><circle cx="380" cy="370" r="22" fill="#2A1E0E" stroke="#FFB454" stroke-width="1.5"/><text x="380" y="374" fill="#FFB454">Py</text></g>
+  <!-- CROSS-DEPENDENCY edges (curved, between repos) -->
+  <g fill="none" stroke-width="1.5" opacity="0.4">
+    <path d="M1060,200 Q1100,230 1060,260" stroke="#4FD6FF" stroke-dasharray="3 6">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M1060,320 Q1100,350 1060,380" stroke="#FFB454" stroke-dasharray="3 6">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M1060,260 Q1100,290 1060,320" stroke="#7EE787" stroke-dasharray="3 6">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2.8s" repeatCount="indefinite"/>
+    </path>
   </g>
 
+  <!-- DATA PACKETS traveling along edges -->
+  <circle r="4" fill="#4FD6FF" filter="url(#lglow2)"><animateMotion dur="2.5s" repeatCount="indefinite" path="M140,220 Q340,240 540,280"/></circle>
+  <circle r="3" fill="#FF7B72" filter="url(#lglow2)"><animateMotion dur="2.8s" repeatCount="indefinite" path="M140,280 Q340,275 540,280"/></circle>
+  <circle r="3.5" fill="#7EE787" filter="url(#lglow2)"><animateMotion dur="2.6s" repeatCount="indefinite" path="M140,340 Q340,315 540,280"/></circle>
+  <circle r="4" fill="#7EE787" filter="url(#lglow2)"><animateMotion dur="3s" repeatCount="indefinite" path="M660,280 Q860,235 1060,200"/></circle>
+  <circle r="3" fill="#4FD6FF" filter="url(#lglow2)"><animateMotion dur="3.2s" repeatCount="indefinite" path="M660,280 Q860,298 1060,320"/></circle>
+  <circle r="3.5" fill="#FF7B9C" filter="url(#lglow2)"><animateMotion dur="2.9s" repeatCount="indefinite" path="M660,280 Q860,328 1060,380"/></circle>
+
+  <!-- CORE HUB -->
+  <g transform="translate(600,280)">
+    <!-- outer glow -->
+    <circle r="60" fill="url(#hubGlow2)" filter="url(#lglow)"/>
+    <!-- pulsing rings -->
+    <circle r="30" fill="none" stroke="#4FD6FF" stroke-width="1.5" opacity="0">
+      <animate attributeName="r" values="30;55;30" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;0;0.7" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="30" fill="none" stroke="#4FD6FF" stroke-width="1.5" opacity="0">
+      <animate attributeName="r" values="30;55;30" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;0;0.7" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <!-- core body -->
+    <circle r="28" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#lglow2)"/>
+    <circle r="28" fill="none" stroke="#4FD6FF" stroke-width="2">
+      <animate attributeName="r" values="28;30;28" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <text y="5" class="mono" font-size="14" fill="#E6EDF3" text-anchor="middle">dhruv</text>
+    <text y="48" class="lbl" font-size="9" fill="#5B6675" text-anchor="middle">ELF64 · entry</text>
+  </g>
+
+  <!-- LANGUAGE NODES (left column) -->
   <g class="lbl" font-size="11" fill="#E6EDF3" text-anchor="middle">
-    <g><rect x="910" y="92" width="120" height="36" rx="8" fill="#0E2A1A" stroke="#1F6F33"/><text x="970" y="114">agrivision-ai</text></g>
-    <g><rect x="970" y="192" width="120" height="36" rx="8" fill="#0E2A1A" stroke="#1F6F33"/><text x="1030" y="214">Pac-man</text></g>
-    <g><rect x="900" y="292" width="120" height="36" rx="8" fill="#0E1A2A" stroke="#1F4F6F"/><text x="960" y="314">DashCode</text></g>
-    <g><rect x="760" y="352" width="120" height="36" rx="8" fill="#2A0E1A" stroke="#6F1F3F"/><text x="820" y="374">UPI-ML</text></g>
-    <g><rect x="720" y="122" width="120" height="36" rx="8" fill="#0E2A1A" stroke="#1F6F33"/><text x="780" y="144">UniSlot</text></g>
+    <g transform="translate(140,220)">
+      <circle r="22" fill="#0E1A2A" stroke="#4FD6FF" stroke-width="1.5" filter="url(#lglow2)"/>
+      <circle r="22" fill="none" stroke="#4FD6FF" opacity="0.3"><animate attributeName="r" values="22;28;22" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="2.4s" repeatCount="indefinite"/></circle>
+      <text y="4">TS</text>
+    </g>
+    <g transform="translate(140,280)">
+      <circle r="22" fill="#2A1110" stroke="#FF7B72" stroke-width="1.5" filter="url(#lglow2)"/>
+      <circle r="22" fill="none" stroke="#FF7B72" opacity="0.3"><animate attributeName="r" values="22;28;22" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="2.6s" repeatCount="indefinite"/></circle>
+      <text y="4" fill="#FF7B72">Rust</text>
+    </g>
+    <g transform="translate(140,340)">
+      <circle r="22" fill="#0E2A1A" stroke="#7EE787" stroke-width="1.5" filter="url(#lglow2)"/>
+      <circle r="22" fill="none" stroke="#7EE787" opacity="0.3"><animate attributeName="r" values="22;28;22" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="2.2s" repeatCount="indefinite"/></circle>
+      <text y="4" fill="#7EE787">C++</text>
+    </g>
+    <g transform="translate(140,400)">
+      <circle r="22" fill="#2A1E0E" stroke="#FFB454" stroke-width="1.5" filter="url(#lglow2)"/>
+      <circle r="22" fill="none" stroke="#FFB454" opacity="0.3"><animate attributeName="r" values="22;28;22" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.3;0;0.3" dur="2.8s" repeatCount="indefinite"/></circle>
+      <text y="4" fill="#FFB454">Py</text>
+    </g>
   </g>
 
-  <text x="1160" y="424" class="lbl" font-size="11" fill="#4A5668" text-anchor="end">ld — resolved 9 nodes · 5 dynamic links</text>
+  <!-- REPO NODES (right column) -->
+  <g class="lbl" font-size="10" fill="#E6EDF3" text-anchor="middle">
+    <g transform="translate(1060,200)">
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="#0E2A1A" stroke="#1F6F33" stroke-width="1.5" filter="url(#lglow2)"/>
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="none" stroke="#7EE787" opacity="0.2"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="3s" repeatCount="indefinite"/></rect>
+      <text y="4">agrivision-ai</text>
+    </g>
+    <g transform="translate(1060,260)">
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="#0E2A1A" stroke="#1F6F33" stroke-width="1.5" filter="url(#lglow2)"/>
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="none" stroke="#7EE787" opacity="0.2"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="3.3s" repeatCount="indefinite"/></rect>
+      <text y="4">Pac-man</text>
+    </g>
+    <g transform="translate(1060,320)">
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="#0E1A2A" stroke="#1F4F6F" stroke-width="1.5" filter="url(#lglow2)"/>
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="none" stroke="#4FD6FF" opacity="0.2"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="2.7s" repeatCount="indefinite"/></rect>
+      <text y="4">DashCode</text>
+    </g>
+    <g transform="translate(1060,380)">
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="#2A0E1A" stroke="#6F1F3F" stroke-width="1.5" filter="url(#lglow2)"/>
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="none" stroke="#FF7B9C" opacity="0.2"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="3.1s" repeatCount="indefinite"/></rect>
+      <text y="4">UPI-ML-Fraud</text>
+    </g>
+    <g transform="translate(1060,440)">
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="#0E2A1A" stroke="#1F6F33" stroke-width="1.5" filter="url(#lglow2)"/>
+      <rect x="-72" y="-16" width="144" height="32" rx="8" fill="none" stroke="#7EE787" opacity="0.2"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="2.9s" repeatCount="indefinite"/></rect>
+      <text y="4">UniSlot</text>
+    </g>
+  </g>
+
+  <!-- legend -->
+  <g class="lbl" font-size="10" fill="#5B6675" transform="translate(40,490)">
+    <circle cx="6" cy="-3" r="4" fill="#4FD6FF"/><text x="16" y="0">flowing edge</text>
+    <circle cx="116" cy="-3" r="4" fill="#7EE787"/><text x="126" y="0">resolved symbol</text>
+    <circle cx="246" cy="-3" r="4" fill="#FFB454"/><text x="256" y="0">data packet</text>
+    <text x="1120" y="0" text-anchor="end" fill="#4A5668">ld: 0 errors · 14 links resolved</text>
+  </g>
 </svg>

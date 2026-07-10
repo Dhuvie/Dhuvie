@@ -274,6 +274,7 @@
     <button class="btn" data-cmd="tree">tree</button>
     <button class="btn" data-cmd="contact">contact</button>
     <button class="btn" data-cmd="guestbook">guestbook</button>
+    <button class="btn" data-cmd="games">games</button>
   </div>
 
   <div id="inputLine">
@@ -947,6 +948,654 @@ commands.ps = () => {
   print('  512 pts/0    00:00:00 bash');
 };
 
+commands.games = () => {
+  print('<span class="dim">playable games in this terminal:</span>');
+  print('  <span class="cyan">snake</span>     the classic. arrow keys or wasd. eat the dots.');
+  print('  <span class="cyan">guess</span>     number guessing. 1 to 100. you have 7 tries.');
+  print('  <span class="cyan">quiz</span>      tech trivia. 10 questions. roasts included.');
+  print('  <span class="cyan">adventure</span> a tiny text adventure. choose your path.');
+  print('  <span class="cyan">type</span>      typing speed test. how fast are your fingers?');
+  print('  <span class="cyan">hack</span>      fake-hack a server. race the clock.');
+  print('  <span class="cyan">sudo</span>      the root access gauntlet. 6 questions. savage.');
+  print('  <span class="dim">type a game name to play. q to quit any game.</span>');
+};
+
+commands.snake = () => startSnake();
+commands.guess = () => startGuess();
+commands.quiz = () => startQuiz();
+commands.adventure = () => startAdventure();
+commands.type = () => startTypeTest();
+commands.hack = () => startHack();
+
+function startSnake(){
+  const overlay = document.getElementById('canvasOverlay');
+  const body = document.getElementById('canvasBody');
+  const bar = document.getElementById('canvasBar');
+  const input = document.getElementById('canvasInput');
+  const titleEl = document.getElementById('canvasTitle');
+  titleEl.textContent = 'SNAKE';
+  body.innerHTML = '';
+  bar.innerHTML = '';
+
+  const SIZE = 20, COLS = 22, ROWS = 18;
+  const canvas = document.createElement('canvas');
+  canvas.width = COLS * SIZE;
+  canvas.height = ROWS * SIZE;
+  canvas.style.border = '1px solid var(--line)';
+  canvas.style.borderRadius = '6px';
+  canvas.style.background = '#070A0F';
+  body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  let snake, dir, nextDir, food, score, alive, loop, started;
+  function reset(){
+    snake = [{x:10,y:9},{x:9,y:9},{x:8,y:9}];
+    dir = {x:1,y:0}; nextDir = {x:1,y:0};
+    placeFood();
+    score = 0; alive = true; started = false;
+    draw();
+    bar.innerHTML = '<span class="stat">score <b>0</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">arrow keys or wasd to move. q to quit.</span>';
+    input.placeholder = 'press an arrow key to start...';
+  }
+  function placeFood(){
+    do { food = {x:Math.floor(Math.random()*COLS), y:Math.floor(Math.random()*ROWS)}; }
+    while(snake.some(s => s.x===food.x && s.y===food.y));
+  }
+  function draw(){
+    ctx.fillStyle = '#070A0F';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#FFB454';
+    ctx.shadowColor = '#FFB454'; ctx.shadowBlur = 8;
+    ctx.fillRect(food.x*SIZE+4, food.y*SIZE+4, SIZE-8, SIZE-8);
+    ctx.shadowBlur = 0;
+    snake.forEach((s,i) => {
+      ctx.fillStyle = i===0 ? '#4FD6FF' : '#3aa0c8';
+      if(i===0){ ctx.shadowColor='#4FD6FF'; ctx.shadowBlur=8; }
+      ctx.fillRect(s.x*SIZE+2, s.y*SIZE+2, SIZE-4, SIZE-4);
+      ctx.shadowBlur = 0;
+    });
+  }
+  function tick(){
+    if(!alive) return;
+    dir = nextDir;
+    const head = {x:snake[0].x+dir.x, y:snake[0].y+dir.y};
+    if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS||snake.some(s=>s.x===head.x&&s.y===head.y)){
+      alive = false; clearInterval(loop);
+      ctx.fillStyle = 'rgba(255,107,107,0.15)';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#FF6B6B';
+      ctx.font = 'bold 28px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2-10);
+      ctx.font = '14px monospace';
+      ctx.fillText('score: ' + score, canvas.width/2, canvas.height/2+20);
+      input.placeholder = 'press enter to restart, q to quit';
+      bar.innerHTML = '<span class="stat">score <b style="color:var(--red)">' + score + '</b></span><span style="margin-left:auto;color:var(--red);font-size:11px;">dead. enter to restart.</span>';
+      return;
+    }
+    snake.unshift(head);
+    if(head.x===food.x && head.y===food.y){ score++; placeFood(); beep(660,0.05,0.05); }
+    else snake.pop();
+    bar.innerHTML = '<span class="stat">score <b>' + score + '</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">arrow keys or wasd. q to quit.</span>';
+    draw();
+  }
+  function startLoop(){ if(!started){ started = true; loop = setInterval(tick, 110); } }
+
+  function snakeKey(e){
+    const k = e.key.toLowerCase();
+    if(k === 'q'){ clearInterval(loop); closeSnake(); return; }
+    if(!alive && e.key === 'Enter'){ reset(); return; }
+    if(!started && e.key === 'Enter'){ startLoop(); return; }
+    if(k==='arrowup'||k==='w'){ if(dir.y!==1) nextDir={x:0,y:-1}; startLoop(); }
+    else if(k==='arrowdown'||k==='s'){ if(dir.y!==-1) nextDir={x:0,y:1}; startLoop(); }
+    else if(k==='arrowleft'||k==='a'){ if(dir.x!==1) nextDir={x:-1,y:0}; startLoop(); }
+    else if(k==='arrowright'||k==='d'){ if(dir.x!==-1) nextDir={x:1,y:0}; startLoop(); }
+  }
+  function closeSnake(){
+    clearInterval(loop);
+    overlay.classList.remove('active');
+    document.removeEventListener('keydown', snakeKey, true);
+    input.focus();
+    print('<span class="dim">snake: ended. final score ' + score + '.</span>');
+    blank();
+  }
+  document.addEventListener('keydown', snakeKey, true);
+  overlay.classList.add('active');
+  reset();
+  input.focus();
+}
+
+function startGuess(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'GUESS THE NUMBER';
+
+  let target = Math.floor(Math.random()*100)+1;
+  let tries = 0; const MAX = 7;
+  let won = false;
+  let gameOver = false;
+
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function renderBar(){ bar.innerHTML = '<span class="stat">tries <b>' + tries + '/' + MAX + '</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">type a number 1-100. q to quit.</span>'; }
+
+  function guessKey(e){
+    if(e.key !== 'Enter') return;
+    const v = input.value.trim().toLowerCase();
+    input.value = '';
+    if(v === 'q'){ closeGuess(); return; }
+    if(gameOver){ closeGuess(); return; }
+    const num = parseInt(v, 10);
+    if(isNaN(num) || num < 1 || num > 100){ gprint('<span class="dim">invalid. type a number 1 to 100.</span>'); return; }
+    tries++;
+    gprint('<span class="prompt">$</span> ' + num);
+    if(num === target){
+      won = true; gameOver = true;
+      gprint('<span class="green">+ correct! you got it in ' + tries + ' tries.</span>');
+      gblank();
+      const verdict = tries <= 3 ? '<span class="green">sharp. impressive.</span>' : tries <= 5 ? '<span class="cyan">solid guesswork.</span>' : '<span class="amber">cut it close there.</span>';
+      gprint(verdict);
+      gblank();
+      gprint('<span class="dim">press enter to exit.</span>');
+      input.placeholder = 'press enter to exit...';
+    } else if(tries >= MAX){
+      gameOver = true;
+      gprint('<span class="red">- wrong. out of tries. the number was ' + target + '.</span>');
+      gblank();
+      gprint('<span class="dim">press enter to exit.</span>');
+      input.placeholder = 'press enter to exit...';
+    } else {
+      const hint = num < target ? 'higher' : 'lower';
+      const dist = Math.abs(num - target);
+      const heat = dist <= 5 ? '<span class="red">burning.</span>' : dist <= 12 ? '<span class="amber">warm.</span>' : dist <= 25 ? '<span class="dim">cold.</span>' : '<span class="dim">freezing.</span>';
+      gprint('<span class="dim">too ' + hint + '. ' + heat + ' ' + (MAX-tries) + ' tries left.</span>');
+    }
+    renderBar();
+  }
+  function closeGuess(){
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', guessKey);
+    input.focus();
+    print('<span class="dim">guess: ended. ' + (won ? 'you won in ' + tries + ' tries.' : 'the number was ' + target + '.') + '</span>');
+    blank();
+  }
+  input.addEventListener('keydown', guessKey);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  gprint('<span class="bright">=== GUESS THE NUMBER ===</span>');
+  gblank();
+  gprint('<span class="dim">i am thinking of a number between 1 and 100.</span>');
+  gprint('<span class="dim">you have ' + MAX + ' tries. i will tell you higher or lower.</span>');
+  gprint('<span class="dim">i will also tell you if you are burning, warm, cold, or freezing.</span>');
+  gblank();
+  renderBar();
+  input.placeholder = 'type a number 1-100...';
+  input.focus();
+}
+
+function startQuiz(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'TECH TRIVIA';
+
+  const questions = [
+    { q: 'what does DNS stand for?', a: ['domain name system','domain name server'], hint: 'it resolves names' },
+    { q: 'what port does HTTPS use?', a: ['443'], hint: 'not 80' },
+    { q: 'what does ACID stand for in databases? (comma separated)', a: ['atomicity,consistency,isolation,durability','atomicity consistency isolation durability'], hint: 'four properties' },
+    { q: 'which sorting algorithm has O(n log n) average and is divide-and-conquer?', a: ['quicksort','quick sort','merge sort','mergesort'], hint: 'two common answers' },
+    { q: 'what does JIT stand for?', a: ['just in time','just-in-time'], hint: 'compilation timing' },
+    { q: 'in git, what command creates a new branch and switches to it?', a: ['git checkout -b','checkout -b'], hint: 'two words with a flag' },
+    { q: 'what does REST stand for?', a: ['representational state transfer'], hint: 'an architectural style' },
+    { q: 'which data structure uses FIFO?', a: ['queue'], hint: 'a line' },
+    { q: 'what is the time complexity of binary search?', a: ['o(log n)','ologn','o(logn)'], hint: 'logarithmic' },
+    { q: 'what does CRDT stand for in distributed systems?', a: ['conflict-free replicated data type','conflict free replicated data type'], hint: 'no coordination needed' },
+  ];
+
+  let idx = 0, score = 0, done = false;
+
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function renderBar(){ bar.innerHTML = '<span class="stat">question <b>' + (idx+1) + '/' + questions.length + '</b></span><span class="stat">score <b>' + score + '</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">type your answer. q to quit. h for hint.</span>'; }
+
+  function showQ(){
+    if(idx >= questions.length){ endQuiz(); return; }
+    gprint('<span class="cyan">[q' + (idx+1) + ']</span> <span class="bright">' + questions[idx].q + '</span>');
+    gblank();
+    renderBar();
+    input.value = '';
+    input.placeholder = 'your answer...';
+    input.focus();
+  }
+  function endQuiz(){
+    done = true;
+    gblank();
+    const pct = Math.round((score/questions.length)*100);
+    let verdict;
+    if(pct === 100) verdict = '<span class="green">flawless. you read the docs. all of them.</span>';
+    else if(pct >= 70) verdict = '<span class="cyan">strong. you clearly build things.</span>';
+    else if(pct >= 40) verdict = '<span class="amber">mid. google is your friend, huh.</span>';
+    else verdict = '<span class="red">ouch. maybe stick to copy-pasting.</span>';
+    gprint('<span class="bright">=== QUIZ COMPLETE ===</span>');
+    gblank();
+    gprint('<span class="dim">final score: <span class="bright">' + score + '/' + questions.length + '</span> (' + pct + '%)</span>');
+    gblank();
+    gprint(verdict);
+    gblank();
+    gprint('<span class="dim">press enter to exit.</span>');
+    input.placeholder = 'press enter to exit...';
+  }
+  function quizKey(e){
+    if(e.key !== 'Enter') return;
+    const v = input.value.trim().toLowerCase();
+    input.value = '';
+    if(done){ closeQuiz(); return; }
+    if(v === 'q'){ closeQuiz(); return; }
+    if(v === 'h' || v === 'hint'){ gprint('<span class="amber">hint: ' + questions[idx].hint + '</span>'); return; }
+    if(!v){ return; }
+    gprint('<span class="prompt">$</span> ' + v);
+    const correct = questions[idx].a.some(ans => v.includes(ans) || ans.includes(v));
+    if(correct){ score++; gprint('<span class="green">+ correct.</span>'); }
+    else { gprint('<span class="red">- wrong. accepted: ' + questions[idx].a[0] + '</span>'); }
+    gblank();
+    idx++;
+    if(idx < questions.length) showQ(); else endQuiz();
+  }
+  function closeQuiz(){
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', quizKey);
+    input.focus();
+    print('<span class="dim">quiz: ended. score ' + score + '/' + questions.length + '.</span>');
+    blank();
+  }
+  input.addEventListener('keydown', quizKey);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  gprint('<span class="bright">=== TECH TRIVIA ===</span>');
+  gblank();
+  gprint('<span class="dim">' + questions.length + ' questions. type your answer.</span>');
+  gprint('<span class="dim">h for a hint. q to quit. spelling close enough.</span>');
+  gblank();
+  showQ();
+}
+
+function startAdventure(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'THE MEMORY DUNGEON';
+
+  let room = 'start', inv = [], visited = [];
+
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function renderBar(){
+    bar.innerHTML = '<span class="stat">room: <b>' + room + '</b></span><span class="stat">inv: <b>' + (inv.length ? inv.join(', ') : 'empty') + '</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">type a choice. q to quit.</span>';
+  }
+
+  const rooms = {
+    start: {
+      desc: 'you wake in a dark server room. hum of cooling fans. three doors: <span class="cyan">left</span>, <span class="cyan">right</span>, <span class="cyan">forward</span>.',
+      opts: { left:'network', right:'storage', forward:'kernel' }
+    },
+    network: {
+      desc: 'a tangle of ethernet cables. a blinking <span class="amber">router</span> sits on a rack. a sign reads "port 22 open".',
+      opts: { back:'start', router:'router' }
+    },
+    router: {
+      desc: 'you examine the router. it asks for a password. on a sticky note: "the answer is 42".',
+      opts: { back:'network', 42:'router42', fortytwo:'router42' }
+    },
+    router42: {
+      desc: 'the router unlocks. inside: a <span class="green">ssh key</span>. you take it.',
+      take: 'ssh key', goto: 'network'
+    },
+    storage: {
+      desc: 'rows of hard drives. one drive is <span class="amber">glowing</span>. a locked <span class="red">safe</span> sits in the corner.',
+      opts: { back:'start', drive:'drive', safe:'safe' }
+    },
+    drive: {
+      desc: 'the glowing drive contains a <span class="green">decryption key</span>. you take it.',
+      take: 'decryption key', goto: 'storage'
+    },
+    safe: {
+      desc: 'the safe is encrypted. you need a decryption key.',
+      opts: { back:'storage' },
+      check: 'decryption key',
+      checkPass: 'safeOpen'
+    },
+    safeOpen: {
+      desc: 'the decryption key works. inside the safe: a <span class="green">root token</span>. you take it.',
+      take: 'root token', goto: 'storage'
+    },
+    kernel: {
+      desc: 'a monolithic door labeled "KERNEL". a prompt: "enter root token to proceed".',
+      opts: { back:'start' },
+      check: 'root token',
+      checkPass: 'ending'
+    },
+    ending: {
+      desc: '<span class="green">the kernel accepts the token. the door opens. you have root. you wake up. it was a dream. or was it.</span>',
+      end: true
+    }
+  };
+
+  function showRoom(){
+    const r = rooms[room];
+    if(!r) { gprint('<span class="red">void. you fell out of the world.</span>'); return; }
+    gprint('<span class="cyan">[' + room + ']</span>');
+    gprint(r.desc);
+    if(r.take && !inv.includes(r.take)){
+      inv.push(r.take);
+      gprint('<span class="green">obtained: ' + r.take + '</span>');
+      beep(660,0.08,0.05);
+    }
+    if(r.goto){ room = r.goto; gblank(); showRoom(); return; }
+    if(r.end){
+      gblank();
+      gprint('<span class="bright">=== THE END ===</span>');
+      gprint('<span class="dim">you escaped with: ' + inv.join(', ') + '</span>');
+      gblank();
+      gprint('<span class="dim">press enter to exit.</span>');
+      input.placeholder = 'press enter to exit...';
+      renderBar();
+      return;
+    }
+    gblank();
+    renderBar();
+    input.value = '';
+    input.placeholder = 'what do you do?';
+    input.focus();
+  }
+
+  function advKey(e){
+    if(e.key !== 'Enter') return;
+    const v = input.value.trim().toLowerCase();
+    input.value = '';
+    if(v === 'q'){ closeAdv(); return; }
+    if(v === '') return;
+    gprint('<span class="prompt">$</span> ' + v);
+    const r = rooms[room];
+    if(!r) return;
+    if(r.check && (v.includes('use') || v.includes('token') || v.includes('key') || v.includes('enter'))){
+      if(inv.includes(r.check)){ room = r.checkPass; showRoom(); return; }
+      else { gprint('<span class="dim">you do not have that.</span>'); return; }
+    }
+    if(r.opts && r.opts[v]){ room = r.opts[v]; showRoom(); return; }
+    if(r.opts){
+      gprint('<span class="dim">options: ' + Object.keys(r.opts).join(', ') + '</span>');
+      return;
+    }
+    gprint('<span class="dim">nothing happens.</span>');
+  }
+  function closeAdv(){
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', advKey);
+    input.focus();
+    print('<span class="dim">adventure: ended. inventory: ' + (inv.length ? inv.join(', ') : 'nothing') + '</span>');
+    blank();
+  }
+  input.addEventListener('keydown', advKey);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  gprint('<span class="bright">=== THE MEMORY DUNGEON ===</span>');
+  gblank();
+  gprint('<span class="dim">a tiny text adventure. type a choice to act.</span>');
+  gprint('<span class="dim">verbs like "use", "enter", or just a direction work.</span>');
+  gblank();
+  room = 'start'; inv = [];
+  showRoom();
+}
+
+function startTypeTest(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'TYPING SPEED TEST';
+
+  const sentences = [
+    'the kernel panicked because it forgot its own name',
+    'a pointer without a plan is just a segfault waiting to happen',
+    'git merge conflict is the universe telling you to communicate',
+    'docker did not fix your environment it just made it portable',
+    'the best load balancer is a well placed cache and a prayer',
+    'rust makes you fight the borrow checker and the checker wins',
+    'javascript was written in ten days and we are still paying for it',
+    'premature optimization is the root of all github issues',
+    'a unit test you did not write is a bug you will find in prod',
+    'the cloud is just someone elses computer with a higher bill',
+  ];
+  const target = sentences[Math.floor(Math.random()*sentences.length)];
+  let startTime = null, finished = false, errors = 0;
+
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function renderTarget(){
+    const typed = input.value;
+    let html = '';
+    for(let i = 0; i < target.length; i++){
+      const ch = target[i];
+      if(i < typed.length){
+        if(typed[i] === ch) html += `<span style="color:var(--green);">${ch === ' ' ? '&nbsp;' : ch}</span>`;
+        else html += `<span style="color:var(--red);background:rgba(255,107,107,0.2);">${ch === ' ' ? '&nbsp;' : ch}</span>`;
+      } else if(i === typed.length){
+        html += `<span style="background:var(--cyan);color:var(--bg);">${ch === ' ' ? '&nbsp;' : ch}</span>`;
+      } else {
+        html += `<span style="color:var(--dim);">${ch === ' ' ? '&nbsp;' : ch}</span>`;
+      }
+    }
+    document.getElementById('typeTarget').innerHTML = html;
+  }
+  function renderBar(){
+    if(!startTime){ bar.innerHTML = '<span class="stat">start typing to begin...</span><span style="margin-left:auto;color:var(--dim);font-size:11px;">type the sentence. backspace allowed. q to quit.</span>'; return; }
+    const elapsed = (Date.now() - startTime) / 1000;
+    const typed = input.value.length;
+    const wpm = Math.round((typed / 5) / (elapsed / 60));
+    const acc = typed > 0 ? Math.max(0, Math.round((1 - errors/typed) * 100)) : 100;
+    bar.innerHTML = '<span class="stat">time <b>' + elapsed.toFixed(1) + 's</b></span><span class="stat">wpm <b>' + wpm + '</b></span><span class="stat">acc <b>' + acc + '%</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">keep going...</span>';
+  }
+
+  let barInterval = null;
+  function checkComplete(){
+    if(finished) return;
+    renderTarget();
+    renderBar();
+    if(input.value === target){
+      finished = true;
+      if(barInterval) clearInterval(barInterval);
+      const elapsed = (Date.now() - startTime) / 1000;
+      const wpm = Math.round((target.length / 5) / (elapsed / 60));
+      const acc = Math.max(0, Math.round((1 - errors/target.length) * 100));
+      gblank();
+      gprint('<span class="bright">=== COMPLETE ===</span>');
+      gblank();
+      gprint('<span class="dim">time: <span class="bright">' + elapsed.toFixed(2) + 's</span></span>');
+      gprint('<span class="dim">speed: <span class="bright">' + wpm + ' WPM</span></span>');
+      gprint('<span class="dim">accuracy: <span class="bright">' + acc + '%</span></span>');
+      gblank();
+      let verdict;
+      if(wpm >= 80) verdict = '<span class="green">blazing. are you a keyboard?</span>';
+      else if(wpm >= 60) verdict = '<span class="cyan">fast. you clearly type for a living.</span>';
+      else if(wpm >= 40) verdict = '<span class="amber">solid. above average.</span>';
+      else verdict = '<span class="red">keep practicing. or use a better keyboard.</span>';
+      gprint(verdict);
+      gblank();
+      gprint('<span class="dim">press enter to exit.</span>');
+      input.placeholder = 'press enter to exit...';
+      input.disabled = true;
+      document.addEventListener('keydown', function exitKey(e){ if(e.key === 'Enter'){ document.removeEventListener('keydown', exitKey); closeType(); } });
+    }
+  }
+  function typeKey(e){
+    if(finished) return;
+    if(e.key === 'Escape'){ closeType(); return; }
+    if(startTime === null && e.key.length === 1 && e.key !== ' '){ startTime = Date.now(); barInterval = setInterval(renderBar, 100); }
+    setTimeout(checkComplete, 0);
+  }
+  function closeType(){
+    if(barInterval) clearInterval(barInterval);
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', typeKey);
+    input.disabled = false;
+    input.focus();
+    print('<span class="dim">type: ended.</span>');
+    blank();
+  }
+  input.addEventListener('keydown', typeKey);
+  input.addEventListener('input', () => { if(startTime === null && input.value.length > 0){ startTime = Date.now(); barInterval = setInterval(renderBar, 100); } setTimeout(checkComplete, 0); });
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  input.disabled = false;
+  input.value = '';
+  gprint('<span class="bright">=== TYPING SPEED TEST ===</span>');
+  gblank();
+  gprint('<span class="dim">type the sentence below. accuracy matters.</span>');
+  gprint('<span class="dim">esc to quit. the clock starts on your first key.</span>');
+  gblank();
+  gprint('<div id="typeTarget" style="font-size:16px;line-height:1.8;padding:12px 16px;background:#070A0F;border-radius:6px;border:1px solid var(--line);"></div>');
+  gblank();
+  renderTarget();
+  renderBar();
+  input.placeholder = 'type here...';
+  input.focus();
+}
+
+function startHack(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'HACK THE PLANET';
+
+  const nodes = [
+    'firewall', 'load balancer', 'auth server', 'database', 'cache layer', 'kernel module'
+  ];
+  let current = 0, progress = 0, timeLeft = 45, timer = null, running = false;
+
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function renderBar(){
+    const pct = Math.round(progress);
+    bar.innerHTML = '<span class="stat">target <b>' + nodes[current] + '</b></span>' +
+      '<span class="stat">breach <b>' + pct + '%</b></span>' +
+      '<span class="stat">time <b style="color:' + (timeLeft > 15 ? 'var(--green)' : timeLeft > 7 ? 'var(--amber)' : 'var(--red)') + '">' + timeLeft + 's</b></span>' +
+      '<span style="margin-left:auto;color:var(--dim);font-size:11px;">type the command shown. q to abort.</span>';
+  }
+  function showTarget(){
+    if(current >= nodes.length){ winHack(); return; }
+    progress = 0;
+    const cmd = 'inject --target=' + nodes[current].replace(/ /g,'_') + ' --exploit=0day';
+    gprint('<span class="cyan">[node ' + (current+1) + '/' + nodes.length + ']</span> <span class="bright">' + nodes[current] + '</span>');
+    gprint('<span class="dim">type this command to breach:</span>');
+    gprint('<span class="amber" style="font-size:15px;">' + cmd + '</span>');
+    gblank();
+    renderBar();
+    input.value = '';
+    input.placeholder = 'type the command...';
+    input.focus();
+  }
+  function winHack(){
+    clearInterval(timer);
+    running = false;
+    gblank();
+    gprint('<span class="green">>>> ALL NODES BREACHED <<<</span>');
+    gblank();
+    gprint('<span class="dim">root shell acquired. dumping credentials...</span>');
+    gprint('<span class="green">admin:dhruv_was_here</span>');
+    gprint('<span class="green">root:you_cant_see_me</span>');
+    gblank();
+    gprint('<span class="bright">=== HACK COMPLETE ===</span>');
+    gblank();
+    gprint('<span class="dim">this was a simulation. no servers were harmed.</span>');
+    gprint('<span class="dim">press enter to exit.</span>');
+    input.placeholder = 'press enter to exit...';
+    current = 999;
+  }
+  function loseHack(){
+    clearInterval(timer);
+    running = false;
+    gblank();
+    gprint('<span class="red">>>> CONNECTION TERMINATED <<<</span>');
+    gblank();
+    gprint('<span class="red">the IDS caught you. your IP has been logged.</span>');
+    gprint('<span class="dim">(not really. this is a game.)</span>');
+    gblank();
+    gprint('<span class="dim">nodes breached: ' + current + '/' + nodes.length + '</span>');
+    gblank();
+    gprint('<span class="dim">press enter to exit.</span>');
+    input.placeholder = 'press enter to exit...';
+    current = 998;
+  }
+  function hackKey(e){
+    if(e.key !== 'Enter') return;
+    const v = input.value.trim().toLowerCase();
+    input.value = '';
+    if(current === 999 || current === 998){ closeHack(); return; }
+    if(v === 'q'){ closeHack(); return; }
+    if(!running){ running = true; timer = setInterval(() => { timeLeft--; renderBar(); if(timeLeft <= 0) loseHack(); }, 1000); }
+    const cmd = 'inject --target=' + nodes[current].replace(/ /g,'_') + ' --exploit=0day';
+    if(v === cmd){
+      progress = 100;
+      gprint('<span class="prompt">$</span> ' + v);
+      gblank();
+      const lines = [
+        'scanning ' + nodes[current] + '...',
+        'found open port 22',
+        'exploiting CVE-2024-' + Math.floor(Math.random()*9999) + '...',
+        'bypassing firewall...',
+        'escalating privileges...',
+        'breach successful'
+      ];
+      let li = 0;
+      function nextLine(){
+        if(li >= lines.length){
+          gblank();
+          gprint('<span class="green">+ ' + nodes[current] + ' breached.</span>');
+          gblank();
+          current++;
+          setTimeout(showTarget, 400);
+          return;
+        }
+        gprint('<span class="dim">  ' + lines[li] + '</span>');
+        li++;
+        setTimeout(nextLine, 120 + Math.random()*80);
+      }
+      nextLine();
+    } else {
+      gprint('<span class="prompt">$</span> ' + v);
+      gprint('<span class="red">invalid command. type it exactly.</span>');
+      timeLeft = Math.max(0, timeLeft - 3);
+      gprint('<span class="dim">-3s penalty. ' + timeLeft + 's remaining.</span>');
+      renderBar();
+    }
+  }
+  function closeHack(){
+    clearInterval(timer);
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', hackKey);
+    input.focus();
+    if(current === 999) print('<span class="green">hack: all nodes breached. root acquired (simulated).</span>');
+    else if(current === 998) print('<span class="red">hack: caught by IDS. ' + current + ' nodes down.</span>');
+    else print('<span class="dim">hack: aborted. ' + current + '/' + nodes.length + ' nodes breached.</span>');
+    blank();
+  }
+  input.addEventListener('keydown', hackKey);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  gprint('<span class="bright">=== HACK THE PLANET ===</span>');
+  gblank();
+  gprint('<span class="dim">breach ' + nodes.length + ' nodes in ' + timeLeft + ' seconds.</span>');
+  gprint('<span class="dim">type each command exactly as shown. typos cost 3 seconds.</span>');
+  gprint('<span class="dim">the clock starts on your first command.</span>');
+  gblank();
+  showTarget();
+}
+
 function openVim(){
   const overlay = document.getElementById('vimOverlay');
   const body = document.getElementById('vimBody');
@@ -1616,6 +2265,23 @@ bootSequence();
     <div class="game-prompt">
       <span class="prompt">$</span>
       <input id="gameInput" autocomplete="off" spellcheck="false" placeholder="type your answer..." />
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="canvasOverlay">
+  <div class="modal">
+    <div class="modal-bar">
+      <div class="dot" style="background:#FF5F57"></div>
+      <div class="dot" style="background:#FEBC2E"></div>
+      <div class="dot" style="background:#28C840"></div>
+      <span class="mt" id="canvasTitle">SNAKE</span>
+    </div>
+    <div class="game-body" id="canvasBody" style="display:flex;align-items:center;justify-content:center;flex-direction:column;"></div>
+    <div class="game-bar" id="canvasBar"></div>
+    <div class="game-prompt">
+      <span class="prompt">$</span>
+      <input id="canvasInput" autocomplete="off" spellcheck="false" placeholder="press enter to start..." />
     </div>
   </div>
 </div>
