@@ -1,250 +1,170 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560" role="img" aria-label="skill constellation">
   <defs>
-    <radialGradient id="coreGlow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0.4"/>
-      <stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.1"/>
+    <radialGradient id="sCoreGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0.5"/>
+      <stop offset="0.4" stop-color="#4FD6FF" stop-opacity="0.15"/>
       <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="coreInner" cx="0.5" cy="0.5" r="0.5">
+    <radialGradient id="sCoreInner" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0" stop-color="#E6EDF3"/>
-      <stop offset="0.6" stop-color="#4FD6FF"/>
+      <stop offset="0.5" stop-color="#4FD6FF"/>
       <stop offset="1" stop-color="#1A6F8F"/>
     </radialGradient>
-    <linearGradient id="langRing" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="sLangRing" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#4FD6FF"/>
       <stop offset="1" stop-color="#7EE787"/>
     </linearGradient>
-    <linearGradient id="fwRing" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="sFwRing" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#FFB454"/>
       <stop offset="1" stop-color="#FF7B9C"/>
     </linearGradient>
-    <linearGradient id="infraRing" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="sInfraRing" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#B084EB"/>
       <stop offset="1" stop-color="#4FD6FF"/>
     </linearGradient>
-    <filter id="nodeGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="sGlow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="3"/>
     </filter>
-    <filter id="coreBlur" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="8"/>
+    <filter id="sBigGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10"/>
     </filter>
   </defs>
   <style>
     .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;font-weight:700;}
     .lbl{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;}
-    @media (prefers-reduced-motion:reduce){animate,animateTransform{display:none}}
+    @media (prefers-reduced-motion:reduce){animate,animateTransform,animateMotion{display:none}}
   </style>
 
-  <rect width="1200" height="560" fill="#070A0F"/>
-
-  <!-- ambient grid -->
-  <g opacity="0.08">
-    <path d="M0 280H1200M600 0V560" stroke="#1A2332" stroke-width="1"/>
-    <circle cx="600" cy="280" r="120" fill="none" stroke="#1A2332" stroke-dasharray="2 6"/>
-    <circle cx="600" cy="280" r="200" fill="none" stroke="#1A2332" stroke-dasharray="2 6"/>
-    <circle cx="600" cy="280" r="270" fill="none" stroke="#1A2332" stroke-dasharray="2 6"/>
-  </g>
+  <rect width="1200" height="560" fill="#06080C"/>
 
   <!-- header -->
   <text x="40" y="44" class="mono" font-size="20" fill="#E6EDF3">.symtab</text>
-  <text x="40" y="66" class="lbl" font-size="12" fill="#5B6675">17 symbols resolved · 3 orbits · live dependency edges</text>
+  <text x="40" y="66" class="lbl" font-size="12" fill="#5B6675">18 symbols · 3 orbits · live edges</text>
   <text x="1160" y="44" class="lbl" font-size="12" fill="#4A5668" text-anchor="end">skill constellation</text>
-  <line x1="40" y1="80" x2="1160" y2="80" stroke="#1A2332"/>
+  <line x1="40" y1="80" x2="1160" y2="80" stroke="#141C28"/>
 
-  <!-- orbit rings (visible guides) -->
+  <!-- ambient grid rings -->
+  <g transform="translate(600,310)" opacity="0.08">
+    <circle r="120" fill="none" stroke="#1A2332" stroke-dasharray="2 6"/>
+    <circle r="200" fill="none" stroke="#1A2332" stroke-dasharray="2 6"/>
+    <circle r="270" fill="none" stroke="#1A2332" stroke-dasharray="2 6"/>
+  </g>
+
+  <!-- rotating orbit rings (counter-rotating) -->
   <g transform="translate(600,310)">
-    <circle r="120" fill="none" stroke="url(#langRing)" stroke-width="1" opacity="0.15" stroke-dasharray="3 8"/>
-    <circle r="200" fill="none" stroke="url(#fwRing)" stroke-width="1" opacity="0.15" stroke-dasharray="3 8"/>
-    <circle r="270" fill="none" stroke="url(#infraRing)" stroke-width="1" opacity="0.15" stroke-dasharray="3 8"/>
-
-    <!-- rotating orbit rings -->
-    <g>
-      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="60s" repeatCount="indefinite"/>
-      <circle r="120" fill="none" stroke="#4FD6FF" stroke-width="0.5" opacity="0.3"/>
-    </g>
-    <g>
-      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="80s" repeatCount="indefinite"/>
-      <circle r="200" fill="none" stroke="#FFB454" stroke-width="0.5" opacity="0.3"/>
-    </g>
-    <g>
-      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="100s" repeatCount="indefinite"/>
-      <circle r="270" fill="none" stroke="#B084EB" stroke-width="0.5" opacity="0.3"/>
-    </g>
+    <g><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="50s" repeatCount="indefinite"/>
+      <circle r="120" fill="none" stroke="url(#sLangRing)" stroke-width="0.8" opacity="0.25" stroke-dasharray="4 8"/></g>
+    <g><animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="70s" repeatCount="indefinite"/>
+      <circle r="200" fill="none" stroke="url(#sFwRing)" stroke-width="0.8" opacity="0.25" stroke-dasharray="4 8"/></g>
+    <g><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="90s" repeatCount="indefinite"/>
+      <circle r="270" fill="none" stroke="url(#sInfraRing)" stroke-width="0.8" opacity="0.25" stroke-dasharray="4 8"/></g>
   </g>
 
-  <!-- CONNECTION EDGES (pulsing) from core to each node -->
-  <g transform="translate(600,310)" stroke-width="1" fill="none" opacity="0.4">
-    <!-- languages (inner orbit r=120) -->
-    <line x1="0" y1="0" x2="120" y2="0" stroke="#4FD6FF" stroke-dasharray="4 6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="60" y2="-104" stroke="#4FD6FF" stroke-dasharray="4 6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.2s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-60" y2="-104" stroke="#4FD6FF" stroke-dasharray="4 6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.4s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-120" y2="0" stroke="#4FD6FF" stroke-dasharray="4 6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.1s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-60" y2="104" stroke="#4FD6FF" stroke-dasharray="4 6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.3s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="60" y2="104" stroke="#4FD6FF" stroke-dasharray="4 6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.5s" repeatCount="indefinite"/></line>
-    <!-- frameworks (middle orbit r=200) -->
-    <line x1="0" y1="0" x2="200" y2="0" stroke="#FFB454" stroke-dasharray="4 6" opacity="0.6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.6s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="100" y2="-173" stroke="#FFB454" stroke-dasharray="4 6" opacity="0.6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.8s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-100" y2="-173" stroke="#FFB454" stroke-dasharray="4 6" opacity="0.6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.7s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-200" y2="0" stroke="#FFB454" stroke-dasharray="4 6" opacity="0.6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.9s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-100" y2="173" stroke="#FFB454" stroke-dasharray="4 6" opacity="0.6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.5s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="100" y2="173" stroke="#FFB454" stroke-dasharray="4 6" opacity="0.6"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.4s" repeatCount="indefinite"/></line>
-    <!-- infra (outer orbit r=270) -->
-    <line x1="0" y1="0" x2="270" y2="0" stroke="#B084EB" stroke-dasharray="4 6" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="135" y2="-234" stroke="#B084EB" stroke-dasharray="4 6" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3.2s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-135" y2="-234" stroke="#B084EB" stroke-dasharray="4 6" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3.1s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-270" y2="0" stroke="#B084EB" stroke-dasharray="4 6" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3.3s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="-135" y2="234" stroke="#B084EB" stroke-dasharray="4 6" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3s" repeatCount="indefinite"/></line>
-    <line x1="0" y1="0" x2="135" y2="234" stroke="#B084EB" stroke-dasharray="4 6" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.9s" repeatCount="indefinite"/></line>
+  <!-- EDGES: core to nodes, flowing dashed -->
+  <g transform="translate(600,310)" stroke-width="1.2" fill="none">
+    <!-- inner (languages) -->
+    <line x1="0" y1="0" x2="120" y2="0" stroke="#4FD6FF" stroke-dasharray="5 7" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.8s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="60" y2="-104" stroke="#4FD6FF" stroke-dasharray="5 7" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-60" y2="-104" stroke="#4FD6FF" stroke-dasharray="5 7" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.2s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-120" y2="0" stroke="#4FD6FF" stroke-dasharray="5 7" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.9s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-60" y2="104" stroke="#4FD6FF" stroke-dasharray="5 7" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.1s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="60" y2="104" stroke="#4FD6FF" stroke-dasharray="5 7" opacity="0.5"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.3s" repeatCount="indefinite"/></line>
+    <!-- middle (frameworks) -->
+    <line x1="0" y1="0" x2="200" y2="0" stroke="#FFB454" stroke-dasharray="5 7" opacity="0.4"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.4s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="100" y2="-173" stroke="#FFB454" stroke-dasharray="5 7" opacity="0.4"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.6s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-100" y2="-173" stroke="#FFB454" stroke-dasharray="5 7" opacity="0.4"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.5s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-200" y2="0" stroke="#FFB454" stroke-dasharray="5 7" opacity="0.4"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.7s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-100" y2="173" stroke="#FFB454" stroke-dasharray="5 7" opacity="0.4"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.3s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="100" y2="173" stroke="#FFB454" stroke-dasharray="5 7" opacity="0.4"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.2s" repeatCount="indefinite"/></line>
+    <!-- outer (infra) -->
+    <line x1="0" y1="0" x2="270" y2="0" stroke="#B084EB" stroke-dasharray="5 7" opacity="0.35"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.8s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="135" y2="-234" stroke="#B084EB" stroke-dasharray="5 7" opacity="0.35"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="3s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-135" y2="-234" stroke="#B084EB" stroke-dasharray="5 7" opacity="0.35"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.9s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-270" y2="0" stroke="#B084EB" stroke-dasharray="5 7" opacity="0.35"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="3.1s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="-135" y2="234" stroke="#B084EB" stroke-dasharray="5 7" opacity="0.35"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.7s" repeatCount="indefinite"/></line>
+    <line x1="0" y1="0" x2="135" y2="234" stroke="#B084EB" stroke-dasharray="5 7" opacity="0.35"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2.6s" repeatCount="indefinite"/></line>
   </g>
 
-  <!-- cross-connections between related nodes (the interesting part) -->
-  <g transform="translate(600,310)" stroke-width="1" fill="none" opacity="0.25">
-    <!-- TS <-> Next.js <-> React -->
-    <path d="M120,0 Q160,-40 200,0" stroke="#4FD6FF" stroke-dasharray="3 5"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="3s" repeatCount="indefinite"/></path>
-    <!-- Rust <-> WASM -->
-    <path d="M-60,-104 Q-80,-180 -135,-234" stroke="#7EE787" stroke-dasharray="3 5"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="3.5s" repeatCount="indefinite"/></path>
-    <!-- Python <-> PyTorch <-> Flask -->
-    <path d="M-120,0 Q-150,80 -200,0" stroke="#FFB454" stroke-dasharray="3 5"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="3.2s" repeatCount="indefinite"/></path>
-    <!-- C++ <-> OpenGL -->
-    <path d="M-60,104 Q-80,180 -100,173" stroke="#FF7B9C" stroke-dasharray="3 5"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="2.8s" repeatCount="indefinite"/></path>
-    <!-- TS <-> Node.js -->
-    <path d="M60,104 Q80,180 100,173" stroke="#4FD6FF" stroke-dasharray="3 5"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="3.4s" repeatCount="indefinite"/></path>
-    <!-- Next.js <-> Vercel -->
-    <path d="M200,0 Q235,-120 270,0" stroke="#B084EB" stroke-dasharray="3 5"><animate attributeName="opacity" values="0.1;0.4;0.1" dur="3.6s" repeatCount="indefinite"/></path>
+  <!-- cross-connections (sequential pulse) -->
+  <g transform="translate(600,310)" stroke-width="1.5" fill="none">
+    <path d="M120,0 Q160,-40 200,0" stroke="#4FD6FF" stroke-dasharray="3 5" opacity="0.2"><animate attributeName="opacity" values="0.1;0.6;0.1" dur="3s" repeatCount="indefinite"/></path>
+    <path d="M-60,-104 Q-80,-180 -135,-234" stroke="#7EE787" stroke-dasharray="3 5" opacity="0.2"><animate attributeName="opacity" values="0.1;0.6;0.1" dur="3.5s" begin="0.5s" repeatCount="indefinite"/></path>
+    <path d="M-120,0 Q-150,80 -200,0" stroke="#FFB454" stroke-dasharray="3 5" opacity="0.2"><animate attributeName="opacity" values="0.1;0.6;0.1" dur="3.2s" begin="1s" repeatCount="indefinite"/></path>
+    <path d="M-60,104 Q-80,180 -100,173" stroke="#FF7B9C" stroke-dasharray="3 5" opacity="0.2"><animate attributeName="opacity" values="0.1;0.6;0.1" dur="2.8s" begin="1.5s" repeatCount="indefinite"/></path>
+    <path d="M60,104 Q80,180 100,173" stroke="#4FD6FF" stroke-dasharray="3 5" opacity="0.2"><animate attributeName="opacity" values="0.1;0.6;0.1" dur="3.4s" begin="2s" repeatCount="indefinite"/></path>
+    <path d="M200,0 Q235,-120 270,0" stroke="#B084EB" stroke-dasharray="3 5" opacity="0.2"><animate attributeName="opacity" values="0.1;0.6;0.1" dur="3.6s" begin="0.3s" repeatCount="indefinite"/></path>
   </g>
 
-  <!-- CORE -->
+  <!-- particle trails along edges -->
   <g transform="translate(600,310)">
-    <circle r="60" fill="url(#coreGlow)" filter="url(#coreBlur)"/>
-    <circle r="28" fill="url(#coreInner)" filter="url(#nodeGlow)">
-      <animate attributeName="r" values="28;32;28" dur="3s" repeatCount="indefinite"/>
+    <circle r="3" fill="#4FD6FF" filter="url(#sGlow)"><animateMotion dur="2.2s" repeatCount="indefinite" path="M0,0 L120,0"/></circle>
+    <circle r="2.5" fill="#FF7B72" filter="url(#sGlow)"><animateMotion dur="2.5s" begin="0.3s" repeatCount="indefinite" path="M0,0 L60,-104"/></circle>
+    <circle r="2.5" fill="#7EE787" filter="url(#sGlow)"><animateMotion dur="2.4s" begin="0.6s" repeatCount="indefinite" path="M0,0 L-60,-104"/></circle>
+    <circle r="3" fill="#FFB454" filter="url(#sGlow)"><animateMotion dur="2.6s" begin="0.2s" repeatCount="indefinite" path="M0,0 L-120,0"/></circle>
+    <circle r="2.5" fill="#FFB454" filter="url(#sGlow)"><animateMotion dur="2.8s" begin="0.5s" repeatCount="indefinite" path="M0,0 L200,0"/></circle>
+    <circle r="2.5" fill="#B084EB" filter="url(#sGlow)"><animateMotion dur="3s" begin="0.8s" repeatCount="indefinite" path="M0,0 L270,0"/></circle>
+    <circle r="2.5" fill="#7EE787" filter="url(#sGlow)"><animateMotion dur="2.9s" begin="1s" repeatCount="indefinite" path="M0,0 L-135,-234"/></circle>
+    <circle r="2.5" fill="#4FD6FF" filter="url(#sGlow)"><animateMotion dur="2.7s" begin="1.2s" repeatCount="indefinite" path="M0,0 L135,234"/></circle>
+  </g>
+
+  <!-- CORE: pulsing with shockwaves -->
+  <g transform="translate(600,310)">
+    <circle r="70" fill="url(#sCoreGlow)" filter="url(#sBigGlow)">
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite"/>
     </circle>
-    <circle r="28" fill="none" stroke="#4FD6FF" stroke-width="1.5" opacity="0.6">
-      <animate attributeName="r" values="28;48;28" dur="3s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"/>
+    <!-- shockwave rings -->
+    <circle r="28" fill="none" stroke="#4FD6FF" stroke-width="2" opacity="0">
+      <animate attributeName="r" values="28;60;28" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;0;0.8" dur="3s" repeatCount="indefinite"/>
     </circle>
-    <text y="5" class="mono" font-size="14" fill="#070A0F" text-anchor="middle" font-weight="700">DHruv</text>
+    <circle r="28" fill="none" stroke="#7EE787" stroke-width="1.5" opacity="0">
+      <animate attributeName="r" values="28;55;28" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <!-- core body -->
+    <circle r="26" fill="url(#sCoreInner)" filter="url(#sGlow)">
+      <animate attributeName="r" values="26;29;26" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <text y="5" class="mono" font-size="13" fill="#06080C" text-anchor="middle">dhruv</text>
   </g>
 
-  <!-- LANGUAGE NODES (inner orbit, r=120, 6 nodes) -->
-  <!-- positions: 0deg=(120,0), 60deg=(60,-104), 120deg=(-60,-104), 180=(-120,0), 240=(-60,104), 300=(60,104) -->
-  <g transform="translate(600,310)">
-    <g transform="translate(120,0)">
-      <circle r="18" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#4FD6FF" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="11" fill="#4FD6FF" text-anchor="middle">TS</text>
-    </g>
-    <g transform="translate(60,-104)">
-      <circle r="18" fill="#0B1018" stroke="#FF7B72" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#FF7B72" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.8s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="10" fill="#FF7B72" text-anchor="middle">Rust</text>
-    </g>
-    <g transform="translate(-60,-104)">
-      <circle r="18" fill="#0B1018" stroke="#7EE787" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#7EE787" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.3s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="11" fill="#7EE787" text-anchor="middle">C++</text>
-    </g>
-    <g transform="translate(-120,0)">
-      <circle r="18" fill="#0B1018" stroke="#FFB454" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#FFB454" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.7s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.7s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="10" fill="#FFB454" text-anchor="middle">Py</text>
-    </g>
-    <g transform="translate(-60,104)">
-      <circle r="18" fill="#0B1018" stroke="#5B6675" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#5B6675" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.6s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="10" fill="#C9D1D9" text-anchor="middle">C</text>
-    </g>
-    <g transform="translate(60,104)">
-      <circle r="18" fill="#0B1018" stroke="#C678DD" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#C678DD" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="10" fill="#C678DD" text-anchor="middle">JS</text>
-    </g>
+  <!-- LANGUAGE NODES (inner orbit r=120) -->
+  <g transform="translate(600,310)" class="lbl" font-size="11" fill="#E6EDF3" text-anchor="middle">
+    <g transform="translate(120,0)"><circle r="17" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#4FD6FF" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite"/></circle><text y="4">TS</text></g>
+    <g transform="translate(60,-104)"><circle r="17" fill="#0B1018" stroke="#FF7B72" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#FF7B72" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.8s" repeatCount="indefinite"/></circle><text y="4" fill="#FF7B72" font-size="10">Rust</text></g>
+    <g transform="translate(-60,-104)"><circle r="17" fill="#0B1018" stroke="#7EE787" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#7EE787" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.3s" repeatCount="indefinite"/></circle><text y="4" fill="#7EE787">C++</text></g>
+    <g transform="translate(-120,0)"><circle r="17" fill="#0B1018" stroke="#FFB454" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#FFB454" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.7s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.7s" repeatCount="indefinite"/></circle><text y="4" fill="#FFB454" font-size="10">Py</text></g>
+    <g transform="translate(-60,104)"><circle r="17" fill="#0B1018" stroke="#C9D1D9" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#C9D1D9" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.6s" repeatCount="indefinite"/></circle><text y="4" font-size="10">C</text></g>
+    <g transform="translate(60,104)"><circle r="17" fill="#0B1018" stroke="#C678DD" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#C678DD" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite"/></circle><text y="4" fill="#C678DD" font-size="10">JS</text></g>
   </g>
 
-  <!-- FRAMEWORK NODES (middle orbit, r=200, 6 nodes) -->
-  <g transform="translate(600,310)">
-    <g transform="translate(200,0)">
-      <circle r="18" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#4FD6FF" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.9s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.9s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="9" fill="#4FD6FF" text-anchor="middle">Next</text>
-    </g>
-    <g transform="translate(100,-173)">
-      <circle r="18" fill="#0B1018" stroke="#61DAFB" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#61DAFB" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.6s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="9" fill="#61DAFB" text-anchor="middle">React</text>
-    </g>
-    <g transform="translate(-100,-173)">
-      <circle r="18" fill="#0B1018" stroke="#EE4C2C" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#EE4C2C" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="8" fill="#EE4C2C" text-anchor="middle">Torch</text>
-    </g>
-    <g transform="translate(-200,0)">
-      <circle r="18" fill="#0B1018" stroke="#FFB454" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#FFB454" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.7s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.7s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="9" fill="#FFB454" text-anchor="middle">Flask</text>
-    </g>
-    <g transform="translate(-100,173)">
-      <circle r="18" fill="#0B1018" stroke="#7EE787" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#7EE787" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="8" fill="#7EE787" text-anchor="middle">OpenGL</text>
-    </g>
-    <g transform="translate(100,173)">
-      <circle r="18" fill="#0B1018" stroke="#83CD29" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#83CD29" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.8s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="8" fill="#83CD29" text-anchor="middle">Node</text>
-    </g>
+  <!-- FRAMEWORK NODES (middle orbit r=200) -->
+  <g transform="translate(600,310)" class="lbl" font-size="9" fill="#E6EDF3" text-anchor="middle">
+    <g transform="translate(200,0)"><circle r="17" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#4FD6FF" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.9s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.9s" repeatCount="indefinite"/></circle><text y="3">Next</text></g>
+    <g transform="translate(100,-173)"><circle r="17" fill="#0B1018" stroke="#61DAFB" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#61DAFB" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.6s" repeatCount="indefinite"/></circle><text y="3" fill="#61DAFB">React</text></g>
+    <g transform="translate(-100,-173)"><circle r="17" fill="#0B1018" stroke="#EE4C2C" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#EE4C2C" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite"/></circle><text y="3" fill="#EE4C2C" font-size="8">Torch</text></g>
+    <g transform="translate(-200,0)"><circle r="17" fill="#0B1018" stroke="#FFB454" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#FFB454" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.7s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.7s" repeatCount="indefinite"/></circle><text y="3" fill="#FFB454">Flask</text></g>
+    <g transform="translate(-100,173)"><circle r="17" fill="#0B1018" stroke="#7EE787" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#7EE787" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite"/></circle><text y="3" fill="#7EE787" font-size="8">OpenGL</text></g>
+    <g transform="translate(100,173)"><circle r="17" fill="#0B1018" stroke="#83CD29" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#83CD29" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.8s" repeatCount="indefinite"/></circle><text y="3" fill="#83CD29" font-size="8">Node</text></g>
   </g>
 
-  <!-- INFRA NODES (outer orbit, r=270, 6 nodes) -->
-  <g transform="translate(600,310)">
-    <g transform="translate(270,0)">
-      <circle r="18" fill="#0B1018" stroke="#F05032" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#F05032" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="3s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="9" fill="#F05032" text-anchor="middle">Git</text>
-    </g>
-    <g transform="translate(135,-234)">
-      <circle r="18" fill="#0B1018" stroke="#2496ED" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#2496ED" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="3.2s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="8" fill="#2496ED" text-anchor="middle">Docker</text>
-    </g>
-    <g transform="translate(-135,-234)">
-      <circle r="18" fill="#0B1018" stroke="#7EE787" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#7EE787" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.9s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.9s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="9" fill="#7EE787" text-anchor="middle">WASM</text>
-    </g>
-    <g transform="translate(-270,0)">
-      <circle r="18" fill="#0B1018" stroke="#FFB454" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#FFB454" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="3.1s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="3.1s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="9" fill="#FFB454" text-anchor="middle">Linux</text>
-    </g>
-    <g transform="translate(-135,234)">
-      <circle r="18" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#4FD6FF" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.7s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.7s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="9" fill="#4FD6FF" text-anchor="middle">Vercel</text>
-    </g>
-    <g transform="translate(135,234)">
-      <circle r="18" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#nodeGlow)"/>
-      <circle r="18" fill="none" stroke="#4FD6FF" opacity="0.4"><animate attributeName="r" values="18;24;18" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.8s" repeatCount="indefinite"/></circle>
-      <text y="4" class="mono" font-size="8" fill="#4FD6FF" text-anchor="middle">VSCode</text>
-    </g>
+  <!-- INFRA NODES (outer orbit r=270) -->
+  <g transform="translate(600,310)" class="lbl" font-size="9" fill="#E6EDF3" text-anchor="middle">
+    <g transform="translate(270,0)"><circle r="17" fill="#0B1018" stroke="#F05032" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#F05032" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="3s" repeatCount="indefinite"/></circle><text y="3" fill="#F05032">Git</text></g>
+    <g transform="translate(135,-234)"><circle r="17" fill="#0B1018" stroke="#2496ED" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#2496ED" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="3.2s" repeatCount="indefinite"/></circle><text y="3" fill="#2496ED" font-size="8">Docker</text></g>
+    <g transform="translate(-135,-234)"><circle r="17" fill="#0B1018" stroke="#7EE787" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#7EE787" opacity="0.3"><animate attributeName="r" values="17;23;23" dur="2.9s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.9s" repeatCount="indefinite"/></circle><text y="3" fill="#7EE787">WASM</text></g>
+    <g transform="translate(-270,0)"><circle r="17" fill="#0B1018" stroke="#FFB454" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#FFB454" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="3.1s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="3.1s" repeatCount="indefinite"/></circle><text y="3" fill="#FFB454">Linux</text></g>
+    <g transform="translate(-135,234)"><circle r="17" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#4FD6FF" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.7s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.7s" repeatCount="indefinite"/></circle><text y="3" fill="#4FD6FF">Vercel</text></g>
+    <g transform="translate(135,234)"><circle r="17" fill="#0B1018" stroke="#4FD6FF" stroke-width="2" filter="url(#sGlow)"/><circle r="17" fill="none" stroke="#4FD6FF" opacity="0.3"><animate attributeName="r" values="17;23;17" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.4;0;0.4" dur="2.8s" repeatCount="indefinite"/></circle><text y="3" fill="#4FD6FF" font-size="8">VSCode</text></g>
   </g>
 
   <!-- orbit labels -->
-  <g class="lbl" font-size="10" fill="#5B6675">
-    <text x="600" y="195" text-anchor="middle" letter-spacing="2">LANGUAGES</text>
-    <text x="600" y="115" text-anchor="middle" letter-spacing="2">FRAMEWORKS</text>
-    <text x="600" y="45" text-anchor="middle" letter-spacing="2">INFRASTRUCTURE</text>
+  <g class="lbl" font-size="9" fill="#4A5668" letter-spacing="3">
+    <text x="600" y="200" text-anchor="middle">LANGUAGES</text>
+    <text x="600" y="120" text-anchor="middle">FRAMEWORKS</text>
+    <text x="600" y="50" text-anchor="middle">INFRASTRUCTURE</text>
   </g>
 
-  <!-- data packets traveling along edges -->
-  <g transform="translate(600,310)">
-    <circle r="3" fill="#4FD6FF"><animateMotion dur="2.5s" repeatCount="indefinite" path="M0,0 L120,0"/></circle>
-    <circle r="3" fill="#FFB454"><animateMotion dur="3s" repeatCount="indefinite" path="M0,0 L200,0"/></circle>
-    <circle r="3" fill="#B084EB"><animateMotion dur="3.5s" repeatCount="indefinite" path="M0,0 L270,0"/></circle>
-    <circle r="2.5" fill="#7EE787"><animateMotion dur="2.8s" repeatCount="indefinite" path="M0,0 L-60,-104"/></circle>
-    <circle r="2.5" fill="#FF7B9C"><animateMotion dur="3.2s" repeatCount="indefinite" path="M0,0 L-100,173"/></circle>
-  </g>
-
-  <text x="40" y="540" class="lbl" font-size="11" fill="#4A5668">core: dhruv · 18 nodes · 24 edges · 3 orbital layers</text>
-  <text x="1160" y="540" class="lbl" font-size="11" fill="#4A5668" text-anchor="end">resolved at runtime</text>
+  <text x="40" y="540" class="lbl" font-size="10" fill="#4A5668">18 nodes · 24 edges · 3 layers</text>
+  <text x="1160" y="540" class="lbl" font-size="10" fill="#4A5668" text-anchor="end">resolved at runtime</text>
 </svg>

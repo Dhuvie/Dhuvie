@@ -888,7 +888,7 @@ commands.sound = (args) => {
   else print(`<span class="dim">sound is ${state.soundOn?'on':'off'} (use 'sound on' or 'sound off')</span>`);
 };
 
-commands.matrix = () => {
+commands.rain = () => {
   state.matrixBoost = !state.matrixBoost;
   document.getElementById('rain').style.opacity = state.matrixBoost ? '0.4' : '0.14';
   print(`<span class="dim">matrix rain ${state.matrixBoost?'boosted':'normal'}</span>`);
@@ -948,9 +948,74 @@ commands.ps = () => {
   print('  512 pts/0    00:00:00 bash');
 };
 
+commands.matrix = () => {
+  print('<span class="dim">wake up... the matrix has you...</span>');
+  const chars = '01ABCDEF0xELF§∇∑∆∂∞░▒▓<>';
+  const colors = ['var(--cyan)','var(--green)','var(--amber)','var(--violet)'];
+  let count = 0;
+  const interval = setInterval(() => {
+    let line = '';
+    for(let i = 0; i < 60; i++){
+      const ch = chars[Math.floor(Math.random()*chars.length)];
+      const color = colors[Math.floor(Math.random()*colors.length)];
+      line += `<span style="color:${color};opacity:${0.3 + Math.random()*0.7};">${ch}</span>`;
+    }
+    print(line);
+    count++;
+    if(count > 25){
+      clearInterval(interval);
+      blank();
+      print('<span class="dim">follow the white rabbit. knock knock.</span>');
+      blank();
+    }
+  }, 80);
+};
+
+commands.sl = () => {
+  print('<span class="dim">you typed sl. here is a train:</span>');
+  blank();
+  print('<span class="cyan">       ====        ________                ___________</span>');
+  print('<span class="cyan">   _D _|  |_______/        \\__I_I_____===__|_________|</span>');
+  print('<span class="cyan">    |(_)---  |   H\\________/ |   |        =|___ ___|      _________________</span>');
+  print('<span class="cyan">    /     |  |   H  |  |     |   |         ||_| |_||     _|                \\_____A</span>');
+  print('<span class="cyan">   |      |  |   H  |__--------------------| [___] |   =|                        |</span>');
+  print('<span class="cyan">   | ________|___H__/__|_____/[][]~\\_______|       |   -|                        |</span>');
+  print('<span class="cyan">   |/ |   |-----------I_____I [][] []  D   |=======|____|________________________|_</span>');
+  print('<span class="cyan">  __/ =- o |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|=____||__|______________|_</span>');
+  blank();
+  print('<span class="dim">(next time, type ls. not sl.)</span>');
+};
+
+commands.starwars = () => {
+  print('<span class="cyan">A long time ago in a terminal far, far away...</span>');
+  blank();
+  print('<span class="amber">Episode V: The Shell Strikes Back</span>');
+  blank();
+  print('<span class="dim">It is a period of system war.</span>');
+  print('<span class="dim">Rebel engineers, striking from a hidden</span>');
+  print('<span class="dim">repository, have won their first victory</span>');
+  print('<span class="dim">against the evil Production Empire.</span>');
+  blank();
+  print('<span class="dim">During the battle, rebels stole secret</span>');
+  print('<span class="dim">plans to the Empire\'s ultimate weapon:</span>');
+  print('<span class="dim">DEADLINE, an armored task with enough</span>');
+  print('<span class="dim">scope to destroy an entire weekend.</span>');
+  blank();
+  print('<span class="green">Pursued by the Empire\'s project managers,</span>');
+  print('<span class="green">dhruv races aboard his terminal, custodian</span>');
+  print('<span class="green">of the stolen code that can save his people</span>');
+  print('<span class="green">and restore freedom to the codebase...</span>');
+};
+
 commands.games = () => {
   print('<span class="dim">playable games in this terminal:</span>');
   print('  <span class="cyan">snake</span>     the classic. arrow keys or wasd. eat the dots.');
+  print('  <span class="cyan">tetris</span>    block-stacking. arrow keys. rotate and clear lines.');
+  print('  <span class="cyan">2048</span>      slide and merge tiles. reach 2048. arrow keys.');
+  print('  <span class="cyan">mines</span>     minesweeper. type coords like "3 5". find the mines.');
+  print('  <span class="cyan">hangman</span>   guess the word before the hangman finishes.');
+  print('  <span class="cyan">blackjack</span> hit or stand. beat the dealer to 21.');
+  print('  <span class="cyan">reaction</span>  test your reflexes. wait for green, then smash enter.');
   print('  <span class="cyan">guess</span>     number guessing. 1 to 100. you have 7 tries.');
   print('  <span class="cyan">quiz</span>      tech trivia. 10 questions. roasts included.');
   print('  <span class="cyan">adventure</span> a tiny text adventure. choose your path.');
@@ -961,6 +1026,12 @@ commands.games = () => {
 };
 
 commands.snake = () => startSnake();
+commands.tetris = () => startTetris();
+commands['2048'] = () => start2048();
+commands.mines = () => startMines();
+commands.hangman = () => startHangman();
+commands.blackjack = () => startBlackjack();
+commands.reaction = () => startReaction();
 commands.guess = () => startGuess();
 commands.quiz = () => startQuiz();
 commands.adventure = () => startAdventure();
@@ -1062,6 +1133,847 @@ function startSnake(){
   document.addEventListener('keydown', snakeKey, true);
   overlay.classList.add('active');
   reset();
+  input.focus();
+}
+
+function startTetris(){
+  const overlay = document.getElementById('canvasOverlay');
+  const body = document.getElementById('canvasBody');
+  const bar = document.getElementById('canvasBar');
+  const input = document.getElementById('canvasInput');
+  const titleEl = document.getElementById('canvasTitle');
+  titleEl.textContent = 'TETRIS';
+  body.innerHTML = '';
+  bar.innerHTML = '';
+
+  const COLS = 10, ROWS = 20, CELL = 22;
+  const canvas = document.createElement('canvas');
+  canvas.width = COLS * CELL;
+  canvas.height = ROWS * CELL;
+  canvas.style.border = '1px solid var(--line)';
+  canvas.style.borderRadius = '6px';
+  canvas.style.background = '#06080C';
+  body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  const PIECES = {
+    I: { shape: [[1,1,1,1]], color: '#4FD6FF' },
+    O: { shape: [[1,1],[1,1]], color: '#FFB454' },
+    T: { shape: [[0,1,0],[1,1,1]], color: '#B084EB' },
+    S: { shape: [[0,1,1],[1,1,0]], color: '#7EE787' },
+    Z: { shape: [[1,1,0],[0,1,1]], color: '#FF6B6B' },
+    J: { shape: [[1,0,0],[1,1,1]], color: '#5B9BF5' },
+    L: { shape: [[0,0,1],[1,1,1]], color: '#FF9B42' },
+  };
+  const KEYS = Object.keys(PIECES);
+
+  let board, cur, curX, curY, curShape, score, lines, level, dropTimer, dropInterval, alive, started;
+
+  function newBoard(){
+    return Array.from({length: ROWS}, () => Array(COLS).fill(null));
+  }
+  function randPiece(){
+    const k = KEYS[Math.floor(Math.random()*KEYS.length)];
+    const p = PIECES[k];
+    return { key: k, color: p.color, shape: p.shape.map(r => r.slice()) };
+  }
+  function rotate(shape){
+    const rows = shape.length, cols = shape[0].length;
+    const out = Array.from({length: cols}, () => Array(rows).fill(0));
+    for(let r = 0; r < rows; r++)
+      for(let c = 0; c < cols; c++)
+        out[c][rows-1-r] = shape[r][c];
+    return out;
+  }
+  function valid(shape, x, y){
+    for(let r = 0; r < shape.length; r++)
+      for(let c = 0; c < shape[r].length; c++)
+        if(shape[r][c]){
+          const nx = x + c, ny = y + r;
+          if(nx < 0 || nx >= COLS || ny >= ROWS) return false;
+          if(ny >= 0 && board[ny][nx]) return false;
+        }
+    return true;
+  }
+  function merge(){
+    for(let r = 0; r < curShape.length; r++)
+      for(let c = 0; c < curShape[r].length; c++)
+        if(curShape[r][c]){
+          const ny = curY + r, nx = curX + c;
+          if(ny >= 0) board[ny][nx] = cur.color;
+        }
+  }
+  function clearLines(){
+    let cleared = 0;
+    for(let r = ROWS-1; r >= 0; r--){
+      if(board[r].every(c => c)){
+        board.splice(r, 1);
+        board.unshift(Array(COLS).fill(null));
+        cleared++; r++;
+      }
+    }
+    if(cleared > 0){
+      const pts = [0, 100, 300, 500, 800][cleared] * level;
+      score += pts;
+      lines += cleared;
+      const newLevel = Math.floor(lines / 10) + 1;
+      if(newLevel > level){
+        level = newLevel;
+        dropInterval = Math.max(100, 800 - (level-1)*70);
+      }
+      beep(880, 0.08, 0.06);
+    }
+  }
+  function spawn(){
+    cur = randPiece();
+    curShape = cur.shape;
+    curX = Math.floor((COLS - curShape[0].length) / 2);
+    curY = -1;
+    if(!valid(curShape, curX, curY)){
+      alive = false;
+      clearInterval(dropTimer);
+      drawGameOver();
+    }
+  }
+  function drop(){
+    if(!alive) return;
+    if(valid(curShape, curX, curY + 1)){ curY++; }
+    else {
+      merge();
+      clearLines();
+      spawn();
+    }
+    draw();
+    updateBar();
+  }
+  function move(dx){
+    if(!alive) return;
+    if(valid(curShape, curX + dx, curY)){ curX += dx; draw(); }
+  }
+  function tryRotate(){
+    if(!alive) return;
+    const rot = rotate(curShape);
+    for(const kick of [0, -1, 1, -2, 2]){
+      if(valid(rot, curX + kick, curY)){ curShape = rot; curX += kick; draw(); return; }
+    }
+  }
+  function hardDrop(){
+    if(!alive) return;
+    while(valid(curShape, curX, curY + 1)) curY++;
+    merge();
+    clearLines();
+    spawn();
+    draw();
+    updateBar();
+  }
+
+  function drawCell(x, y, color, ctx2 = ctx, size = CELL){
+    if(y < 0) return;
+    ctx2.fillStyle = color;
+    ctx2.fillRect(x*size + 1, y*size + 1, size - 2, size - 2);
+    ctx2.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx2.fillRect(x*size + 1, y*size + 1, size - 2, 3);
+    ctx2.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx2.fillRect(x*size + 1, y*size + size - 4, size - 2, 3);
+  }
+  function draw(){
+    ctx.fillStyle = '#06080C';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // grid
+    ctx.strokeStyle = '#11161F';
+    ctx.lineWidth = 1;
+    for(let c = 1; c < COLS; c++){ ctx.beginPath(); ctx.moveTo(c*CELL, 0); ctx.lineTo(c*CELL, canvas.height); ctx.stroke(); }
+    for(let r = 1; r < ROWS; r++){ ctx.beginPath(); ctx.moveTo(0, r*CELL); ctx.lineTo(canvas.width, r*CELL); ctx.stroke(); }
+    // board
+    for(let r = 0; r < ROWS; r++)
+      for(let c = 0; c < COLS; c++)
+        if(board[r][c]) drawCell(c, r, board[r][c]);
+    // current piece
+    if(curShape && alive){
+      for(let r = 0; r < curShape.length; r++)
+        for(let c = 0; c < curShape[r].length; c++)
+          if(curShape[r][c]) drawCell(curX + c, curY + r, cur.color);
+    }
+  }
+  function drawGameOver(){
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#FF6B6B';
+    ctx.font = 'bold 24px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2 - 20);
+    ctx.fillStyle = '#E6EDF3';
+    ctx.font = '14px monospace';
+    ctx.fillText('score: ' + score, canvas.width/2, canvas.height/2 + 10);
+    ctx.fillText('lines: ' + lines, canvas.width/2, canvas.height/2 + 30);
+    input.placeholder = 'press enter to restart, q to quit';
+  }
+  function updateBar(){
+    bar.innerHTML = '<span class="stat">score <b>' + score + '</b></span>' +
+      '<span class="stat">lines <b>' + lines + '</b></span>' +
+      '<span class="stat">level <b>' + level + '</b></span>' +
+      '<span style="margin-left:auto;color:var(--dim);font-size:11px;">left/right move · up rotate · down soft drop · space hard drop · q quit</span>';
+  }
+  function reset(){
+    board = newBoard();
+    score = 0; lines = 0; level = 1;
+    dropInterval = 800; alive = true; started = false;
+    spawn();
+    draw();
+    updateBar();
+    input.placeholder = 'press an arrow key to start...';
+  }
+  function startLoop(){
+    if(!started && alive){ started = true; dropTimer = setInterval(drop, dropInterval); }
+  }
+  function tetrisKey(e){
+    const k = e.key;
+    if(k === 'q' || k === 'Q'){ if(dropTimer) clearInterval(dropTimer); closeTetris(); return; }
+    if(!alive && k === 'Enter'){ if(dropTimer) clearInterval(dropTimer); reset(); return; }
+    if(!started && (k === 'ArrowLeft' || k === 'ArrowRight' || k === 'ArrowDown' || k === 'ArrowUp' || k === ' ')){ startLoop(); }
+    if(k === 'ArrowLeft'){ e.preventDefault(); move(-1); }
+    else if(k === 'ArrowRight'){ e.preventDefault(); move(1); }
+    else if(k === 'ArrowDown'){ e.preventDefault(); if(alive){ if(valid(curShape, curX, curY+1)){ curY++; draw(); } } }
+    else if(k === 'ArrowUp'){ e.preventDefault(); tryRotate(); }
+    else if(k === ' '){ e.preventDefault(); hardDrop(); }
+  }
+  function closeTetris(){
+    if(dropTimer) clearInterval(dropTimer);
+    overlay.classList.remove('active');
+    document.removeEventListener('keydown', tetrisKey, true);
+    input.focus();
+    print('<span class="dim">tetris: ended. score ' + score + ', ' + lines + ' lines, level ' + level + '.</span>');
+    blank();
+  }
+  document.addEventListener('keydown', tetrisKey, true);
+  overlay.classList.add('active');
+  reset();
+  input.focus();
+}
+
+function start2048(){
+  const overlay = document.getElementById('canvasOverlay');
+  const body = document.getElementById('canvasBody');
+  const bar = document.getElementById('canvasBar');
+  const input = document.getElementById('canvasInput');
+  document.getElementById('canvasTitle').textContent = '2048';
+  body.innerHTML = '';
+  bar.innerHTML = '';
+
+  const SIZE = 4, CELL = 70, GAP = 8;
+  const canvas = document.createElement('canvas');
+  canvas.width = SIZE * CELL + GAP * (SIZE+1);
+  canvas.height = SIZE * CELL + GAP * (SIZE+1);
+  canvas.style.borderRadius = '8px';
+  canvas.style.background = '#11161F';
+  body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  const COLORS = {
+    0: '#11161F', 2: '#1E2A3A', 4: '#2A3F5A', 8: '#4FD6FF', 16: '#3AA8D8',
+    32: '#FFB454', 64: '#FF9B42', 128: '#FF7B9C', 256: '#B084EB',
+    512: '#7EE787', 1024: '#56D364', 2048: '#FFD700',
+  };
+  let grid, score, won, moved, best = 0;
+
+  function init(){
+    grid = Array.from({length: SIZE}, () => Array(SIZE).fill(0));
+    score = 0; won = false;
+    addRandom(); addRandom();
+    draw(); updateBar();
+  }
+  function addRandom(){
+    const empty = [];
+    for(let r = 0; r < SIZE; r++)
+      for(let c = 0; c < SIZE; c++)
+        if(grid[r][c] === 0) empty.push([r,c]);
+    if(empty.length === 0) return;
+    const [r,c] = empty[Math.floor(Math.random()*empty.length)];
+    grid[r][c] = Math.random() < 0.9 ? 2 : 4;
+  }
+  function draw(){
+    ctx.fillStyle = '#11161F';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for(let r = 0; r < SIZE; r++){
+      for(let c = 0; c < SIZE; c++){
+        const val = grid[r][c];
+        const x = GAP + c * (CELL + GAP);
+        const y = GAP + r * (CELL + GAP);
+        ctx.fillStyle = COLORS[val] || '#FFD700';
+        ctx.beginPath();
+        ctx.roundRect(x, y, CELL, CELL, 8);
+        ctx.fill();
+        if(val > 0){
+          ctx.fillStyle = val <= 4 ? '#5B6675' : '#06080C';
+          ctx.font = 'bold ' + (val < 100 ? 30 : val < 1000 ? 26 : 22) + 'px monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(val, x + CELL/2, y + CELL/2);
+        }
+      }
+    }
+  }
+  function updateBar(){
+    bar.innerHTML = '<span class="stat">score <b>' + score + '</b></span>' +
+      '<span class="stat">best <b>' + best + '</b></span>' +
+      '<span style="margin-left:auto;color:var(--dim);font-size:11px;">arrow keys to slide. q to quit.</span>';
+  }
+  function slide(row){
+    let arr = row.filter(v => v !== 0);
+    let gained = 0;
+    for(let i = 0; i < arr.length - 1; i++){
+      if(arr[i] === arr[i+1]){
+        arr[i] *= 2; gained += arr[i];
+        if(arr[i] === 2048) won = true;
+        arr.splice(i+1, 1);
+      }
+    }
+    while(arr.length < SIZE) arr.push(0);
+    return { row: arr, gained };
+  }
+  function moveLeft(){
+    let gained = 0, moved = false;
+    for(let r = 0; r < SIZE; r++){
+      const orig = grid[r].slice();
+      const res = slide(grid[r]);
+      grid[r] = res.row; gained += res.gained;
+      if(JSON.stringify(orig) !== JSON.stringify(res.row)) moved = true;
+    }
+    return { moved, gained };
+  }
+  function rotateGrid(){
+    const out = Array.from({length: SIZE}, () => Array(SIZE).fill(0));
+    for(let r = 0; r < SIZE; r++)
+      for(let c = 0; c < SIZE; c++)
+        out[c][SIZE-1-r] = grid[r][c];
+    return out;
+  }
+  function move(dir){
+    let rotations = 0;
+    if(dir === 'up') rotations = 1;
+    else if(dir === 'right') rotations = 2;
+    else if(dir === 'down') rotations = 3;
+    for(let i = 0; i < rotations; i++) grid = rotateGrid();
+    const res = moveLeft();
+    for(let i = 0; i < (4 - rotations) % 4; i++) grid = rotateGrid();
+    if(res.moved){
+      score += res.gained;
+      if(score > best) best = score;
+      addRandom();
+      draw(); updateBar();
+      if(won){
+        ctx.fillStyle = 'rgba(255,215,0,0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 32px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('YOU WIN!', canvas.width/2, canvas.height/2);
+        input.placeholder = 'press enter to continue, q to quit';
+      }
+      if(isGameOver()){
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#FF6B6B';
+        ctx.font = 'bold 28px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2);
+        input.placeholder = 'press enter to restart, q to quit';
+      }
+    }
+  }
+  function isGameOver(){
+    for(let r = 0; r < SIZE; r++)
+      for(let c = 0; c < SIZE; c++){
+        if(grid[r][c] === 0) return false;
+        if(c < SIZE-1 && grid[r][c] === grid[r][c+1]) return false;
+        if(r < SIZE-1 && grid[r][c] === grid[r+1][c]) return false;
+      }
+    return true;
+  }
+  function g2048Key(e){
+    if(e.key === 'q' || e.key === 'Q'){ close2048(); return; }
+    if(e.key === 'Enter'){ init(); input.placeholder = 'arrow keys to slide...'; return; }
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); move('left'); }
+    else if(e.key === 'ArrowRight'){ e.preventDefault(); move('right'); }
+    else if(e.key === 'ArrowUp'){ e.preventDefault(); move('up'); }
+    else if(e.key === 'ArrowDown'){ e.preventDefault(); move('down'); }
+  }
+  function close2048(){
+    overlay.classList.remove('active');
+    document.removeEventListener('keydown', g2048Key, true);
+    input.focus();
+    print('<span class="dim">2048: ended. score ' + score + ', best ' + best + '.</span>');
+    blank();
+  }
+  document.addEventListener('keydown', g2048Key, true);
+  overlay.classList.add('active');
+  init();
+  input.placeholder = 'arrow keys to slide...';
+  input.focus();
+}
+
+function startMines(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'MINESWEEPER';
+
+  const COLS = 8, ROWS = 8, MINES = 10;
+  let board, revealed, flagged, alive, won, started;
+
+  function init(){
+    board = Array.from({length: ROWS}, () => Array(COLS).fill(0));
+    revealed = Array.from({length: ROWS}, () => Array(COLS).fill(false));
+    flagged = Array.from({length: ROWS}, () => Array(COLS).fill(false));
+    alive = true; won = false; started = false;
+  }
+  function placeMines(safeR, safeC){
+    let placed = 0;
+    while(placed < MINES){
+      const r = Math.floor(Math.random()*ROWS), c = Math.floor(Math.random()*COLS);
+      if(board[r][c] === -1) continue;
+      if(Math.abs(r-safeR) <= 1 && Math.abs(c-safeC) <= 1) continue;
+      board[r][c] = -1; placed++;
+    }
+    for(let r = 0; r < ROWS; r++)
+      for(let c = 0; c < COLS; c++){
+        if(board[r][c] === -1) continue;
+        let count = 0;
+        for(let dr = -1; dr <= 1; dr++)
+          for(let dc = -1; dc <= 1; dc++){
+            const nr = r+dr, nc = c+dc;
+            if(nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && board[nr][nc] === -1) count++;
+          }
+        board[r][c] = count;
+      }
+  }
+  function reveal(r, c){
+    if(r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
+    if(revealed[r][c] || flagged[r][c]) return;
+    revealed[r][c] = true;
+    if(board[r][c] === 0){
+      for(let dr = -1; dr <= 1; dr++)
+        for(let dc = -1; dc <= 1; dc++)
+          reveal(r+dr, c+dc);
+    }
+  }
+  function checkWin(){
+    let unrevealed = 0;
+    for(let r = 0; r < ROWS; r++)
+      for(let c = 0; c < COLS; c++)
+        if(!revealed[r][c]) unrevealed++;
+    if(unrevealed === MINES){ won = true; alive = false; }
+  }
+  function cellStr(r, c){
+    if(flagged[r][c]) return '<span class="amber">F</span>';
+    if(!revealed[r][c]) return '<span class="dim">.</span>';
+    const v = board[r][c];
+    if(v === -1) return '<span class="red">*</span>';
+    if(v === 0) return '<span class="dim"> </span>';
+    const colors = ['', '#5B6675', '#4FD6FF', '#7EE787', '#FFB454', '#FF7B9C', '#B084EB', '#FF6B6B', '#E6EDF3'];
+    return '<span style="color:' + colors[v] + ';">' + v + '</span>';
+  }
+  function render(){
+    let html = '<div style="font-family:monospace;font-size:15px;line-height:1.5;">';
+    html += '<span class="dim">  </span>';
+    for(let c = 0; c < COLS; c++) html += '<span class="dim">' + c + '</span> ';
+    html += '\n';
+    for(let r = 0; r < ROWS; r++){
+      html += '<span class="dim">' + String(r).padStart(2) + '</span> ';
+      for(let c = 0; c < COLS; c++){
+        html += cellStr(r, c) + '  ';
+      }
+      html += '\n';
+    }
+    html += '</div>';
+    document.getElementById('mineGrid').innerHTML = html;
+  }
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function updateBar(){
+    let flags = 0;
+    for(let r = 0; r < ROWS; r++) for(let c = 0; c < COLS; c++) if(flagged[r][c]) flags++;
+    bar.innerHTML = '<span class="stat">mines <b>' + MINES + '</b></span><span class="stat">flagged <b>' + flags + '</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">type "r c" to reveal. "f r c" to flag. q to quit.</span>';
+  }
+  function mineKey(e){
+    if(e.key !== 'Enter') return;
+    const v = input.value.trim().toLowerCase();
+    input.value = '';
+    if(v === 'q'){ closeMines(); return; }
+    if(!alive){ init(); gprint('<span class="dim">new game.</span>'); render(); updateBar(); input.placeholder = 'type "r c" to reveal...'; return; }
+    const parts = v.split(/\s+/);
+    if(parts[0] === 'f' && parts.length === 3){
+      const r = parseInt(parts[1]), c = parseInt(parts[2]);
+      if(r >= 0 && r < ROWS && c >= 0 && c < COLS && !revealed[r][c]){
+        flagged[r][c] = !flagged[r][c];
+        render(); updateBar();
+      }
+      return;
+    }
+    if(parts.length === 2){
+      const r = parseInt(parts[0]), c = parseInt(parts[1]);
+      if(r < 0 || r >= ROWS || c < 0 || c >= COLS){ gprint('<span class="dim">out of bounds.</span>'); return; }
+      if(!started){ placeMines(r, c); started = true; }
+      if(flagged[r][c]){ gprint('<span class="dim">that cell is flagged. unflag it first.</span>'); return; }
+      if(board[r][c] === -1){
+        revealed[r][c] = true;
+        for(let rr = 0; rr < ROWS; rr++)
+          for(let cc = 0; cc < COLS; cc++)
+            if(board[rr][cc] === -1) revealed[rr][cc] = true;
+        alive = false;
+        render();
+        gblank();
+        gprint('<span class="red">BOOM. you hit a mine.</span>');
+        gprint('<span class="dim">press enter for a new game, q to quit.</span>');
+        input.placeholder = 'press enter for new game...';
+        return;
+      }
+      reveal(r, c);
+      checkWin();
+      render();
+      updateBar();
+      if(won){
+        gblank();
+        gprint('<span class="green">you cleared the field. flawless.</span>');
+        gprint('<span class="dim">press enter for a new game, q to quit.</span>');
+        input.placeholder = 'press enter for new game...';
+      }
+    }
+  }
+  function closeMines(){
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', mineKey);
+    input.focus();
+    print('<span class="dim">mines: ended.</span>');
+    blank();
+  }
+  input.addEventListener('keydown', mineKey);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  init();
+  gprint('<span class="bright">=== MINESWEEPER ===</span>');
+  gblank();
+  gprint('<span class="dim">' + ROWS + 'x' + COLS + ' grid. ' + MINES + ' mines. first click is always safe.</span>');
+  gprint('<span class="dim">type "r c" to reveal a cell. type "f r c" to flag.</span>');
+  gblank();
+  gprint('<div id="mineGrid"></div>');
+  gblank();
+  render();
+  updateBar();
+  input.placeholder = 'type "r c" to reveal...';
+  input.focus();
+}
+
+function startHangman(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'HANGMAN';
+
+  const words = ['kernel','pointer','segfault','recursion','compiler','runtime','memory','thread','socket','buffer','overflow','deadlock','mutex','lambda','closure','iterator','protocol','encryption','firewall','database','quantum','algorithm','binary','register','syscall','segment','pipeline','cache','interrupt','context'];
+  let word, guessed, wrong, maxWrong, done;
+
+  function init(){
+    word = words[Math.floor(Math.random()*words.length)];
+    guessed = new Set();
+    wrong = 0; maxWrong = 6; done = false;
+  }
+  function display(){
+    let display = '';
+    for(const ch of word){
+      display += guessed.has(ch) ? ch + ' ' : '_ ';
+    }
+    return display.trim();
+  }
+  function gallows(){
+    const stages = [
+      '\n  ____\n  |   |\n      |\n      |\n      |\n      |\n______|',
+      '\n  ____\n  |   |\n  O   |\n      |\n      |\n      |\n______|',
+      '\n  ____\n  |   |\n  O   |\n  |   |\n      |\n      |\n______|',
+      '\n  ____\n  |   |\n  O   |\n /|   |\n      |\n      |\n______|',
+      '\n  ____\n  |   |\n  O   |\n /|\\  |\n      |\n      |\n______|',
+      '\n  ____\n  |   |\n  O   |\n /|\\  |\n /    |\n      |\n______|',
+      '\n  ____\n  |   |\n  O   |\n /|\\  |\n / \\  |\n      |\n______|',
+    ];
+    return stages[wrong];
+  }
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function updateBar(){
+    const letters = 'abcdefghijklmnopqrstuvwxyz'.split('').map(l => guessed.has(l) ? (word.includes(l) ? '<span class="green">'+l+'</span>' : '<span class="red">'+l+'</span>') : '<span class="dim">'+l+'</span>').join(' ');
+    bar.innerHTML = '<span class="stat">wrong <b style="color:var(--red)">' + wrong + '/' + maxWrong + '</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">type a letter. q to quit.</span>';
+  }
+  function showState(){
+    body.innerHTML = '';
+    gprint('<span class="bright">=== HANGMAN ===</span>');
+    gblank();
+    gprint('<pre style="color:var(--amber);font-size:14px;line-height:1.3;">' + gallows() + '</pre>');
+    gblank();
+    gprint('<div style="font-size:24px;letter-spacing:6px;color:var(--cyan);font-family:monospace;font-weight:bold;">' + display() + '</div>');
+    gblank();
+    const letters = 'abcdefghijklmnopqrstuvwxyz'.split('').map(l => guessed.has(l) ? (word.includes(l) ? '<span class="green">'+l+'</span>' : '<span class="red" style="text-decoration:line-through;">'+l+'</span>') : '<span class="dim">'+l+'</span>').join(' ');
+    gprint('<span style="font-size:12px;">' + letters + '</span>');
+    gblank();
+    updateBar();
+  }
+  function hangmanKey(e){
+    if(e.key !== 'Enter') return;
+    const v = input.value.trim().toLowerCase();
+    input.value = '';
+    if(v === 'q'){ closeHangman(); return; }
+    if(done){ init(); showState(); input.placeholder = 'type a letter...'; return; }
+    if(v.length !== 1 || !/[a-z]/.test(v)){ gprint('<span class="dim">type one letter.</span>'); return; }
+    if(guessed.has(v)){ gprint('<span class="dim">already guessed ' + v + '.</span>'); return; }
+    guessed.add(v);
+    if(!word.includes(v)){
+      wrong++;
+      gprint('<span class="red">no "' + v + '".</span>');
+    } else {
+      gprint('<span class="green">yes, "' + v + '" is in there.</span>');
+    }
+    if(wrong >= maxWrong){
+      done = true;
+      showState();
+      gblank();
+      gprint('<span class="red">hanged. the word was: ' + word + '</span>');
+      gprint('<span class="dim">press enter for a new word, q to quit.</span>');
+      input.placeholder = 'press enter for new word...';
+      return;
+    }
+    if([...word].every(ch => guessed.has(ch))){
+      done = true;
+      showState();
+      gblank();
+      gprint('<span class="green">you got it. the word was ' + word + '.</span>');
+      gprint('<span class="dim">press enter for a new word, q to quit.</span>');
+      input.placeholder = 'press enter for new word...';
+      return;
+    }
+    showState();
+  }
+  function closeHangman(){
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', hangmanKey);
+    input.focus();
+    print('<span class="dim">hangman: ended.</span>');
+    blank();
+  }
+  input.addEventListener('keydown', hangmanKey);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  init();
+  showState();
+  input.placeholder = 'type a letter...';
+  input.focus();
+}
+
+function startBlackjack(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'BLACKJACK';
+
+  const SUITS = ['spades','hearts','diamonds','clubs'];
+  const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+  let deck, player, dealer, score, dealerScore, done;
+
+  function newDeck(){
+    const d = [];
+    for(const s of SUITS) for(const r of RANKS) d.push({rank: r, suit: s});
+    for(let i = d.length-1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [d[i],d[j]] = [d[j],d[i]]; }
+    return d;
+  }
+  function cardStr(card){
+    const suitSym = {spades:'\u2660',hearts:'\u2665',diamonds:'\u2666',clubs:'\u2663'};
+    const color = (card.suit === 'hearts' || card.suit === 'diamonds') ? 'red' : 'bright';
+    return '<span class="' + color + '">' + card.rank + suitSym[card.suit] + '</span>';
+  }
+  function handStr(hand, hideSecond){
+    return hand.map((c,i) => (hideSecond && i === 1) ? '<span class="dim">[?]</span>' : cardStr(c)).join('  ');
+  }
+  function handValue(hand){
+    let val = 0, aces = 0;
+    for(const c of hand){
+      if(c.rank === 'A'){ val += 11; aces++; }
+      else if(['J','Q','K'].includes(c.rank)) val += 10;
+      else val += parseInt(c.rank);
+    }
+    while(val > 21 && aces > 0){ val -= 10; aces--; }
+    return val;
+  }
+  function init(){
+    deck = newDeck();
+    player = [deck.pop(), deck.pop()];
+    dealer = [deck.pop(), deck.pop()];
+    done = false;
+  }
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function updateBar(){
+    bar.innerHTML = '<span class="stat">wins <b style="color:var(--green)">' + score + '</b></span><span class="stat">dealer <b style="color:var(--red)">' + dealerScore + '</b></span><span style="margin-left:auto;color:var(--dim);font-size:11px;">h = hit, s = stand, q = quit</span>';
+  }
+  function showState(hideDealer){
+    body.innerHTML = '';
+    gprint('<span class="bright">=== BLACKJACK ===</span>');
+    gblank();
+    gprint('<span class="dim">dealer (' + (hideDealer ? '?' : handValue(dealer)) + '):</span>');
+    gprint('<div style="font-size:20px;letter-spacing:4px;">' + handStr(dealer, hideDealer) + '</div>');
+    gblank();
+    gprint('<span class="dim">you (' + handValue(player) + '):</span>');
+    gprint('<div style="font-size:20px;letter-spacing:4px;">' + handStr(player, false) + '</div>');
+    gblank();
+    updateBar();
+  }
+  function dealerPlay(){
+    while(handValue(dealer) < 17){
+      dealer.push(deck.pop());
+    }
+  }
+  function settle(){
+    done = true;
+    const pv = handValue(player), dv = handValue(dealer);
+    let result;
+    if(pv > 21) result = '<span class="red">bust. you lose.</span>';
+    else if(dv > 21) { result = '<span class="green">dealer busts. you win.</span>'; score++; }
+    else if(pv > dv) { result = '<span class="green">you win. ' + pv + ' beats ' + dv + '.</span>'; score++; }
+    else if(pv < dv) { result = '<span class="red">dealer wins. ' + dv + ' beats ' + pv + '.</span>'; dealerScore++; }
+    else result = '<span class="amber">push. tie.</span>';
+    showState(false);
+    gblank();
+    gprint(result);
+    gblank();
+    gprint('<span class="dim">press enter for a new hand, q to quit.</span>');
+    input.placeholder = 'press enter for new hand...';
+  }
+  function bjKey(e){
+    if(e.key !== 'Enter') return;
+    const v = input.value.trim().toLowerCase();
+    input.value = '';
+    if(v === 'q'){ closeBJ(); return; }
+    if(done){ init(); showState(true); input.placeholder = 'h = hit, s = stand...'; return; }
+    if(v === 'h' || v === 'hit'){
+      player.push(deck.pop());
+      if(handValue(player) > 21){
+        showState(false);
+        gblank();
+        gprint('<span class="red">bust! ' + handValue(player) + '.</span>');
+        done = true;
+        dealerScore++;
+        gprint('<span class="dim">press enter for a new hand, q to quit.</span>');
+        input.placeholder = 'press enter for new hand...';
+      } else {
+        showState(true);
+      }
+    } else if(v === 's' || v === 'stand'){
+      dealerPlay();
+      settle();
+    }
+  }
+  function closeBJ(){
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', bjKey);
+    input.focus();
+    print('<span class="dim">blackjack: ended. wins ' + score + ', dealer ' + dealerScore + '.</span>');
+    blank();
+  }
+  input.addEventListener('keydown', bjKey);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  score = 0; dealerScore = 0;
+  init();
+  showState(true);
+  input.placeholder = 'h = hit, s = stand...';
+  input.focus();
+}
+
+function startReaction(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const input = document.getElementById('gameInput');
+  document.querySelector('#gameOverlay .mt').textContent = 'REACTION TEST';
+
+  let phase = 'wait';
+  let startTime = 0;
+  let timeoutId = null;
+  let best = Infinity;
+  let attempts = [];
+  let done = false;
+
+  function gprint(html){ const d=document.createElement('div'); d.innerHTML=html; body.appendChild(d); body.scrollTop=body.scrollHeight; }
+  function gblank(){ gprint('&nbsp;'); }
+  function updateBar(){
+    const avg = attempts.length ? Math.round(attempts.reduce((a,b)=>a+b,0)/attempts.length) : 0;
+    bar.innerHTML = '<span class="stat">best <b>' + (best === Infinity ? '--' : best + 'ms') + '</b></span>' +
+      '<span class="stat">avg <b>' + (avg || '--') + (avg ? 'ms' : '') + '</b></span>' +
+      '<span class="stat">tries <b>' + attempts.length + '</b></span>' +
+      '<span style="margin-left:auto;color:var(--dim);font-size:11px;">enter to react. q to quit.</span>';
+  }
+  function startWait(){
+    phase = 'wait';
+    gprint('<span class="amber">wait for green...</span>');
+    const delay = 1500 + Math.random() * 3000;
+    timeoutId = setTimeout(() => {
+      phase = 'go';
+      startTime = Date.now();
+      gprint('<span class="green" style="font-size:20px;font-weight:bold;">GO! PRESS ENTER NOW!</span>');
+    }, delay);
+  }
+  function reactKey(e){
+    if(e.key !== 'Enter') return;
+    if(done){ closeReaction(); return; }
+    if(e.key === 'Enter' && (e.target.value === 'q' || input.value.trim().toLowerCase() === 'q')){ closeReaction(); return; }
+    input.value = '';
+    if(phase === 'wait'){
+      clearTimeout(timeoutId);
+      gprint('<span class="red">too early! wait for green.</span>');
+      gblank();
+      startWait();
+      updateBar();
+      return;
+    }
+    if(phase === 'go'){
+      const rt = Date.now() - startTime;
+      attempts.push(rt);
+      if(rt < best) best = rt;
+      phase = 'done';
+      let verdict;
+      if(rt < 150) verdict = '<span class="green">inhuman. ' + rt + 'ms. are you a robot?</span>';
+      else if(rt < 200) verdict = '<span class="green">lightning. ' + rt + 'ms.</span>';
+      else if(rt < 250) verdict = '<span class="cyan">fast. ' + rt + 'ms.</span>';
+      else if(rt < 350) verdict = '<span class="amber">average. ' + rt + 'ms.</span>';
+      else verdict = '<span class="red">slow. ' + rt + 'ms. try again.</span>';
+      gprint(verdict);
+      gblank();
+      updateBar();
+      startWait();
+    }
+  }
+  function closeReaction(){
+    if(timeoutId) clearTimeout(timeoutId);
+    overlay.classList.remove('active');
+    input.removeEventListener('keydown', reactKey);
+    input.focus();
+    const avg = attempts.length ? Math.round(attempts.reduce((a,b)=>a+b,0)/attempts.length) : 0;
+    print('<span class="dim">reaction: ended. best ' + (best === Infinity ? '--' : best + 'ms') + ', avg ' + (avg || '--') + (avg ? 'ms' : '') + ', ' + attempts.length + ' tries.</span>');
+    blank();
+  }
+  input.addEventListener('keydown', reactKey);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+  gprint('<span class="bright">=== REACTION TEST ===</span>');
+  gblank();
+  gprint('<span class="dim">wait for the green GO signal, then press enter as fast as you can.</span>');
+  gprint('<span class="dim">press too early and you reset. your best time is tracked.</span>');
+  gblank();
+  updateBar();
+  startWait();
+  input.placeholder = 'press enter when you see GO...';
   input.focus();
 }
 

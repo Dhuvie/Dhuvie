@@ -1,73 +1,118 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" width="1200" height="440" role="img" aria-label="dhruv.ts compiling">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" width="1200" height="460" role="img" aria-label="dhruv.ts compiling">
   <defs>
     <linearGradient id="hbg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#0D1320"/>
       <stop offset="1" stop-color="#080C14"/>
     </linearGradient>
-    <linearGradient id="titlebar" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="htitlebar" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#161D2B"/>
       <stop offset="1" stop-color="#0F1521"/>
     </linearGradient>
-    <linearGradient id="buildbar" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="hbuild" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#4FD6FF"/>
       <stop offset="1" stop-color="#7EE787"/>
     </linearGradient>
-
-    <clipPath id="c1"><rect x="100" y="92" width="430" height="22"><animate attributeName="width" from="0" to="430" dur="0.6s" begin="0.2s" fill="freeze"/></rect></clipPath>
-    <clipPath id="c2"><rect x="100" y="120" width="380" height="22"><animate attributeName="width" from="0" to="380" dur="0.55s" begin="0.9s" fill="freeze"/></rect></clipPath>
-    <clipPath id="c3"><rect x="100" y="148" width="470" height="22"><animate attributeName="width" from="0" to="470" dur="0.65s" begin="1.6s" fill="freeze"/></rect></clipPath>
-    <clipPath id="c4"><rect x="100" y="176" width="350" height="22"><animate attributeName="width" from="0" to="350" dur="0.5s" begin="2.4s" fill="freeze"/></rect></clipPath>
-    <clipPath id="c5"><rect x="100" y="204" width="420" height="22"><animate attributeName="width" from="0" to="420" dur="0.6s" begin="3.0s" fill="freeze"/></rect></clipPath>
-    <clipPath id="c6"><rect x="100" y="232" width="300" height="22"><animate attributeName="width" from="0" to="300" dur="0.45s" begin="3.7s" fill="freeze"/></rect></clipPath>
-    <clipPath id="c7"><rect x="100" y="260" width="395" height="22"><animate attributeName="width" from="0" to="395" dur="0.55s" begin="4.2s" fill="freeze"/></rect></clipPath>
+    <linearGradient id="hscan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="hglow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
   </defs>
   <style>
     .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;}
-    @media (prefers-reduced-motion:reduce){animate,animateTransform,animateMotion{display:none}}
+    @media (prefers-reduced-motion:reduce){animate,animateTransform{display:none}}
   </style>
 
-  <rect width="1200" height="440" fill="url(#hbg)"/>
+  <rect width="1200" height="460" fill="url(#hbg)"/>
 
-  <rect x="40" y="30" width="1120" height="380" rx="14" fill="#0B1018" stroke="#1E2735" stroke-width="1.5"/>
+  <!-- window -->
+  <rect x="40" y="24" width="1120" height="412" rx="14" fill="#0B1018" stroke="#1A2332" stroke-width="1.5" filter="url(#hglow)"/>
 
-  <path d="M40 44a14 14 0 0 1 14-14h1092a14 14 0 0 1 14 14v34H40z" fill="url(#titlebar)"/>
-  <g>
-    <circle cx="66" cy="59" r="6" fill="#FF5F57"/>
-    <circle cx="88" cy="59" r="6" fill="#FEBC2E"/>
-    <circle cx="110" cy="59" r="6" fill="#28C840"/>
-  </g>
-  <text x="600" y="63" class="mono" font-size="13" fill="#7D8590" text-anchor="middle">dhruv.ts — dhruvnarayanbajaj.dev</text>
+  <!-- title bar -->
+  <path d="M40 38a14 14 0 0 1 14-14h1092a14 14 0 0 1 14 14v32H40z" fill="url(#htitlebar)"/>
+  <circle cx="64" cy="53" r="6" fill="#FF5F57"/>
+  <circle cx="86" cy="53" r="6" fill="#FEBC2E"/>
+  <circle cx="108" cy="53" r="6" fill="#28C840"/>
+  <text x="600" y="57" class="mono" font-size="13" fill="#5B6675" text-anchor="middle">dhruv.ts · dhruvnarayanbajaj.dev</text>
 
-  <rect x="40" y="78" width="54" height="332" fill="#090D14"/>
+  <!-- line number gutter -->
+  <rect x="40" y="70" width="54" height="290" fill="#070A0F"/>
   <g class="mono" font-size="13" fill="#3A4658" text-anchor="end">
-    <text x="80" y="112">1</text><text x="80" y="140">2</text><text x="80" y="168">3</text>
-    <text x="80" y="196">4</text><text x="80" y="224">5</text><text x="80" y="252">6</text>
-    <text x="80" y="280">7</text>
+    <text x="80" y="104">1</text><text x="80" y="132">2</text><text x="80" y="160">3</text>
+    <text x="80" y="188">4</text><text x="80" y="216">5</text><text x="80" y="244">6</text>
+    <text x="80" y="272">7</text><text x="80" y="300">8</text><text x="80" y="328">9</text>
   </g>
 
-  <g class="mono" font-size="14">
-    <text x="110" y="112" fill="#E6EDF3" clip-path="url(#c1)"><tspan fill="#C678DD">const</tspan> <tspan fill="#61AFEF">dhruv</tspan> <tspan fill="#ABB2BF">=</tspan> <tspan fill="#E5C07B">{</tspan></text>
-    <text x="110" y="140" fill="#E6EDF3" clip-path="url(#c2)">  <tspan fill="#61AFEF">role</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#98C379">'full-stack engineer'</tspan><tspan fill="#ABB2BF">,</tspan></text>
-    <text x="110" y="168" fill="#E6EDF3" clip-path="url(#c3)">  <tspan fill="#61AFEF">stack</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#E5C07B">[</tspan><tspan fill="#98C379">'next.ts'</tspan><tspan fill="#ABB2BF">,</tspan> <tspan fill="#98C379">'rust'</tspan><tspan fill="#ABB2BF">,</tspan> <tspan fill="#98C379">'c++'</tspan><tspan fill="#E5C07B">]</tspan><tspan fill="#ABB2BF">,</tspan></text>
-    <text x="110" y="196" fill="#E6EDF3" clip-path="url(#c4)">  <tspan fill="#61AFEF">ml</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#98C379">'xgboost · pytorch · gemini'</tspan><tspan fill="#ABB2BF">,</tspan></text>
-    <text x="110" y="224" fill="#E6EDF3" clip-path="url(#c5)">  <tspan fill="#C678DD">ship</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#61AFEF">()</tspan> <tspan fill="#56B6C2">=&gt;</tspan> <tspan fill="#98C379">'prod, not demo'</tspan><tspan fill="#ABB2BF">,</tspan></text>
-    <text x="110" y="252" fill="#E6EDF3" clip-path="url(#c6)">  <tspan fill="#61AFEF">depth</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#D19A66">'infra → product'</tspan><tspan fill="#ABB2BF">,</tspan></text>
-    <text x="110" y="280" fill="#E6EDF3" clip-path="url(#c7)"><tspan fill="#E5C07B">}</tspan> <tspan fill="#7D8590">// hire me if it compiles</tspan></text>
-  </g>
-  <rect x="110" y="296" width="2" height="20" fill="#4FD6FF">
-    <animate attributeName="opacity" values="1;0;1" dur="0.8s" begin="4.8s" repeatCount="indefinite"/>
+  <!-- scanning beam over code area -->
+  <rect x="94" y="70" width="1066" height="290" fill="url(#hscan)" opacity="0.4">
+    <animate attributeName="y" values="70;320;70" dur="7s" repeatCount="indefinite"/>
   </rect>
 
-  <rect x="40" y="378" width="1120" height="32" fill="#0E1626"/>
-  <rect x="40" y="378" width="1120" height="32" fill="none" stroke="#1E2735" stroke-width="1"/>
-  <g class="mono" font-size="12">
-    <circle cx="62" cy="394" r="4" fill="#FFB454"><animate attributeName="fill" values="#FFB454;#7EE787;#7EE787" keyTimes="0;0.5;1" dur="6s" begin="0s" fill="freeze"/></circle>
-    <text x="74" y="398" fill="#7D8590">compiling</text>
-    <text x="148" y="398" fill="#7EE787" opacity="0">✓ built in 4.2s<animate attributeName="opacity" values="0;1" dur="0.4s" begin="5s" fill="freeze"/></text>
-    <text x="1140" y="398" fill="#7D8590" text-anchor="end">typescript · 0 errors · 0 warnings</text>
+  <!-- code lines, each fading in sequentially with typing feel -->
+  <g class="mono" font-size="14">
+    <text x="110" y="104" opacity="0">
+      <tspan fill="#C678DD">const</tspan> <tspan fill="#61AFEF">dhruv</tspan> <tspan fill="#ABB2BF">=</tspan> <tspan fill="#E5C07B">{</tspan>
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="0.3s" fill="freeze"/>
+    </text>
+    <text x="110" y="132" opacity="0">
+      <tspan fill="#ABB2BF">  </tspan><tspan fill="#61AFEF">role</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#98C379">'full-stack engineer'</tspan><tspan fill="#ABB2BF">,</tspan>
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="0.6s" fill="freeze"/>
+    </text>
+    <text x="110" y="160" opacity="0">
+      <tspan fill="#ABB2BF">  </tspan><tspan fill="#61AFEF">stack</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#E5C07B">[</tspan><tspan fill="#98C379">'next.ts'</tspan><tspan fill="#ABB2BF">,</tspan> <tspan fill="#98C379">'rust'</tspan><tspan fill="#ABB2BF">,</tspan> <tspan fill="#98C379">'c++'</tspan><tspan fill="#E5C07B">]</tspan><tspan fill="#ABB2BF">,</tspan>
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="0.9s" fill="freeze"/>
+    </text>
+    <text x="110" y="188" opacity="0">
+      <tspan fill="#ABB2BF">  </tspan><tspan fill="#61AFEF">ml</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#98C379">'xgboost · pytorch · gemini'</tspan><tspan fill="#ABB2BF">,</tspan>
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="1.2s" fill="freeze"/>
+    </text>
+    <text x="110" y="216" opacity="0">
+      <tspan fill="#ABB2BF">  </tspan><tspan fill="#C678DD">ship</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#61AFEF">()</tspan> <tspan fill="#56B6C2">=&gt;</tspan> <tspan fill="#98C379">'prod, not demo'</tspan><tspan fill="#ABB2BF">,</tspan>
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="1.5s" fill="freeze"/>
+    </text>
+    <text x="110" y="244" opacity="0">
+      <tspan fill="#ABB2BF">  </tspan><tspan fill="#61AFEF">depth</tspan><tspan fill="#ABB2BF">:</tspan> <tspan fill="#D19A66">'infra to product'</tspan><tspan fill="#ABB2BF">,</tspan>
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="1.8s" fill="freeze"/>
+    </text>
+    <text x="110" y="272" opacity="0">
+      <tspan fill="#E5C07B">}</tspan> <tspan fill="#7D8590">// hire me if it compiles</tspan>
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="2.1s" fill="freeze"/>
+    </text>
   </g>
 
-  <rect x="40" y="408" width="0" height="2" fill="url(#buildbar)">
-    <animate attributeName="width" from="0" to="1120" dur="4.8s" begin="0.2s" fill="freeze"/>
+  <!-- blinking cursor after last line -->
+  <rect x="110" y="284" width="2" height="18" fill="#4FD6FF" filter="url(#hglow)">
+    <animate attributeName="opacity" values="1;0;1" dur="0.7s" begin="2.4s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- build terminal panel (bottom section) -->
+  <rect x="40" y="360" width="1120" height="76" fill="#070A0F"/>
+  <line x1="40" y1="360" x2="1160" y2="360" stroke="#1A2332"/>
+  <g class="mono" font-size="12">
+    <!-- spinner circle -->
+    <g transform="translate(64,388)">
+      <circle r="7" fill="none" stroke="#1A2332" stroke-width="2"/>
+      <circle r="7" fill="none" stroke="#FFB454" stroke-width="2" stroke-linecap="round" stroke-dasharray="44" stroke-dashoffset="44">
+        <animate attributeName="stroke-dashoffset" values="44;11;44" keyTimes="0;0.5;1" dur="1s" begin="2.5s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" begin="2.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    <text x="84" y="392" fill="#7D8590" opacity="0">compiling dhruv.ts...
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="2.5s" fill="freeze"/>
+    </text>
+    <text x="84" y="412" fill="#7EE787" opacity="0">✓ built in 4.2s · 0 errors · 0 warnings
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.75;1" dur="4s" begin="2.5s" fill="freeze"/>
+    </text>
+    <text x="1140" y="392" fill="#5B6675" text-anchor="end" opacity="0">typescript · strict
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin="2.5s" fill="freeze"/>
+    </text>
+  </g>
+
+  <!-- build progress bar sweep -->
+  <rect x="40" y="432" width="0" height="4" fill="url(#hbuild)" filter="url(#hglow)">
+    <animate attributeName="width" from="0" to="1120" dur="3.5s" begin="2.5s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
   </rect>
 </svg>

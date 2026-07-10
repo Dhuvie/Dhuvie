@@ -1,83 +1,123 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" width="1200" height="280" role="img" aria-label="click to launch the interactive terminal">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" width="1200" height="260" role="img" aria-label="launch the interactive terminal">
   <defs>
-    <linearGradient id="lbg" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="tlbg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#0D1320"/>
-      <stop offset="1" stop-color="#080C14"/>
+      <stop offset="1" stop-color="#070A0F"/>
     </linearGradient>
-    <linearGradient id="titlebar2" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="tlbar" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#161D2B"/>
       <stop offset="1" stop-color="#0F1521"/>
     </linearGradient>
-    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="tlcta" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#4FD6FF"/>
       <stop offset="1" stop-color="#7EE787"/>
     </linearGradient>
-    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="tlsheen" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#fff" stop-opacity="0.25"/>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0.4"/>
       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </linearGradient>
-    <filter id="ctaglow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="b"/>
+    <linearGradient id="tlscan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="tlglow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <clipPath id="typeline1"><rect x="40" y="100" width="0" height="22"><animate attributeName="width" from="0" to="460" dur="1.2s" begin="0.4s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/></rect></clipPath>
-    <clipPath id="typeline2"><rect x="40" y="132" width="0" height="22"><animate attributeName="width" from="0" to="340" dur="0.9s" begin="1.7s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/></rect></clipPath>
+    <filter id="tlglow2" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
   </defs>
   <style>
     .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;}
     .disp{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;font-weight:700;}
-    @media (prefers-reduced-motion:reduce){animate,animateTransform,animateMotion{display:none}}
+    @media (prefers-reduced-motion:reduce){animate,animateTransform{display:none}}
   </style>
 
-  <rect width="1200" height="280" fill="url(#lbg)"/>
+  <rect width="1200" height="260" fill="url(#tlbg)"/>
 
-  <rect x="30" y="24" width="1140" height="232" rx="14" fill="#0B1018" stroke="#1E2735" stroke-width="1.5"/>
-  <path d="M30 38a14 14 0 0 1 14-14h1112a14 14 0 0 1 14 14v32H30z" fill="url(#titlebar2)"/>
-  <circle cx="54" cy="47" r="5.5" fill="#FF5F57"/>
-  <circle cx="74" cy="47" r="5.5" fill="#FEBC2E"/>
-  <circle cx="94" cy="47" r="5.5" fill="#28C840"/>
-  <text x="600" y="51" class="mono" font-size="12" fill="#5B6675" text-anchor="middle">dhruv@memory.bin: ~</text>
-  <circle cx="1146" cy="47" r="3.5" fill="#7EE787"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+  <!-- terminal window shell -->
+  <rect x="40" y="20" width="1120" height="220" rx="14" fill="#0B1018" stroke="#1A2332" stroke-width="1.5" filter="url(#tlglow2)"/>
 
-  <rect x="30" y="70" width="1140" height="186" fill="url(#lbg)" opacity="0.3"/>
-  <g opacity="0.08">
-    <rect x="30" y="70" width="1140" height="2" fill="#4FD6FF"/>
-    <rect x="30" y="74" width="1140" height="2" fill="#4FD6FF"/>
-    <rect x="30" y="78" width="1140" height="2" fill="#4FD6FF"/>
-    <rect x="30" y="82" width="1140" height="2" fill="#4FD6FF"/>
-  </g>
+  <!-- title bar -->
+  <path d="M40 34a14 14 0 0 1 14-14h1092a14 14 0 0 1 14 14v30H40z" fill="url(#tlbar)"/>
+  <circle cx="64" cy="42" r="5.5" fill="#FF5F57"/>
+  <circle cx="84" cy="42" r="5.5" fill="#FEBC2E"/>
+  <circle cx="104" cy="42" r="5.5" fill="#28C840"/>
+  <text x="600" y="46" class="mono" font-size="12" fill="#5B6675" text-anchor="middle">dhruv@memory.bin: ~</text>
+  <circle cx="1140" cy="42" r="3" fill="#7EE787" filter="url(#tlglow2)">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
 
-  <g class="mono" font-size="15">
-    <text x="40" y="118" fill="#7EE787">$</text>
-    <text x="56" y="118" fill="#E6EDF3" clip-path="url(#typeline1)">./launch --interactive terminal</text>
-    <text x="40" y="150" fill="#5B6675" clip-path="url(#typeline2)">initializing memory.bin ... ready</text>
-  </g>
-
-  <rect x="40" y="170" width="10" height="18" fill="#4FD6FF">
-    <animate attributeName="opacity" values="1;0;1" dur="0.7s" repeatCount="indefinite"/>
+  <!-- vertical scanning beam inside terminal -->
+  <rect x="40" y="64" width="1120" height="176" fill="url(#tlscan)" opacity="0.5">
+    <animate attributeName="y" values="64;200;64" dur="6s" repeatCount="indefinite"/>
   </rect>
 
-  <g transform="translate(0,210)">
-    <rect x="430" y="0" width="340" height="44" rx="22" fill="#0E2A1A" stroke="url(#cta)" stroke-width="2" filter="url(#ctaglow)"/>
-    <rect x="430" y="0" width="340" height="44" rx="22" fill="url(#sheen)" opacity="0">
-      <animate attributeName="x" values="430;690;430" dur="3.5s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0.6;0" dur="3.5s" repeatCount="indefinite"/>
-    </rect>
-    <text x="600" y="28" class="disp" font-size="16" fill="#E6EDF3" text-anchor="middle" letter-spacing="1">LAUNCH INTERACTIVE TERMINAL</text>
+  <!-- scanline texture -->
+  <g opacity="0.06">
+    <rect x="40" y="68" width="1120" height="2" fill="#4FD6FF"/>
+    <rect x="40" y="74" width="1120" height="2" fill="#4FD6FF"/>
+    <rect x="40" y="80" width="1120" height="2" fill="#4FD6FF"/>
+  </g>
 
-    <path d="M740 22 L756 22 M750 16 L756 22 L750 28" stroke="#4FD6FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- typed boot lines -->
+  <g class="mono" font-size="14">
+    <text x="60" y="100" fill="#7EE787" opacity="0">$
+      <animate attributeName="opacity" values="0;1" dur="0.2s" begin="0.3s" fill="freeze"/>
+    </text>
+    <text x="76" y="100" fill="#E6EDF3" opacity="0">./launch --interactive
+      <animate attributeName="opacity" values="0;1" dur="0.2s" begin="0.5s" fill="freeze"/>
+    </text>
+    <text x="60" y="124" fill="#5B6675" opacity="0">initializing memory.bin
+      <animate attributeName="opacity" values="0;1" dur="0.2s" begin="1.0s" fill="freeze"/>
+      <animate attributeName="fill" values="#5B6675;#5B6675;#7EE787" keyTimes="0;0.8;1" dur="1.5s" begin="1.0s" fill="freeze"/>
+    </text>
+    <text x="280" y="124" fill="#7EE787" opacity="0">[ ok ]
+      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.6;1" dur="1.6s" begin="1.0s" fill="freeze"/>
+    </text>
+    <text x="60" y="148" fill="#5B6675" opacity="0">loading 7 games · 40 easter eggs
+      <animate attributeName="opacity" values="0;1" dur="0.2s" begin="1.5s" fill="freeze"/>
+    </text>
+  </g>
+
+  <!-- blinking cursor -->
+  <rect x="60" y="158" width="9" height="16" fill="#4FD6FF" filter="url(#tlglow2)">
+    <animate attributeName="opacity" values="1;0;1" dur="0.6s" begin="2s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- ready line -->
+  <text x="60" y="184" class="mono" font-size="13" fill="#4FD6FF" opacity="0" filter="url(#tlglow2)">
+    ready. press enter.
+    <animate attributeName="opacity" values="0;1" dur="0.3s" begin="2.2s" fill="freeze"/>
+  </text>
+
+  <!-- CTA button with pulsing glow -->
+  <g transform="translate(600,218)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="2.5s" fill="freeze"/>
+    <!-- glow ring -->
+    <rect x="-175" y="-22" width="350" height="44" rx="22" fill="none" stroke="url(#tlcta)" stroke-width="1" opacity="0.4" filter="url(#tlglow)">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <!-- button body -->
+    <rect x="-175" y="-22" width="350" height="44" rx="22" fill="#0A1A14" stroke="url(#tlcta)" stroke-width="2"/>
+    <!-- sheen sweep -->
+    <rect x="-175" y="-22" width="100" height="44" rx="22" fill="url(#tlsheen)" opacity="0">
+      <animate attributeName="x" values="-175;75;-175" dur="3s" begin="2.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.6;0" dur="3s" begin="2.8s" repeatCount="indefinite"/>
+    </rect>
+    <!-- text -->
+    <text y="6" class="disp" font-size="15" fill="#E6EDF3" text-anchor="middle" letter-spacing="2">LAUNCH INTERACTIVE TERMINAL</text>
+    <!-- arrow -->
+    <path d="M125,0 L145,0 M138,-6 L145,0 L138,6" stroke="#4FD6FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#tlglow2)">
       <animate attributeName="opacity" values="1;0.4;1" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="transform" type="translate" values="0,0;4,0;0,0" dur="1.5s" repeatCount="indefinite"/>
     </path>
   </g>
 
-  <g stroke="#4FD6FF" stroke-width="1.5" fill="none" opacity="0.5">
-    <path d="M44 88h16M44 88v16"/>
-    <path d="M1156 88h-16M1156 88v16"/>
-    <path d="M44 240h16M44 240v-16"/>
-    <path d="M1156 240h-16M1156 240v-16"/>
-  </g>
-
-  <text x="40" y="266" class="mono" font-size="11" fill="#5B6675">github pages / live / no build step / just html</text>
-  <text x="1160" y="266" class="mono" font-size="11" fill="#5B6675" text-anchor="end">click anywhere on this card</text>
+  <!-- bottom hint -->
+  <text x="60" y="248" class="mono" font-size="10" fill="#4A5668">one file · no build step · just html</text>
+  <text x="1160" y="248" class="mono" font-size="10" fill="#4A5668" text-anchor="end">click anywhere</text>
 </svg>
