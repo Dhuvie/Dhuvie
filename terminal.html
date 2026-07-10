@@ -42,7 +42,7 @@
     position:relative; overflow:hidden;
   }
 
-  #rain{position:fixed; inset:0; width:100%; height:100%; opacity:0.14; pointer-events:none; z-index:0;}
+  #rain{position:fixed; inset:0; width:100%; height:100%; opacity:0.25; pointer-events:none; z-index:0; transition:opacity 0.5s;}
 
   .crt-overlay{
     position:fixed; inset:0; pointer-events:none; z-index:100;
@@ -65,7 +65,7 @@
   .win{
     position:relative; z-index:1;
     width:100%; max-width:920px; height:88vh; max-height:680px;
-    background:var(--panel); border:1px solid var(--line);
+    background:rgba(13,19,32,0.92); border:1px solid var(--line);
     border-radius:12px; overflow:hidden;
 
     box-shadow:0 0 0 1px rgba(79,214,255,0.08), 0 24px 80px rgba(0,0,0,0.6), inset 0 0 120px rgba(0,0,0,0.4);
@@ -317,6 +317,7 @@ const state = {
   bootDone: false,
   startTime: Date.now(),
   matrixBoost: false,
+  gogoRain: false,
 };
 
 function print(html=''){
@@ -890,7 +891,7 @@ commands.sound = (args) => {
 
 commands.rain = () => {
   state.matrixBoost = !state.matrixBoost;
-  document.getElementById('rain').style.opacity = state.matrixBoost ? '0.4' : '0.14';
+  document.getElementById('rain').style.opacity = state.matrixBoost ? '0.55' : '0.25';
   print(`<span class="dim">matrix rain ${state.matrixBoost?'boosted':'normal'}</span>`);
 };
 
@@ -949,27 +950,19 @@ commands.ps = () => {
 };
 
 commands.matrix = () => {
-  print('<span class="dim">wake up... the matrix has you...</span>');
-  const chars = ['0','1','A','B','C','D','E','F','x','E','L','F','§','∇','∑','∆','∂','∞','░','▒','▓'];
-  const colors = ['#4FD6FF','#7EE787','#FFB454','#B084EB'];
-  let count = 0;
-  const interval = setInterval(() => {
-    let line = '';
-    for(let i = 0; i < 60; i++){
-      const ch = chars[Math.floor(Math.random()*chars.length)];
-      const color = colors[Math.floor(Math.random()*colors.length)];
-      const esc = ch === '<' ? '&lt;' : ch === '>' ? '&gt;' : ch === '&' ? '&amp;' : ch;
-      line += '<span style="color:' + color + ';opacity:' + (0.3 + Math.random()*0.7).toFixed(2) + ';">' + esc + '</span>';
-    }
-    print(line);
-    count++;
-    if(count > 25){
-      clearInterval(interval);
-      blank();
-      print('<span class="dim">follow the white rabbit. knock knock.</span>');
-      blank();
-    }
-  }, 80);
+  state.matrixBoost = !state.matrixBoost;
+  const rain = document.getElementById('rain');
+  if(state.matrixBoost){
+    rain.style.opacity = '0.55';
+    print('<span class="dim">wake up... the matrix has you...</span>');
+    print('<span class="dim">matrix rain boosted. type "matrix" again to stop.</span>');
+    beep(440, 0.1, 0.04);
+  } else {
+    rain.style.opacity = '0.25';
+    print('<span class="dim">follow the white rabbit. knock knock.</span>');
+    beep(330, 0.1, 0.04);
+  }
+  blank();
 };
 
 commands.sl = () => {
@@ -2973,27 +2966,20 @@ function gogoPoem(){
 }
 
 function gogoMatrix(){
-  print('<span class="dim">gogo... wake up...</span>');
+  state.gogoRain = !state.gogoRain;
+  const rain = document.getElementById('rain');
+  if(state.gogoRain){
+    rain.style.opacity = '0.5';
+    print('<span style="color:#FF7B9C;">gogo rain: ON.</span>');
+    print('<span class="dim">gogo and hearts are now falling in the background.</span>');
+    print('<span class="dim">type "gogo matrix" again to stop.</span>');
+    beep(660, 0.1, 0.05);
+  } else {
+    rain.style.opacity = '0.25';
+    print('<span class="dim">gogo rain: OFF. back to normal.</span>');
+    beep(440, 0.1, 0.05);
+  }
   blank();
-  let count = 0;
-  const chars = ['g','o','g','o','0','1','♥','♥','G','G','❤'];
-  const colors = ['#FF7B9C','#FFB454','#4FD6FF','#7EE787'];
-  const interval = setInterval(() => {
-    let line = '';
-    for(let i = 0; i < 55; i++){
-      const ch = chars[Math.floor(Math.random() * chars.length)];
-      const c = colors[Math.floor(Math.random() * colors.length)];
-      line += '<span style="color:' + c + ';opacity:' + (0.3 + Math.random() * 0.7).toFixed(2) + ';">' + ch + '</span>';
-    }
-    print(line);
-    count++;
-    if(count > 18){
-      clearInterval(interval);
-      blank();
-      print('<span class="bright" style="color:#FF7B9C;">the matrix has gogo.</span>');
-      blank();
-    }
-  }, 80);
 }
 
 function gogoTypewriter(){
@@ -4459,9 +4445,14 @@ tickClock();
   window.addEventListener('resize', resize);
 
   function getColors(){
+    if(state.gogoRain) return ['#FF7B9C', '#FFB454', '#4FD6FF', '#7EE787'];
     if(state.theme === 'matrix') return ['#33FF66'];
     if(state.theme === 'amber') return ['#FFB454'];
     return ['#4FD6FF', '#B084EB', '#FFB454', '#5B6675'];
+  }
+  function getChars(){
+    if(state.gogoRain) return 'gogo♥gogo❤GoGo♥♥❤';
+    return chars;
   }
   function frame(){
 
@@ -4469,8 +4460,9 @@ tickClock();
     ctx.fillRect(0, 0, c.width, c.height);
     ctx.font = '13px monospace';
     const colors = getColors();
+    const pool = getChars();
     for(let i = 0; i < cols; i++){
-      const ch = chars[Math.floor(Math.random() * chars.length)];
+      const ch = pool[Math.floor(Math.random() * pool.length)];
       ctx.fillStyle = colors[i % colors.length];
       ctx.fillText(ch, i * 14, drops[i] * 14);
 
