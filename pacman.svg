@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220" width="1200" height="220" role="img" aria-label="a small looping Pac-Man scene chomping along the tech stack">
+  <defs>
+    <linearGradient id="pcbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B1018"/><stop offset="1" stop-color="#070A0F"/></linearGradient>
+    <radialGradient id="pacGlow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FFB454" stop-opacity="0.5"/><stop offset="1" stop-color="#FFB454" stop-opacity="0"/></radialGradient>
+    <filter id="blur1"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+  <style>
+    .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;}
+    @media (prefers-reduced-motion:reduce){animate,animateTransform,animateMotion{display:none}}
+  </style>
+
+  <rect width="1200" height="220" fill="url(#pcbg)"/>
+
+  <line x1="0" y1="120" x2="1200" y2="120" stroke="#161D2B" stroke-width="1" stroke-dasharray="2 8"/>
+
+  <g class="mono" font-size="11" fill="#4A5668" text-anchor="middle">
+    <g><circle cx="180" cy="100" r="5" fill="#4FD6FF"/><text x="180" y="148">ts</text></g>
+    <g><circle cx="300" cy="100" r="5" fill="#FF7B72"/><text x="300" y="148">rust</text></g>
+    <g><circle cx="420" cy="100" r="5" fill="#7EE787"/><text x="420" y="148">cpp</text></g>
+    <g><circle cx="540" cy="100" r="5" fill="#FFB454"/><text x="540" y="148">python</text></g>
+    <g><circle cx="660" cy="100" r="5" fill="#4FD6FF"/><text x="660" y="148">nextjs</text></g>
+    <g><circle cx="780" cy="100" r="5" fill="#FF7B9C"/><text x="780" y="148">opengl</text></g>
+    <g><circle cx="900" cy="100" r="5" fill="#C678DD"/><text x="900" y="148">pytorch</text></g>
+    <g><circle cx="1020" cy="100" r="5" fill="#7EE787"/><text x="1020" y="148">wasm</text></g>
+  </g>
+
+  <g>
+    <circle cx="180" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.10;0.14;0.2" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="300" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.20;0.24;0.30" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="420" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.31;0.35;0.41" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="540" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.41;0.45;0.51" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="660" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.52;0.56;0.62" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="780" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.62;0.66;0.72" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="900" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.73;0.77;0.83" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="1020" cy="100" r="5" fill="#FFB454"><animate attributeName="r" values="5;5;0;5" keyTimes="0;0.83;0.87;0.93" dur="9s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <g>
+    <circle cx="0" cy="100" r="34" fill="url(#pacGlow)" filter="url(#blur1)"/>
+    <g transform="translate(60,0)">
+      <animateTransform attributeName="transform" type="translate" values="60 0;1060 0;60 0" keyTimes="0;0.93;1" dur="9s" repeatCount="indefinite"/>
+      <path fill="#FFB454" d="M 0 100 L 16.85 85.86 A 22 22 0 1 1 16.85 114.14 Z">
+        <animate attributeName="d" values="M 0 100 L 16.85 85.86 A 22 22 0 1 1 16.85 114.14 Z;M 0 100 L 22 100 A 22 22 0 1 1 22 100.01 Z;M 0 100 L 16.85 85.86 A 22 22 0 1 1 16.85 114.14 Z" dur="0.32s" repeatCount="indefinite"/>
+      </path>
+      <circle cx="-6" cy="92" r="2.5" fill="#0B1018"/>
+    </g>
+  </g>
+
+  <g>
+
+    <g transform="translate(20,0)">
+      <animateTransform attributeName="transform" type="translate" values="20 0;1020 0;20 0" keyTimes="0;0.93;1" dur="9s" repeatCount="indefinite"/>
+      <g transform="translate(0,100)">
+        <animateTransform attributeName="transform" type="translate" values="0 100;0 94;0 100;0 96;0 100" dur="0.8s" additive="sum" repeatCount="indefinite"/>
+        <path fill="#FF5F57" d="M -16 4 A 16 16 0 1 1 16 4 L 16 12 L 10 6 L 5 12 L 0 6 L -5 12 L -10 6 L -16 12 Z"/>
+        <circle cx="-5" cy="-4" r="4" fill="#fff"/><circle cx="6" cy="-4" r="4" fill="#fff"/>
+        <circle cx="-5" cy="-4" r="2" fill="#0B1018"/><circle cx="6" cy="-4" r="2" fill="#0B1018"/>
+      </g>
+    </g>
+
+    <g transform="translate(-20,0)">
+      <animateTransform attributeName="transform" type="translate" values="-20 0;980 0;-20 0" keyTimes="0;0.93;1" dur="9s" repeatCount="indefinite"/>
+      <g transform="translate(0,100)">
+        <animateTransform attributeName="transform" type="translate" values="0 100;0 96;0 100;0 94;0 100" dur="0.9s" additive="sum" repeatCount="indefinite"/>
+        <path fill="#4FD6FF" d="M -16 4 A 16 16 0 1 1 16 4 L 16 12 L 10 6 L 5 12 L 0 6 L -5 12 L -10 6 L -16 12 Z"/>
+        <circle cx="-5" cy="-4" r="4" fill="#fff"/><circle cx="6" cy="-4" r="4" fill="#fff"/>
+        <circle cx="-5" cy="-4" r="2" fill="#0B1018"/><circle cx="6" cy="-4" r="2" fill="#0B1018"/>
+      </g>
+    </g>
+  </g>
+
+  <text x="40" y="30" class="mono" font-size="13" fill="#7D8590">// a* chasing dots — my own C++ build, running on a README</text>
+  <text x="1160" y="200" class="mono" font-size="11" fill="#4A5668" text-anchor="end">loop · 9s</text>
+</svg>

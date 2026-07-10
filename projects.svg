@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560" role="img" aria-label="symbol table of featured repositories">
+  <defs>
+    <linearGradient id="pbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B1018"/><stop offset="1" stop-color="#070A0F"/></linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4FD6FF" stop-opacity="0"/><stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.18"/><stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/></linearGradient>
+    <linearGradient id="spark1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4FD6FF"/><stop offset="1" stop-color="#7EE787"/></linearGradient>
+    <linearGradient id="spark2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFB454"/><stop offset="1" stop-color="#FF7B9C"/></linearGradient>
+  </defs>
+  <style>
+    .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;}
+    .name{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;font-weight:700;}
+    .row{opacity:0;}
+    @media (prefers-reduced-motion:reduce){animate,animateTransform,animateMotion{display:none}.row{opacity:1}}
+  </style>
+
+  <rect width="1200" height="560" fill="url(#pbg)"/>
+  <rect width="1200" height="560" fill="#0A0E14"/>
+  <rect width="1200" height="560" fill="url(#pbg)" opacity="0.9"/>
+
+  <text x="40" y="46" class="name" font-size="22" fill="#E6EDF3">.dynsym — featured repositories</text>
+  <text x="40" y="68" class="mono" font-size="12" fill="#7D8590">5 of 18 symbols · resolved from github.com/Dhuvie</text>
+  <line x1="40" y1="84" x2="1160" y2="84" stroke="#1E2735" stroke-width="1"/>
+  <g class="mono" font-size="11" fill="#4A5668">
+    <text x="60" y="106">[Nr]</text>
+    <text x="110" y="106">NAME</text>
+    <text x="640" y="106">TYPE / STACK</text>
+    <text x="950" y="106">COMMITS</text>
+    <text x="1120" y="106">F1/★</text>
+  </g>
+  <line x1="40" y1="116" x2="1160" y2="116" stroke="#1E2735" stroke-width="1"/>
+
+  <rect x="40" y="116" width="1120" height="90" fill="url(#beam)">
+    <animate attributeName="y" values="116;470;116" dur="9s" repeatCount="indefinite"/>
+  </rect>
+
+  <g class="row" transform="translate(0,150)">
+    <animateTransform attributeName="transform" type="translate" from="0 150" to="0 150" begin="0s" dur="0.01s"/>
+    <animate attributeName="opacity" values="0;1" dur="0.5s" begin="0.2s" fill="freeze"/>
+    <text x="60" y="0" class="mono" font-size="13" fill="#4A5668">[1]</text>
+    <text x="110" y="0" class="name" font-size="20" fill="#E6EDF3">agrivision-ai</text>
+    <text x="110" y="22" class="mono" font-size="12" fill="#7D8590">AI agricultural intelligence — crop yield, pest &amp; disease, soil, markets</text>
+    <rect x="640" y="-14" width="150" height="22" rx="11" fill="#0E2A1A" stroke="#1F6F33"/>
+    <circle cx="654" cy="-3" r="4" fill="#7EE787"><animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/></circle>
+    <text x="666" y="1" class="mono" font-size="11" fill="#7EE787">Next.js · Gemini · TS</text>
+    <polyline points="950,4 975,-4 1000,2 1025,-8 1050,-2 1075,-10 1100,-6" fill="none" stroke="url(#spark1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="200" stroke-dashoffset="200"><animate attributeName="stroke-dashoffset" from="200" to="0" dur="1s" begin="0.5s" fill="freeze"/></polyline>
+    <text x="1120" y="1" class="mono" font-size="12" fill="#FFB454">★</text>
+  </g>
+
+  <g class="row" transform="translate(0,230)">
+    <animate attributeName="opacity" values="0;1" dur="0.5s" begin="0.6s" fill="freeze"/>
+    <text x="60" y="0" class="mono" font-size="13" fill="#4A5668">[2]</text>
+    <text x="110" y="0" class="name" font-size="20" fill="#E6EDF3">Pac-man</text>
+    <text x="110" y="22" class="mono" font-size="12" fill="#7D8590">C++17 Pac-Man with real ghost AI — A*/Dijkstra, OpenGL, particles</text>
+    <rect x="640" y="-14" width="150" height="22" rx="11" fill="#2A1A0E" stroke="#6F4F1F"/>
+    <circle cx="654" cy="-3" r="4" fill="#FFB454"><animate attributeName="opacity" values="1;0.3;1" dur="2.2s" repeatCount="indefinite"/></circle>
+    <text x="666" y="1" class="mono" font-size="11" fill="#FFB454">C++17 · OpenGL · CMake</text>
+    <polyline points="950,2 975,-2 1000,4 1025,-6 1050,0 1075,-4 1100,-8" fill="none" stroke="url(#spark2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="200" stroke-dashoffset="200"><animate attributeName="stroke-dashoffset" from="200" to="0" dur="1s" begin="0.9s" fill="freeze"/></polyline>
+    <text x="1120" y="1" class="mono" font-size="12" fill="#FFB454">★</text>
+  </g>
+
+  <g class="row" transform="translate(0,310)">
+    <animate attributeName="opacity" values="0;1" dur="0.5s" begin="1.0s" fill="freeze"/>
+    <text x="60" y="0" class="mono" font-size="13" fill="#4A5668">[3]</text>
+    <text x="110" y="0" class="name" font-size="20" fill="#E6EDF3">DashCode</text>
+    <text x="110" y="22" class="mono" font-size="12" fill="#7D8590">Competitive programming analytics — LeetCode/CF/CodeChef/HackerRank</text>
+    <rect x="640" y="-14" width="150" height="22" rx="11" fill="#0E1A2A" stroke="#1F4F6F"/>
+    <circle cx="654" cy="-3" r="4" fill="#4FD6FF"><animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/></circle>
+    <text x="666" y="1" class="mono" font-size="11" fill="#4FD6FF">Next.js · TS · Postgres</text>
+    <polyline points="950,0 975,-6 1000,-2 1025,4 1050,-8 1075,-4 1100,-10" fill="none" stroke="url(#spark1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="200" stroke-dashoffset="200"><animate attributeName="stroke-dashoffset" from="200" to="0" dur="1s" begin="1.3s" fill="freeze"/></polyline>
+    <text x="1120" y="1" class="mono" font-size="12" fill="#FFB454">★</text>
+  </g>
+
+  <g class="row" transform="translate(0,390)">
+    <animate attributeName="opacity" values="0;1" dur="0.5s" begin="1.4s" fill="freeze"/>
+    <text x="60" y="0" class="mono" font-size="13" fill="#4A5668">[4]</text>
+    <text x="110" y="0" class="name" font-size="20" fill="#E6EDF3">UPI-ML-Fraud-Detection</text>
+    <text x="110" y="22" class="mono" font-size="12" fill="#7D8590">Real-time transaction fraud detection over Indian UPI — 87% F1</text>
+    <rect x="640" y="-14" width="150" height="22" rx="11" fill="#2A0E1A" stroke="#6F1F3F"/>
+    <circle cx="654" cy="-3" r="4" fill="#FF7B9C"><animate attributeName="opacity" values="1;0.3;1" dur="2.0s" repeatCount="indefinite"/></circle>
+    <text x="666" y="1" class="mono" font-size="11" fill="#FF7B9C">Python · XGBoost · Flask</text>
+    <polyline points="950,4 975,2 1000,-4 1025,-2 1050,-8 1075,-6 1100,-12" fill="none" stroke="url(#spark2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="200" stroke-dashoffset="200"><animate attributeName="stroke-dashoffset" from="200" to="0" dur="1s" begin="1.7s" fill="freeze"/></polyline>
+    <text x="1118" y="1" class="mono" font-size="12" fill="#7EE787">.87</text>
+  </g>
+
+  <g class="row" transform="translate(0,470)">
+    <animate attributeName="opacity" values="0;1" dur="0.5s" begin="1.8s" fill="freeze"/>
+    <text x="60" y="0" class="mono" font-size="13" fill="#4A5668">[5]</text>
+    <text x="110" y="0" class="name" font-size="20" fill="#E6EDF3">UniSlot</text>
+    <text x="110" y="22" class="mono" font-size="12" fill="#7D8590">Real-time slot booking + chat with AI content moderation</text>
+    <rect x="640" y="-14" width="150" height="22" rx="11" fill="#0E2A1A" stroke="#1F6F33"/>
+    <circle cx="654" cy="-3" r="4" fill="#7EE787"><animate attributeName="opacity" values="1;0.3;1" dur="1.9s" repeatCount="indefinite"/></circle>
+    <text x="666" y="1" class="mono" font-size="11" fill="#7EE787">Node.js · Firebase · JS</text>
+    <polyline points="950,-2 975,4 1000,-4 1025,2 1050,-6 1075,0 1100,-8" fill="none" stroke="url(#spark1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="200" stroke-dashoffset="200"><animate attributeName="stroke-dashoffset" from="200" to="0" dur="1s" begin="2.1s" fill="freeze"/></polyline>
+    <text x="1120" y="1" class="mono" font-size="12" fill="#FFB454">★</text>
+  </g>
+
+  <line x1="40" y1="520" x2="1160" y2="520" stroke="#1E2735" stroke-width="1"/>
+  <text x="40" y="542" class="mono" font-size="11" fill="#4A5668">13 more symbols in .dynsym — expand the repositories below to resolve them</text>
+</svg>

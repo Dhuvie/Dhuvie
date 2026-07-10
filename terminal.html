@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>memory.bin - interactive terminal</title>
+<meta name="description" content="Dhruv Narayan Bajaj - interactive terminal running on a static page. Type 'help' to explore.">
+
+<style>
+
+  :root{
+    --bg:#0A0E14;
+    --panel:#0D1320;
+    --line:#1A2332;
+    --text:#C9D1D9;
+    --dim:#5B6675;
+    --bright:#E6EDF3;
+    --cyan:#4FD6FF;
+    --amber:#FFB454;
+    --violet:#B084EB;
+    --green:#7EE787;
+    --red:#FF6B6B;
+  }
+
+  [data-theme="matrix"]{
+    --bg:#000700; --panel:#001200; --line:#003300;
+    --text:#33FF66; --dim:#1A6633; --bright:#66FF99;
+    --cyan:#33FF66; --amber:#33FF66; --violet:#33FF66; --green:#33FF66; --red:#33FF66;
+  }
+
+  [data-theme="amber"]{
+    --bg:#0A0800; --panel:#120E00; --line:#2A2200;
+    --text:#FFB454; --dim:#6B5A2E; --bright:#FFD699;
+    --cyan:#FFB454; --amber:#FFB454; --violet:#FFB454; --green:#FFB454; --red:#FF6B6B;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; background:var(--bg);}
+  body{
+    font-family:'JetBrains Mono','Fira Code',SFMono-Regular,Menlo,Consolas,monospace;
+    display:flex; align-items:center; justify-content:center; padding:12px;
+    position:relative; overflow:hidden;
+  }
+
+  #rain{position:fixed; inset:0; width:100%; height:100%; opacity:0.14; pointer-events:none; z-index:0;}
+
+  .crt-overlay{
+    position:fixed; inset:0; pointer-events:none; z-index:100;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,0.18) 3px, rgba(0,0,0,0) 4px);
+    mix-blend-mode:multiply;
+  }
+
+  .crt-vignette{
+    position:fixed; inset:0; pointer-events:none; z-index:101;
+    background:radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.45) 100%);
+  }
+
+  .crt-flicker{
+    position:fixed; inset:0; pointer-events:none; z-index:102;
+    background:rgba(79,214,255,0.015);
+    animation:flicker 0.15s infinite;
+  }
+  @keyframes flicker{ 0%{opacity:0.92;} 50%{opacity:1;} 100%{opacity:0.96;} }
+
+  .win{
+    position:relative; z-index:1;
+    width:100%; max-width:920px; height:88vh; max-height:680px;
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; overflow:hidden;
+
+    box-shadow:0 0 0 1px rgba(79,214,255,0.08), 0 24px 80px rgba(0,0,0,0.6), inset 0 0 120px rgba(0,0,0,0.4);
+    display:flex; flex-direction:column;
+    animation:bootIn 0.6s cubic-bezier(0.2,0.8,0.2,1);
+  }
+
+  @keyframes bootIn{ from{opacity:0; transform:translateY(12px) scale(0.98);} to{opacity:1; transform:none;} }
+
+  .bar{
+    height:36px; display:flex; align-items:center; gap:8px; padding:0 14px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    flex-shrink:0; position:relative;
+  }
+  .dot{width:12px; height:12px; border-radius:50%; flex-shrink:0;}
+  .bar .title{position:absolute; left:50%; transform:translateX(-50%); color:var(--dim); font-size:12px; white-space:nowrap;}
+  .bar .right{margin-left:auto; display:flex; gap:6px; align-items:center;}
+  .bar .led{width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 4px var(--green);}
+  .bar .led.pulse{animation:ledPulse 2s infinite;}
+  @keyframes ledPulse{50%{opacity:0.3;}}
+
+  #screen{
+    flex:1; overflow-y:auto; padding:16px 20px;
+    color:var(--text); font-size:13.5px; line-height:1.6;
+    scroll-behavior:smooth;
+  }
+  #screen::-webkit-scrollbar{width:6px;}
+  #screen::-webkit-scrollbar-track{background:transparent;}
+  #screen::-webkit-scrollbar-thumb{background:var(--line); border-radius:3px;}
+  #screen::-webkit-scrollbar-thumb:hover{background:var(--dim);}
+
+  .prompt{color:var(--green);}
+  .dim{color:var(--dim);}
+  .cyan{color:var(--cyan);}
+  .amber{color:var(--amber);}
+  .violet{color:var(--violet);}
+  .green{color:var(--green);}
+  .red{color:var(--red);}
+  .bright{color:var(--bright); font-weight:bold;}
+
+  .glitch{animation:glitch 0.3s steps(2) 2;}
+  @keyframes glitch{
+    0%{text-shadow:2px 0 var(--cyan), -2px 0 var(--red); transform:translateX(0);}
+    50%{text-shadow:-2px 0 var(--cyan), 2px 0 var(--red); transform:translateX(1px);}
+    100%{text-shadow:none; transform:translateX(0);}
+  }
+
+  a{color:var(--cyan); text-decoration:none; border-bottom:1px dotted var(--cyan);}
+  a:hover{color:var(--amber); border-bottom-color:var(--amber);}
+
+  .proj{
+    border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin:6px 0;
+    transition:all 0.2s; cursor:default;
+  }
+  .proj:hover{border-color:var(--cyan); background:rgba(79,214,255,0.04); transform:translateX(2px);}
+
+  .btnrow{
+    display:flex; gap:6px; flex-wrap:wrap; padding:8px 16px;
+    border-top:1px solid var(--line); flex-shrink:0;
+    background:rgba(0,0,0,0.2);
+  }
+  .btn{
+    cursor:pointer; border:1px solid var(--line); color:var(--dim);
+    background:#0A0F1A; padding:4px 10px; border-radius:5px;
+    font-size:11.5px; font-family:inherit; transition:all 0.15s; white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--cyan); color:var(--cyan); transform:translateY(-1px);}
+  .btn:active{transform:translateY(0);}
+
+  #inputLine{
+    display:flex; align-items:center; gap:8px; padding:10px 20px 14px;
+    border-top:1px solid var(--line); flex-shrink:0;
+  }
+  #cmd{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--bright); font:inherit; font-size:13.5px; caret-color:var(--cyan);
+  }
+  #cmd::placeholder{color:var(--dim); opacity:0.6;}
+
+  #statusbar{
+    height:24px; display:flex; align-items:center; gap:16px; padding:0 14px;
+    border-top:1px solid var(--line); background:rgba(0,0,0,0.3);
+    font-size:11px; color:var(--dim); flex-shrink:0;
+  }
+  #statusbar .sep{color:var(--line);}
+  #statusbar .right{margin-left:auto;}
+
+  #boot{
+    position:absolute; inset:0; z-index:50; background:#000;
+    overflow:hidden; font-size:11.5px; line-height:1.4; padding:12px 16px;
+    color:var(--dim); white-space:pre;
+  }
+  #boot .ok{color:var(--green);}
+  #boot .warn{color:var(--amber);}
+  #boot .info{color:var(--cyan);}
+  #boot.hide{opacity:0; pointer-events:none; transition:opacity 0.5s;}
+
+  @media (max-width:640px){
+    body{padding:0;}
+    .win{border-radius:0; max-width:100%; height:100vh; max-height:100vh;}
+    #screen{font-size:12.5px; padding:12px 14px;}
+    .bar .title{font-size:10px;}
+    #statusbar{font-size:10px; gap:10px;}
+    #statusbar .hide-mobile{display:none;}
+  }
+
+  .modal-overlay{
+    position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.85);
+    display:none; align-items:center; justify-content:center; padding:20px;
+    backdrop-filter:blur(2px);
+  }
+  .modal-overlay.active{display:flex;}
+  .modal{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    box-shadow:0 0 0 1px rgba(79,214,255,0.1), 0 30px 100px rgba(0,0,0,0.8);
+    max-width:680px; width:100%; max-height:85vh; overflow:hidden;
+    display:flex; flex-direction:column;
+    animation:bootIn 0.25s ease-out;
+  }
+  .modal-bar{
+    height:32px; display:flex; align-items:center; gap:8px; padding:0 12px;
+    border-bottom:1px solid var(--line); background:rgba(0,0,0,0.3);
+    font-size:11px; color:var(--dim); flex-shrink:0;
+  }
+  .modal-bar .mt{margin-left:auto;}
+
+  .vim-body{
+    flex:1; overflow-y:auto; padding:12px 16px; font-size:13.5px;
+    line-height:1.55; color:var(--text); white-space:pre-wrap; word-break:break-word;
+    font-family:inherit; min-height:300px; outline:none;
+  }
+  .vim-body .ln{color:var(--dim); user-select:none; display:inline-block; width:28px; text-align:right; margin-right:12px;}
+  .vim-cmdline{
+    border-top:1px solid var(--line); padding:6px 16px; font-size:12.5px;
+    color:var(--green); background:rgba(0,0,0,0.3); flex-shrink:0;
+    min-height:24px; display:flex; align-items:center;
+  }
+  .vim-help{
+    border-top:1px solid var(--line); padding:6px 16px; font-size:10.5px;
+    color:var(--dim); background:rgba(0,0,0,0.2); flex-shrink:0;
+    line-height:1.5;
+  }
+
+  .game-body{
+    flex:1; overflow-y:auto; padding:16px; font-size:13.5px; line-height:1.7;
+    color:var(--text); min-height:320px;
+  }
+  .game-bar{
+    border-top:1px solid var(--line); padding:8px 16px; font-size:12px;
+    color:var(--dim); background:rgba(0,0,0,0.3); flex-shrink:0;
+    display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+  }
+  .game-bar .stat{color:var(--cyan);}
+  .game-bar .stat b{color:var(--bright);}
+  .game-prompt{
+    border-top:1px solid var(--line); padding:8px 16px; flex-shrink:0;
+    display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.2);
+  }
+  .game-prompt input{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--bright); font:inherit; font-size:13.5px; caret-color:var(--cyan);
+  }
+  .btn-action{
+    cursor:pointer; border:1px solid var(--line); color:var(--text);
+    background:#0A0F1A; padding:5px 14px; border-radius:5px;
+    font-size:12px; font-family:inherit; transition:all 0.15s;
+  }
+  .btn-action:hover{border-color:var(--cyan); color:var(--cyan);}
+  .btn-action.danger{border-color:#5A2A2A; color:var(--red);}
+  .btn-action.danger:hover{border-color:var(--red); color:var(--red);}
+</style>
+</head>
+<body data-theme="default">
+
+<canvas id="rain"></canvas>
+<div class="crt-overlay"></div>
+<div class="crt-vignette"></div>
+<div class="crt-flicker"></div>
+
+<div class="win">
+
+  <div class="bar">
+    <div class="dot" style="background:#FF5F57"></div>
+    <div class="dot" style="background:#FEBC2E"></div>
+    <div class="dot" style="background:#28C840"></div>
+    <span class="title">dhruv@memory.bin: ~</span>
+    <div class="right">
+      <span class="led pulse" id="ledNet" title="online"></span>
+    </div>
+  </div>
+
+  <div id="boot"></div>
+
+  <div id="screen"></div>
+
+  <div class="btnrow" id="btnrow">
+    <button class="btn" data-cmd="help">help</button>
+    <button class="btn" data-cmd="neofetch">neofetch</button>
+    <button class="btn" data-cmd="whoami">whoami</button>
+    <button class="btn" data-cmd="about">about</button>
+    <button class="btn" data-cmd="projects">projects</button>
+    <button class="btn" data-cmd="research">research</button>
+    <button class="btn" data-cmd="stack">stack</button>
+    <button class="btn" data-cmd="ls">ls</button>
+    <button class="btn" data-cmd="tree">tree</button>
+    <button class="btn" data-cmd="contact">contact</button>
+    <button class="btn" data-cmd="guestbook">guestbook</button>
+  </div>
+
+  <div id="inputLine">
+    <span class="prompt" id="promptText">dhruv@memory.bin:~$</span>
+    <input id="cmd" autocomplete="off" spellcheck="false" autocapitalize="off"
+           placeholder="type 'help' and press enter..." />
+  </div>
+
+  <div id="statusbar">
+    <span id="sbHost">memory.bin</span>
+    <span class="sep">|</span>
+    <span id="sbPath">~</span>
+    <span class="sep">|</span>
+    <span class="hide-mobile" id="sbCmds">0 cmds</span>
+    <span class="sep hide-mobile">|</span>
+    <span class="hide-mobile" id="sbTheme">default</span>
+    <span class="right" id="sbClock">--:--:--</span>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+const screen = document.getElementById('screen');
+const input = document.getElementById('cmd');
+const promptText = document.getElementById('promptText');
+const bootEl = document.getElementById('boot');
+const sbPath = document.getElementById('sbPath');
+const sbCmds = document.getElementById('sbCmds');
+const sbTheme = document.getElementById('sbTheme');
+const sbClock = document.getElementById('sbClock');
+
+const state = {
+  history: [],
+  histIdx: -1,
+  cwd: '/home/dhruv',
+  cmdCount: 0,
+  soundOn: false,
+  theme: 'default',
+  bootDone: false,
+  startTime: Date.now(),
+  matrixBoost: false,
+};
+
+function print(html=''){
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  screen.appendChild(d);
+  scroll();
+  return d;
+}
+function printRaw(text=''){
+  const d = document.createElement('div');
+
+  d.textContent = text;
+  screen.appendChild(d);
+  scroll();
+  return d;
+}
+function blank(){ print('&nbsp;'); }
+function scroll(){ screen.scrollTop = screen.scrollHeight; }
+function clearScreen(){ screen.innerHTML=''; }
+
+let audioCtx = null;
+function beep(freq=440, dur=0.03, vol=0.04){
+  if(!state.soundOn) return;
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.frequency.value = freq;
+    o.type = 'square';
+    g.gain.value = vol;
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + dur);
+  }catch(e){  }
+}
+
+const fs = {
+  type:'dir',
+  children:{
+  'home': { type:'dir', children:{
+    'dhruv': { type:'dir', children:{
+
+      'about.txt': {type:'file', content:
+`Dhruv Narayan Bajaj
+Full-Stack Engineer and Systems Programmer
+
+I design and ship full-stack products end to end, then go a layer deeper
+and build the infrastructure underneath them myself. Recent work spans a
+distributed version-control system in Rust, a WASM sandbox for untrusted
+plugins, and real-time OpenGL engines with classical AI pathfinding,
+alongside production Next.js / TypeScript apps wired to XGBoost, PyTorch,
+Gemini and LangGraph.`},
+      'stack.txt': {type:'file', content:
+`LANGUAGES    TypeScript / Rust / C++ / Python / C / JavaScript / C#
+FRAMEWORKS   Next.js / React / PyTorch / Flask / OpenGL / Node.js
+INFRA        Git / Docker / WASM / Linux / Vercel / VS Code`},
+      'contact.vcf': {type:'file', content:
+`BEGIN:VCARD
+VERSION:3.0
+FN:Dhruv Narayan Bajaj
+EMAIL:dhruvnarayanbajaj@gmail.com
+URL:https://dhruvnarayanbajaj.dev
+URL:https://github.com/Dhuvie
+END:VCARD`},
+      'README.txt': {type:'file', content:
+`Welcome to memory.bin.
+
+This is a live terminal running on a static page. Nothing here is a
+screenshot. Type 'help' for the command list, or try 'neofetch',
+'projects', 'tree', or 'guestbook'.
+
+Everything you see was built from scratch in one HTML file. The source
+is heavily commented. Read it if you want to see how the trick works.`},
+      'fortune.txt': {type:'file', content:
+`A README is a contract. Break it and you lose trust.
+The best bug is the one you write out of existence by design.
+A model that compiles is not a model that ships.
+Every layer of abstraction is a layer you will dig through at 2am.
+You do not understand a pointer until you have drawn it on paper.`},
+
+      'projects': {type:'dir', children:{
+        'agrivision-ai.txt': {type:'file', content:
+`agrivision-ai
+  AI-powered agricultural intelligence for Indian farmers.
+  Crop yield prediction, pest and disease detection, soil analysis,
+  and market intelligence. Gemini for unstructured queries, classical
+  and gradient-boosted models for structured prediction.
+
+  Stack: Next.js 15 / Google Gemini / TypeScript
+  Repo:  https://github.com/Dhuvie/agrivision-ai`},
+        'pac-man.txt': {type:'file', content:
+`Pac-man
+  C++17 Pac-Man with real A*/Dijkstra ghost AI, OpenGL rendering,
+  particle effects, and four distinct ghost personalities. Each ghost
+  has a genuinely different pursuit strategy.
+
+  Stack: C++17 / OpenGL / CMake
+  Repo:  https://github.com/Dhuvie/Pac-man`},
+        'dashcode.txt': {type:'file', content:
+`DashCode
+  Full-stack analytics platform for competitive programmers. Tracks
+  LeetCode, Codeforces, CodeChef and HackerRank with live streaks.
+
+  Stack: Next.js / TypeScript / PostgreSQL
+  Repo:  https://github.com/Dhuvie/DashCode`},
+        'upi-ml-fraud-detection.txt': {type:'file', content:
+`UPI-ML-Fraud-Detection
+  Real-time UPI transaction fraud detection tuned to an 87% F1-score
+  over Indian digital payment data. Built around the cost asymmetry
+  between false positives and false negatives, not raw accuracy.
+
+  Stack: Python / XGBoost / Scikit-learn / Flask
+  Repo:  https://github.com/Dhuvie/UPI-ML-Fraud-Detection`},
+        'unislot.txt': {type:'file', content:
+`UniSlot
+  Real-time slot booking and chat for university students with
+  AI-driven content moderation built inline into the chat layer.
+
+  Stack: Node.js / Firebase / JavaScript
+  Repo:  https://github.com/Dhuvie/UniSlot`},
+        'autoforge.txt': {type:'file', content:
+`AutoForge
+  AutoML and MLOps platform simulator. Upload datasets, get auto EDA
+  and pipeline generation. Built with Next.js 16.
+
+  Stack: TypeScript / Next.js
+  Repo:  https://github.com/Dhuvie/AutoForge`},
+        'medisync.txt': {type:'file', content:
+`Medisync
+  AI-powered clinical decision support system for triage and
+  diagnostic reasoning.
+
+  Stack: TypeScript / Next.js
+  Repo:  https://github.com/Dhuvie/Medisync`},
+        'ecoroute.txt': {type:'file', content:
+`Ecoroute
+  Intelligent route optimization using ensemble ML models: XGBoost,
+  LightGBM, CatBoost.
+
+  Stack: Python
+  Repo:  https://github.com/Dhuvie/Ecoroute`},
+        'card-orchestration.txt': {type:'file', content:
+`Card-Orchestration
+  AI-powered CRM orchestration that automatically extracts, enriches
+  and stores contact data.
+
+  Stack: Python
+  Repo:  https://github.com/Dhuvie/Card-Orchestration`},
+        'astra-ledger.txt': {type:'file', content:
+`Astra_Ledger
+  Production-ready personal finance dashboard with Plaid and Postgres.
+
+  Stack: TypeScript / Next.js
+  Repo:  https://github.com/Dhuvie/Astra_Ledger`},
+        'edgevision.txt': {type:'file', content:
+`EdgeVision
+  Edge-deployed computer vision work.
+
+  Stack: TypeScript
+  Repo:  https://github.com/Dhuvie/EdgeVision`},
+        'codeolio.txt': {type:'file', content:
+`Codeolio
+  Developer portfolio / snippet tooling.
+
+  Stack: TypeScript
+  Repo:  https://github.com/Dhuvie/Codeolio`},
+      }},
+
+      'research': {type:'dir', children:{
+        'tinyml-quantization.txt': {type:'file', content:
+`Adaptive Quantization in TinyML
+
+Dynamic, per-layer, runtime-aware quantization to push state-of-the-art
+accuracy on microcontrollers with under 512KB of RAM, while cutting
+energy consumption 3 to 5 times over static 8-bit methods.
+
+The core idea: not all layers deserve the same precision at the same
+moment. A convolution near the input and a classifier near the output
+fail in very different ways, and a static bit-width throws away budget
+on layers that could tolerate less.`},
+        'memory-forensics.txt': {type:'file', content:
+`Memory Forensics
+
+Lightweight tooling and algorithms for post-mortem and live data
+recovery, anomaly detection, and reverse engineering in constrained
+embedded environments.
+
+The constraint is the point: full desktop forensic stacks do not fit,
+so the work is about which signals you can recover from a partial,
+possibly-corrupted image when you cannot assume the kernel is telling
+you the truth.`},
+      }},
+
+      '.secrets': {type:'dir', children:{
+        'flag.txt': {type:'file', content:
+`You found it. Good instincts.
+
+There is no prize, but there is respect. If you enjoyed digging through
+this filesystem, we would probably get along. Reach out:
+dhruvnarayanbajaj@gmail.com`},
+        'konami.txt': {type:'file', content:
+`psst: try the konami code on your keyboard.
+up up down down left right left right b a`},
+      }},
+
+      '.config': {type:'dir', children:{
+        'memory.sh': {type:'file', content:
+`# ~/.config/memory.sh - shell config for memory.bin
+export PS1='dhruv@memory.bin:\\w$ '
+export THEME=default
+alias ll='ls -la'
+alias ..='cd ..'
+alias please='sudo'`},
+      }},
+    }}
+  }}
+  }
+};
+
+function resolvePath(path){
+  if(!path) return state.cwd;
+  if(path === '~') return '/home/dhruv';
+  if(path.startsWith('~/')) path = '/home/dhruv/' + path.slice(2);
+
+  let parts = (path.startsWith('/') ? path : state.cwd + '/' + path).split('/');
+  let resolved = [];
+  for(let p of parts){
+    if(!p || p === '.') continue;
+    if(p === '..'){ resolved.pop(); continue; }
+    resolved.push(p);
+  }
+  return '/' + resolved.join('/');
+}
+function getNode(path){
+  if(path === '/' || path === '') return fs;
+  let parts = path.split('/').filter(Boolean);
+  let node = fs;
+  for(let p of parts){
+    if(node.type !== 'dir' || !node.children || !node.children[p]) return null;
+    node = node.children[p];
+  }
+  return node;
+}
+function shortPath(path){
+  if(path === '/home/dhruv') return '~';
+  if(path.startsWith('/home/dhruv/')) return '~/' + path.slice(12);
+  return path;
+}
+function updatePrompt(){
+  const sp = shortPath(state.cwd);
+  promptText.textContent = `dhruv@memory.bin:${sp}$`;
+  sbPath.textContent = sp;
+  document.querySelector('.bar .title').textContent = `dhruv@memory.bin: ${sp}`;
+}
+
+const commands = {};
+
+commands.help = () => {
+  print('<span class="dim">core</span>');
+  print('  <span class="cyan">whoami</span>       one line, no fluff');
+  print('  <span class="cyan">about</span>        the long version');
+  print('  <span class="cyan">neofetch</span>     system info card with ASCII art');
+  print('  <span class="cyan">projects</span>     exported symbols (real repos)');
+  print('  <span class="cyan">research</span>     what I read papers about at 1am');
+  print('  <span class="cyan">stack</span>        languages / frameworks / infra');
+  print('  <span class="cyan">contact</span>      reach me');
+  blank();
+  print('<span class="dim">filesystem</span>');
+  print('  <span class="cyan">ls</span> [path] [-l] [-a]   list directory');
+  print('  <span class="cyan">cd</span> [path]              change directory');
+  print('  <span class="cyan">pwd</span>                    print working directory');
+  print('  <span class="cyan">cat</span> [file]             read a file');
+  print('  <span class="cyan">tree</span>                   recursive directory tree');
+  print('  <span class="cyan">file</span> [path]            identify file type');
+  print('  <span class="cyan">find</span> [name]            search for a file');
+  blank();
+  print('<span class="dim">meta</span>');
+  print('  <span class="cyan">history</span>      everything you typed');
+  print('  <span class="cyan">guestbook</span>     sign the visitor log');
+  print('  <span class="cyan">theme</span> [name]  default / matrix / amber');
+  print('  <span class="cyan">sound</span> on|off  toggle audio feedback');
+  print('  <span class="cyan">matrix</span>        boost the rain');
+  print('  <span class="cyan">banner</span>        the ASCII logo');
+  print('  <span class="cyan">fortune</span>       random wisdom');
+  print('  <span class="cyan">cowsay</span> [msg]   a cow says something');
+  print('  <span class="cyan">date</span>          current time');
+  print('  <span class="cyan">uname</span> [-a]    kernel info');
+  print('  <span class="cyan">uptime</span>        session uptime');
+  print('  <span class="cyan">ps</span>            list fake processes');
+  print('  <span class="cyan">echo</span> [text]   print text');
+  print('  <span class="cyan">man</span> [cmd]     manual for a command');
+  print('  <span class="cyan">clear</span>         clear screen');
+  blank();
+  print('<span class="dim">tips: tab to autocomplete / up-down for history / ctrl+l to clear / ctrl+c to cancel</span>');
+  print('<span class="dim">hint: there are easter eggs. try weird things.</span>');
+};
+
+commands.whoami = () => {
+  print('Dhruv Narayan Bajaj. Full-stack engineer and systems programmer.');
+};
+
+commands.about = () => {
+  const lines = [
+    'I design and ship full-stack products end to end, then go a layer',
+    'deeper and build the infrastructure underneath them myself. Recent',
+    'work spans a distributed version-control system in Rust, a WASM',
+    'sandbox for untrusted plugins, and real-time OpenGL engines with',
+    'classical AI pathfinding, alongside production Next.js / TypeScript',
+    'apps wired to XGBoost, PyTorch, Gemini and LangGraph.',
+    '',
+    'I care about the difference between a project that compiles and a',
+    'project that would survive contact with a real user, and I try to',
+    'build the second kind.',
+  ];
+  lines.forEach(l => l === '' ? blank() : printRaw(l));
+};
+
+commands.neofetch = () => {
+  print(`<div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; padding:8px 0;">
+<pre class="cyan" style="margin:0; line-height:1.1; font-size:11px;">    ▄▄▄▄▄▄▄▄
+   █       █
+   █  D N B█
+   █       █
+    ▀▀▀▀▀▀▀
+       ▟▙
+      ▜▛▜▛
+       ▜▛   </pre>
+    <div style="font-size:13px; line-height:1.7;">
+      <b class="amber">dhruv</b>@<b class="amber">memory.bin</b><br>
+      <span class="dim">---------------------------</span><br>
+      <span class="violet">OS</span>       memory.bin (ELF64)<br>
+      <span class="violet">Host</span>     GitHub Pages<br>
+      <span class="violet">Kernel</span>   6.6.6-dhruv<br>
+      <span class="violet">Uptime</span>   <span id="nfUptime">${uptimeStr()}</span><br>
+      <span class="violet">Shell</span>    memory.sh 1.0<br>
+      <span class="violet">Role</span>     Full-Stack and Systems<br>
+      <span class="violet">Langs</span>    TS, Rust, C++, Python, C, JS, C#<br>
+      <span class="violet">Repos</span>    23 public<br>
+      <span class="violet">Now</span>     Adaptive TinyML quantization<br>
+      <span class="violet">Theme</span>   ${state.theme}<br>
+      <span class="violet">Cmds</span>    ${state.cmdCount}<br>
+      <span class="dim">---------------------------</span><br>
+      <span class="green">●</span> online andmiddot; open to talk
+    </div>
+  </div>`);
+};
+
+const projects = [
+  {name:'agrivision-ai', desc:'AI-powered agricultural intelligence. Crop yield, pest and disease detection, soil analysis, market insight for Indian farmers.', stack:'Next.js 15 / Google Gemini / TypeScript', url:'https://github.com/Dhuvie/agrivision-ai'},
+  {name:'AutoForge', desc:'AutoML and MLOps platform simulator. Upload datasets, get auto EDA and pipeline generation.', stack:'TypeScript / Next.js', url:'https://github.com/Dhuvie/AutoForge'},
+  {name:'Medisync', desc:'AI-powered clinical decision support system for triage and diagnostic reasoning.', stack:'TypeScript / Next.js', url:'https://github.com/Dhuvie/Medisync'},
+  {name:'Pac-man', desc:'C++ Pac-Man with real A*/Dijkstra ghost AI, OpenGL rendering, particle effects, four ghost personalities.', stack:'C++17 / OpenGL / CMake', url:'https://github.com/Dhuvie/Pac-man'},
+  {name:'DashCode', desc:'Full-stack analytics platform for competitive programmers. LeetCode, Codeforces, CodeChef, HackerRank in one place.', stack:'Next.js / TypeScript / PostgreSQL', url:'https://github.com/Dhuvie/DashCode'},
+  {name:'UPI-ML-Fraud-Detection', desc:'Real-time UPI transaction fraud detection tuned to an 87% F1-score.', stack:'Python / XGBoost / Flask', url:'https://github.com/Dhuvie/UPI-ML-Fraud-Detection'},
+  {name:'Ecoroute', desc:'Intelligent route optimization using ensemble ML models: XGBoost, LightGBM, CatBoost.', stack:'Python', url:'https://github.com/Dhuvie/Ecoroute'},
+  {name:'Card-Orchestration', desc:'AI-powered CRM orchestration that automatically extracts, enriches and stores contact data.', stack:'Python', url:'https://github.com/Dhuvie/Card-Orchestration'},
+  {name:'Astra_Ledger', desc:'Production-ready personal finance dashboard with Plaid and Postgres.', stack:'TypeScript / Next.js', url:'https://github.com/Dhuvie/Astra_Ledger'},
+  {name:'UniSlot', desc:'Real-time slot booking and chat for university students with AI content moderation.', stack:'Node.js / Firebase / JavaScript', url:'https://github.com/Dhuvie/UniSlot'},
+  {name:'EdgeVision', desc:'Edge-deployed computer vision work.', stack:'TypeScript', url:'https://github.com/Dhuvie/EdgeVision'},
+  {name:'Codeolio', desc:'Developer portfolio and snippet tooling.', stack:'TypeScript', url:'https://github.com/Dhuvie/Codeolio'},
+];
+
+commands.projects = () => {
+  print(`<span class="dim">.dynsym - ${projects.length} exported symbols (real repos)</span>`);
+  projects.forEach(p => {
+    print(`<div class="proj"><b class="amber">${p.name}</b><br><span class="dim">${p.desc}</span><br><span class="violet">${p.stack}</span> - <a href="${p.url}" target="_blank" rel="noopener">open repo</a></div>`);
+  });
+};
+
+commands.research = () => {
+  print('<b class="cyan">Adaptive Quantization in TinyML</b>');
+  print('  per-layer, runtime-aware quantization for microcontrollers under');
+  print('  512KB RAM. 3 to 5x lower energy vs. static 8-bit.');
+  blank();
+  print('<b class="cyan">Memory Forensics</b>');
+  print('  tooling for post-mortem / live data recovery, anomaly detection');
+  print('  and reverse engineering in constrained embedded environments.');
+};
+
+commands.stack = () => {
+  print('<span class="dim">languages</span>   TypeScript / Rust / C++ / Python / C / JavaScript / C#');
+  print('<span class="dim">frameworks</span>  Next.js / React / PyTorch / Flask / OpenGL / Node.js');
+  print('<span class="dim">infra</span>       Git / Docker / WASM / Linux / Vercel / VS Code');
+};
+
+commands.contact = () => {
+  print('email    <a href="mailto:dhruvnarayanbajaj@gmail.com">dhruvnarayanbajaj@gmail.com</a>');
+  print('site     <a href="https://dhruvnarayanbajaj.dev/" target="_blank" rel="noopener">dhruvnarayanbajaj.dev</a>');
+  print('github   <a href="https://github.com/Dhuvie" target="_blank" rel="noopener">github.com/Dhuvie</a>');
+};
+
+commands.ls = (args) => {
+  const showAll = args.some(a => a === '-a' || a === '-la' || a === '-al');
+  const longFmt = args.some(a => a === '-l' || a === '-la' || a === '-al');
+  const pathArg = args.find(a => !a.startsWith('-'));
+  const path = resolvePath(pathArg || '.');
+  const node = getNode(path);
+  if(!node){ print(`<span class="red">ls: cannot access '${pathArg}': No such file or directory</span>`); return; }
+  if(node.type === 'file'){ printRaw(pathArg || path); return; }
+  let entries = Object.entries(node.children);
+  if(!showAll) entries = entries.filter(([n]) => !n.startsWith('.'));
+  entries.sort((a,b) => a[0].localeCompare(b[0]));
+  if(longFmt){
+    entries.forEach(([name, child]) => {
+      const type = child.type === 'dir' ? 'd' : '-';
+      const color = child.type === 'dir' ? 'cyan' : 'text';
+      const size = child.type === 'file' ? (child.content.length) : 4096;
+      print(`<span class="dim">${type}rwxr-xr-x  dhruv dhruv ${String(size).padStart(6)} Jan  1 2026</span> <span class="${color}">${name}${child.type==='dir'?'/':''}</span>`);
+    });
+  } else {
+    const parts = entries.map(([name, child]) => {
+      const display = name + (child.type==='dir' ? '/' : '');
+      return child.type==='dir' ? `<span class="cyan">${display}</span>` : `<span>${display}</span>`;
+    });
+    print(parts.join('   '));
+  }
+};
+
+commands.cd = (args) => {
+  const target = args[0] || '~';
+  const path = resolvePath(target);
+  const node = getNode(path);
+  if(!node){ print(`<span class="red">cd: no such file or directory: ${target}</span>`); return; }
+  if(node.type !== 'dir'){ print(`<span class="red">cd: not a directory: ${target}</span>`); return; }
+  state.cwd = path;
+  updatePrompt();
+};
+
+commands.pwd = () => { printRaw(state.cwd); };
+
+commands.cat = (args) => {
+  if(!args[0]){ print('<span class="red">cat: missing operand</span>'); return; }
+  const path = resolvePath(args[0]);
+  const node = getNode(path);
+  if(!node){ print(`<span class="red">cat: ${args[0]}: No such file or directory</span>`); return; }
+  if(node.type === 'dir'){ print(`<span class="red">cat: ${args[0]}: Is a directory</span>`); return; }
+  node.content.split('\n').forEach(l => printRaw(l));
+};
+
+commands.tree = () => {
+  function walk(path, prefix=''){
+    const node = getNode(path);
+    if(!node || node.type !== 'dir') return;
+    const entries = Object.entries(node.children)
+      .filter(([n]) => !n.startsWith('.'))
+      .sort((a,b) => a[0].localeCompare(b[0]));
+    entries.forEach(([name, child], i) => {
+      const last = i === entries.length - 1;
+      const branch = last ? '`-- ' : '|-- ';
+      const color = child.type === 'dir' ? 'cyan' : 'dim';
+      print(`<span class="${color}">${prefix}${branch}${name}${child.type==='dir'?'/':''}</span>`);
+      if(child.type === 'dir') walk(path + '/' + name, prefix + (last ? '    ' : '|   '));
+    });
+  }
+  printRaw('.');
+  walk(state.cwd);
+};
+
+commands.file = (args) => {
+  if(!args[0]){ print('<span class="red">file: missing operand</span>'); return; }
+  const path = resolvePath(args[0]);
+  const node = getNode(path);
+  if(!node){ print(`<span class="red">file: ${args[0]}: No such file or directory</span>`); return; }
+  if(node.type === 'dir'){ printRaw(`${args[0]}: directory`); return; }
+  const ext = args[0].split('.').pop();
+  const types = {'txt':'ASCII text','vcf':'vCard contact file','md':'Markdown text','sh':'POSIX shell script'};
+  printRaw(`${args[0]}: ${types[ext] || 'data'}`);
+};
+
+commands.find = (args) => {
+  const name = args[0];
+  if(!name){ print('<span class="red">find: missing pattern</span>'); return; }
+  function search(path, depth=0){
+    const node = getNode(path);
+    if(!node || node.type !== 'dir' || depth > 4) return;
+    for(const [n, child] of Object.entries(node.children)){
+      const full = path === '/' ? '/' + n : path + '/' + n;
+      if(n.includes(name)) print(`<span class="dim">${full}</span>`);
+      if(child.type === 'dir' && !n.startsWith('.')) search(full, depth + 1);
+    }
+  }
+  search('/home/dhruv');
+};
+
+commands.history = () => {
+  if(!state.history.length){ print('<span class="dim">(empty)</span>'); return; }
+  state.history.forEach((h, i) => print(`<span class="dim">${String(i+1).padStart(3)}</span>  ${h}`));
+};
+
+commands.clear = () => { clearScreen(); };
+commands.cls = commands.clear;
+
+commands.date = () => { printRaw(new Date().toString()); };
+
+commands.uname = (args) => {
+  if(args.includes('-a')){
+    printRaw('memory.bin 6.6.6-dhruv #1 SMP PREEMPT_DYNAMIC ELF64 x86_64 GNU/memory');
+  } else {
+    printRaw('memory.bin');
+  }
+};
+
+function uptimeStr(){
+  const secs = Math.floor((Date.now() - state.startTime) / 1000);
+  const m = Math.floor(secs / 60), s = secs % 60;
+  return `${m}m ${s}s`;
+}
+commands.uptime = () => { printRaw(`up ${uptimeStr()}, 1 user, load average: 0.42, 0.42, 0.87`); };
+
+commands.echo = (args) => { printRaw(args.join(' ')); };
+
+commands.banner = () => {
+  print(`<pre class="cyan" style="font-size:11px; line-height:1.1; margin:4px 0;">
+  ____  _   _  ____  _   _ _   _ _   _ _____ ____
+ |  _ \\| | | |/ ___|| | | | | | | \\ | |_   _/ ___|
+ | |_) | | | | |  _ | |_| | | | |  \\| | | | \\___ \\
+ |  _ <| |_| | |_| ||  _  | |_| | |\\  | | |  ___) |
+ |_| \\_\\\\___/ \\____||_| |_|\\___/|_| \\_| |_| |____/
+         memory.bin  /  full-stack + systems</pre>`);
+};
+
+const fortunes = [
+  'The best bug is the one you write out of existence by design.',
+  'A model that compiles is not a model that ships.',
+  'Premature optimization is the root of all evil. So is premature abstraction.',
+  'If you cannot debug it, you do not understand it.',
+  'The stack trace is not your enemy. It is your only honest friend.',
+  'Every layer of abstraction is a layer you will one day dig through at 2am.',
+  'Good systems fail loudly. Great systems fail before you even notice.',
+  'The fastest code is the code that never runs. The second fastest is cache-friendly.',
+  'You do not understand a pointer until you have drawn it on paper.',
+  'A README is a contract. Break it and you lose trust.',
+  'There are two hard problems in computer science: cache invalidation, naming things, and off-by-one errors.',
+  'If you think you understand quantum computing, you do not understand quantum computing.',
+  'The best time to write a test was before the bug. The second best time is now.',
+  'Code is read more often than it is written. Optimize accordingly.',
+];
+commands.fortune = () => { printRaw(fortunes[Math.floor(Math.random() * fortunes.length)]); };
+
+commands.cowsay = (args) => {
+  const msg = args.join(' ') || 'moo';
+  const top = ' ' + '_'.repeat(msg.length + 2);
+  const bot = ' ' + '-'.repeat(msg.length + 2);
+  print(`<pre style="font-size:12px;">${top}
+< ${msg} >
+${bot}
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||</pre>`);
+};
+
+commands.theme = (args) => {
+  const t = args[0];
+  if(!t){ print(`<span class="dim">themes: default, matrix, amber (current: ${state.theme})</span>`); return; }
+  if(!['default','matrix','amber'].includes(t)){ print(`<span class="red">theme '${t}' not found</span>`); return; }
+  state.theme = t;
+  document.body.setAttribute('data-theme', t);
+  sbTheme.textContent = t;
+  print(`<span class="dim">theme set to ${t}</span>`);
+};
+
+commands.sound = (args) => {
+  const v = args[0];
+  if(v === 'on'){ state.soundOn = true; beep(660, 0.08, 0.06); print('<span class="dim">sound on</span>'); }
+  else if(v === 'off'){ state.soundOn = false; print('<span class="dim">sound off</span>'); }
+  else print(`<span class="dim">sound is ${state.soundOn?'on':'off'} (use 'sound on' or 'sound off')</span>`);
+};
+
+commands.matrix = () => {
+  state.matrixBoost = !state.matrixBoost;
+  document.getElementById('rain').style.opacity = state.matrixBoost ? '0.4' : '0.14';
+  print(`<span class="dim">matrix rain ${state.matrixBoost?'boosted':'normal'}</span>`);
+};
+
+commands.guestbook = (args) => {
+  const KEY = 'memorybin_guestbook';
+  let entries = [];
+  try{ entries = JSON.parse(localStorage.getItem(KEY) || '[]'); }catch(e){}
+  if(args[0] === 'sign'){
+    const msg = args.slice(1).join(' ');
+    if(!msg){ print('<span class="dim">usage: guestbook sign &lt;your message&gt;</span>'); return; }
+    const entry = { msg: msg.slice(0, 200), time: new Date().toISOString() };
+    entries.unshift(entry);
+    if(entries.length > 50) entries = entries.slice(0, 50);
+    try{ localStorage.setItem(KEY, JSON.stringify(entries)); }catch(e){}
+    print('<span class="green">signed. thanks for stopping by.</span>');
+    return;
+  }
+  if(!entries.length){
+    print('<span class="dim">the guestbook is empty. be the first: guestbook sign &lt;message&gt;</span>');
+    return;
+  }
+  print(`<span class="dim">guestbook (${entries.length} entries)</span>`);
+  entries.forEach((e, i) => {
+    const d = new Date(e.time);
+    print(`<span class="dim">[${i+1}]</span> <span class="cyan">${d.toLocaleDateString()} ${d.toLocaleTimeString()}</span>`);
+    print(`    ${e.msg}`);
+  });
+};
+
+commands.man = (args) => {
+  const cmd = args[0];
+  if(!cmd){ print('<span class="dim">usage: man &lt;command&gt;</span>'); return; }
+  const mans = {
+    help: 'help - display the list of available commands.',
+    neofetch: 'neofetch - print a system info card with ASCII art.',
+    projects: 'projects - list exported repository symbols.',
+    ls: 'ls [-l] [-a] [path] - list directory contents.',
+    cd: 'cd [path] - change the current working directory.',
+    cat: 'cat [file] - print the contents of a file.',
+    tree: 'tree - print a recursive directory tree.',
+    guestbook: 'guestbook [sign <msg>] - read or sign the visitor log.',
+    theme: 'theme [default|matrix|amber] - switch color scheme.',
+    fortune: 'fortune - print a random piece of wisdom.',
+  };
+  if(mans[cmd]) printRaw(mans[cmd]);
+  else print(`<span class="red">No manual entry for ${cmd}</span>`);
+};
+
+commands.ps = () => {
+  print('  PID TTY          TIME CMD');
+  print('    1 ?        00:00:01 memory.sh');
+  print('   42 ?        00:00:00 matrix-rain');
+  print('  108 ?        00:00:00 crt-driver');
+  print('  256 ?        00:00:00 guestbook-srv');
+  print('  512 pts/0    00:00:00 bash');
+};
+
+function openVim(){
+  const overlay = document.getElementById('vimOverlay');
+  const body = document.getElementById('vimBody');
+  const cmdline = document.getElementById('vimCmdline');
+  const titleEl = document.getElementById('vimTitle');
+
+  let lines = [
+    '# secret notes to self',
+    '',
+    'todo:',
+    '- finish the tinyml quantization paper',
+    '- stop rewriting tools that already exist',
+    '- reply to that email from last week',
+    '- figure out why the pacman ghost AI sometimes',
+    '  walks into walls (probably an off-by-one in',
+    '  the adjacency list, check dijkstra neighbor gen)',
+    '',
+    'reminder: a readme is a contract.',
+    '',
+  ];
+  let cursorRow = 0, cursorCol = 0;
+  let mode = 'normal';
+  let cmdBuffer = '';
+  let saved = false;
+
+  function render(){
+    let html = '';
+    for(let i = 0; i < lines.length; i++){
+      const ln = String(i + 1).padStart(3, ' ');
+      let lineText = escapeHtml(lines[i]);
+      if(i === cursorRow && mode === 'normal'){
+        const before = escapeHtml(lines[i].slice(0, cursorCol));
+        const charAt = lines[i].slice(cursorCol, cursorCol + 1) || ' ';
+        const after = escapeHtml(lines[i].slice(cursorCol + 1));
+        html += `<span class="ln">${ln}</span>${before}<span style="background:var(--cyan);color:var(--bg);">${escapeHtml(charAt)}</span>${after}\n`;
+      } else {
+        html += `<span class="ln">${ln}</span>${lineText}\n`;
+      }
+    }
+    if(cursorRow >= lines.length){
+      html += '<span class="ln">' + String(lines.length+1).padStart(3,' ') + '</span>\n';
+    }
+    body.innerHTML = html;
+    const modeColor = mode === 'insert' ? 'var(--green)' : mode === 'command' ? 'var(--amber)' : 'var(--dim)';
+    const modeLabel = mode === 'insert' ? '-- INSERT --' : mode === 'command' ? ':' + cmdBuffer : '';
+    if(mode === 'command'){
+      cmdline.innerHTML = `<span style="color:var(--amber)">:</span>${escapeHtml(cmdBuffer)}<span style="display:inline-block;width:7px;height:14px;background:var(--amber);vertical-align:middle;animation:blink 1s steps(1) infinite;"></span>`;
+    } else if(mode === 'insert'){
+      cmdline.innerHTML = `<span style="color:var(--green);">-- INSERT --</span>`;
+    } else {
+      cmdline.innerHTML = `<span style="color:var(--dim);">"${titleEl.textContent}" ${lines.length}L ${saved ? '[saved]' : '[unsaved]'}</span>`;
+    }
+  }
+
+  function escapeHtml(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function closeVim(){
+    overlay.classList.remove('active');
+    document.removeEventListener('keydown', vimKeyHandler, true);
+    input.focus();
+    if(saved){
+      print('<span class="dim">vim: saved ~/secret.txt (in memory only, of course)</span>');
+    }
+    blank();
+  }
+
+  function vimKeyHandler(e){
+    e.preventDefault();
+    e.stopPropagation();
+    const key = e.key;
+
+    if(mode === 'command'){
+      if(key === 'Enter'){
+        const cmd = cmdBuffer;
+        cmdBuffer = '';
+        mode = 'normal';
+        if(cmd === 'q' || cmd === 'q!'){ closeVim(); return; }
+        if(cmd === 'w'){ saved = true; render(); return; }
+        if(cmd === 'wq' || cmd === 'x'){ saved = true; closeVim(); return; }
+        if(cmd === 'help'){
+          printInVim(':w save | :q quit | :wq save+quit | :q! force quit | i insert | x delete | dd delete line | o new line | hjkl move');
+          render(); return;
+        }
+        render(); return;
+      }
+      if(key === 'Escape'){ mode = 'normal'; cmdBuffer = ''; render(); return; }
+      if(key === 'Backspace'){ cmdBuffer = cmdBuffer.slice(0, -1); render(); return; }
+      if(key.length === 1){ cmdBuffer += key; render(); return; }
+      return;
+    }
+
+    if(mode === 'insert'){
+      if(key === 'Escape'){ mode = 'normal'; if(cursorCol > 0) cursorCol--; render(); return; }
+      if(key === 'Enter'){
+        lines.splice(cursorRow + 1, 0, '');
+        cursorRow++; cursorCol = 0; render(); return;
+      }
+      if(key === 'Backspace'){
+        if(cursorCol > 0){
+          lines[cursorRow] = lines[cursorRow].slice(0, cursorCol-1) + lines[cursorRow].slice(cursorCol);
+          cursorCol--;
+        } else if(cursorRow > 0){
+          cursorCol = lines[cursorRow-1].length;
+          lines[cursorRow-1] += lines[cursorRow];
+          lines.splice(cursorRow, 1);
+          cursorRow--;
+        }
+        render(); return;
+      }
+      if(key.length === 1){
+        lines[cursorRow] = lines[cursorRow].slice(0, cursorCol) + key + lines[cursorRow].slice(cursorCol);
+        cursorCol++; render(); return;
+      }
+      return;
+    }
+
+    if(key === 'i'){ mode = 'insert'; render(); return; }
+    if(key === 'a'){ mode = 'insert'; cursorCol = Math.min(cursorCol+1, lines[cursorRow].length); render(); return; }
+    if(key === 'o'){ lines.splice(cursorRow+1, 0, ''); cursorRow++; cursorCol = 0; mode = 'insert'; render(); return; }
+    if(key === 'x'){
+      if(lines[cursorRow].length > 0 && cursorCol < lines[cursorRow].length){
+        lines[cursorRow] = lines[cursorRow].slice(0, cursorCol) + lines[cursorRow].slice(cursorCol+1);
+        if(cursorCol >= lines[cursorRow].length && cursorCol > 0) cursorCol--;
+      }
+      render(); return;
+    }
+    if(key === 'd' && vimPending === 'd'){
+      lines.splice(cursorRow, 1);
+      if(lines.length === 0) lines.push('');
+      if(cursorRow >= lines.length) cursorRow = lines.length - 1;
+      cursorCol = 0;
+      vimPending = null;
+      render(); return;
+    }
+    if(key === 'd'){ vimPending = 'd'; render(); return; }
+    if(key === ':'){ mode = 'command'; cmdBuffer = ''; render(); return; }
+    if(key === 'h'){ cursorCol = Math.max(0, cursorCol-1); vimPending=null; render(); return; }
+    if(key === 'l'){ cursorCol = Math.min(lines[cursorRow].length, cursorCol+1); vimPending=null; render(); return; }
+    if(key === 'k'){ cursorRow = Math.max(0, cursorRow-1); cursorCol = Math.min(cursorCol, lines[cursorRow].length); vimPending=null; render(); return; }
+    if(key === 'j'){ cursorRow = Math.min(lines.length-1, cursorRow+1); cursorCol = Math.min(cursorCol, lines[cursorRow].length); vimPending=null; render(); return; }
+    if(key === '0'){ cursorCol = 0; render(); return; }
+    if(key === '$'){ cursorCol = Math.max(0, lines[cursorRow].length-1); render(); return; }
+    if(key === 'G'){ cursorRow = lines.length-1; cursorCol = 0; render(); return; }
+    if(key === 'g' && vimPending === 'g'){ cursorRow = 0; cursorCol = 0; vimPending=null; render(); return; }
+    if(key === 'g'){ vimPending = 'g'; render(); return; }
+    vimPending = null;
+  }
+
+  let vimPending = null;
+  body.addEventListener('click', () => body.focus());
+  document.addEventListener('keydown', vimKeyHandler, true);
+  overlay.classList.add('active');
+  body.focus();
+  render();
+  beep(440, 0.05, 0.05);
+}
+
+function startSudoGame(){
+  print("<span class=\"amber\">sudo: you? sudo? bold of you to assume you have root on my machine.</span>");
+  print("<span class=\"dim\">sudo: let me think about this...</span>");
+  setTimeout(() => {
+    print("<span class=\"dim\">sudo: no.</span>");
+    blank();
+    setTimeout(() => {
+      print("<span class=\"dim\">sudo: ...but fine. if you can survive the gauntlet, maybe.</span>");
+      blank();
+      setTimeout(() => { launchSudoGame(); }, 800);
+    }, 600);
+  }, 1500);
+}
+
+function launchSudoGame(){
+  const overlay = document.getElementById('gameOverlay');
+  const body = document.getElementById('gameBody');
+  const bar = document.getElementById('gameBar');
+  const gameInput = document.getElementById('gameInput');
+
+  const roasts = [
+    "you want root? you, who just typed 'sudo' like it owes you something?",
+    "the kernel saw your request and laughed. it is still laughing.",
+    "sudoers file reviewed your credentials and filed a restraining order.",
+    "root access is earned, not typed. but i am feeling chaotic today.",
+    "congratulations: you have been promoted to 'threat to be assessed'.",
+  ];
+  const challenges = [
+    {
+      q: "a user runs 'chmod 777 /'. what do you do?",
+      opts: ['nothing, it is fine', 'revoke their access and restore perms', 'join in, 777 everything', 'git commit the change'],
+      answer: 1,
+      roast: "777 the whole filesystem. i can smell the production fire from here."
+    },
+    {
+      q: "the production database is on fire. first move?",
+      opts: ['tweet about it', 'panic', 'check the backups you definitely have', 'blame the intern'],
+      answer: 2,
+      roast: "you do not have backups, do you. of course you do not."
+    },
+    {
+      q: "someone committed secrets to git. now what?",
+      opts: ['leave them, nobody looks', 'force push and pray', 'rotate the secrets immediately', 'delete the repo'],
+      answer: 2,
+      roast: "the secret is already on 14 mirrors and a pastebin. but sure, rotate."
+    },
+    {
+      q: "what is the correct number of nines in uptime?",
+      opts: ['two', 'three', 'five', 'however many you can lie about'],
+      answer: 3,
+      roast: "honesty. the rarest skill in this industry."
+    },
+    {
+      q: "a junior asks you to review their pr. it is 2000 lines. you...",
+      opts: ['approve it, looks fine', 'ask them to break it up', 'rewrite it yourself at 2am', 'pretend you did not see it'],
+      answer: 1,
+      roast: "2000 lines. in one pr. what are they, monolithic?"
+    },
+    {
+      q: "last one. the classic. what does 'sudo' stand for?",
+      opts: ['super user do', 'substitute user do', 'supreme overlord', 'stop, undo, debug, observe'],
+      answer: 1,
+      roast: "substitute user do. everyone gets this wrong. including you, probably."
+    },
+  ];
+
+  let score = 0;
+  let round = 0;
+  let sanity = 100;
+
+  function gprint(html=''){
+    const d = document.createElement('div');
+    d.innerHTML = html;
+    body.appendChild(d);
+    body.scrollTop = body.scrollHeight;
+  }
+  function gblank(){ gprint('&nbsp;'); }
+  function gline(t){ gprint(`<span class="dim">${t}</span>`); }
+
+  function renderBar(){
+    bar.innerHTML = `<span class="stat">round <b>${round}/${challenges.length}</b></span>` +
+      `<span class="stat">score <b>${score}</b></span>` +
+      `<span class="stat">sanity <b style="color:${sanity>50?'var(--green)':'var(--red)'}">${sanity}%</b></span>` +
+      `<span style="margin-left:auto;color:var(--dim);font-size:11px;">type the number, or q to quit</span>`;
+  }
+
+  function showRoast(){
+    const r = roasts[Math.floor(Math.random()*roasts.length)];
+    gprint(`<span class="amber">> ${r}</span>`);
+    gblank();
+  }
+
+  function showQuestion(){
+    if(round >= challenges.length){ endGame(); return; }
+    const ch = challenges[round];
+    gprint(`<span class="cyan">[challenge ${round+1}/${challenges.length}]</span> <span class="bright">${ch.q}</span>`);
+    ch.opts.forEach((o, i) => {
+      gprint(`  <span class="amber">${i+1}.</span> ${o}`);
+    });
+    gblank();
+    renderBar();
+    gameInput.value = '';
+    gameInput.placeholder = 'type 1-4...';
+    gameInput.focus();
+  }
+
+  function endGame(){
+    gblank();
+    const pct = Math.round((score / challenges.length) * 100);
+    let verdict;
+    if(pct === 100) verdict = '<span class="green">flawless. the kernel is impressed. you have earned... nothing. but respect.</span>';
+    else if(pct >= 66) verdict = '<span class="cyan">not bad. you might survive a tuesday in production.</span>';
+    else if(pct >= 33) verdict = '<span class="amber">mediocre. exactly what i expected from someone who types sudo unprompted.</span>';
+    else verdict = '<span class="red">yikes. please never touch a production server. ever.</span>';
+    gprint(`<span class="bright">=== GAUNTLET COMPLETE ===</span>`);
+    gblank();
+    gprint(`<span class="dim">final score: <span class="bright">${score} / ${challenges.length}</span> (${pct}%)</span>`);
+    gprint(`<span class="dim">sanity remaining: ${sanity}%</span>`);
+    gblank();
+    gprint(verdict);
+    gblank();
+    gprint(`<span class="dim">sudo: access ${pct>=66?'<span class="green">granted</span>':'<span class="red">denied</span>'}. (not really. this is a game.)</span>`);
+    gblank();
+    gprint(`<span class="dim">press enter or q to return to the terminal</span>`);
+    gameInput.placeholder = 'press enter to exit...';
+    round = -999;
+  }
+
+  function gameKeyHandler(e){
+    if(e.key === 'Enter'){
+      const v = gameInput.value.trim().toLowerCase();
+      gameInput.value = '';
+      if(round === -999){
+        closeGame();
+        return;
+      }
+      if(v === 'q' || v === 'quit' || v === 'exit'){
+        closeGame();
+        return;
+      }
+      const num = parseInt(v, 10);
+      if(isNaN(num) || num < 1 || num > 4){
+        gprint('<span class="dim">invalid. type 1, 2, 3, or 4.</span>');
+        return;
+      }
+      const ch = challenges[round];
+      if(num - 1 === ch.answer){
+        score++;
+        sanity = Math.min(100, sanity + 5);
+        gprint('<span class="green">+ correct.</span>');
+      } else {
+        sanity = Math.max(0, sanity - 20);
+        gprint(`<span class="red">- wrong. ${ch.roast}</span>`);
+      }
+      gblank();
+      round++;
+      if(round < challenges.length){
+        showRoast();
+        setTimeout(() => showQuestion(), 400);
+      } else {
+        endGame();
+      }
+    }
+  }
+
+  function closeGame(){
+    overlay.classList.remove('active');
+    gameInput.removeEventListener('keydown', gameKeyHandler);
+    input.focus();
+    const pct = Math.round((score / challenges.length) * 100);
+    if(pct >= 66){
+      print(`<span class="green">sudo: gauntlet survived. ${score}/${challenges.length} correct. root: still no.</span>`);
+    } else {
+      print(`<span class="red">sudo: gauntlet failed. ${score}/${challenges.length} correct. definitely no root for you.</span>`);
+    }
+    blank();
+  }
+
+  gameInput.addEventListener('keydown', gameKeyHandler);
+  overlay.classList.add('active');
+  body.innerHTML = '';
+
+  gprint('<span class="bright">=== SUDO WARS: THE PHANTOM ROOT ===</span>');
+  gblank();
+  gline('welcome to the root access gauntlet.');
+  gline('answer 6 questions. survive the roasts.');
+  gline('score 4+ and i will pretend to respect you.');
+  gline('score below that and i will judge you, publicly.');
+  gblank();
+  showRoast();
+  setTimeout(() => showQuestion(), 400);
+  renderBar();
+  beep(220, 0.1, 0.05);
+}
+
+const easterEggs = {
+
+  sudo: () => startSudoGame(),
+  exit: () => print("<span class=\"dim\">there is no escape. (close the tab, it is fine.)</span>"),
+  logout: () => print("<span class=\"dim\">you can check out any time you like, but you can never leave.</span>"),
+  quit: () => print("<span class=\"dim\">quitters never win. try 'clear' instead.</span>"),
+
+  vim: () => openVim(),
+  vi: () => openVim(),
+  nano: () => { print('<span class="dim\">nano? in this economy? try vim.</span>'); },
+  emacs: () => { print('<span class="dim\">emacs is a great operating system, lacking only a decent text editor.</span>'); },
+  'code .': () => print('<span class="dim\">this is not VS Code. but nice try.</span>'),
+
+  'rm -rf /': () => {
+    print('<span class="red">rm: cannot remove \'/\': permission denied</span>');
+    print('<span class="dim">(nice try though)</span>');
+  },
+  'rm -rf': () => print("<span class=\"red\">rm: missing operand. (good.)</span>"),
+  'mkfs.ext4 /dev/sda': () => print("<span class=\"red\">no.</span>"),
+  'dd if=/dev/zero of=/dev/sda': () => print("<span class=\"red\">absolutely not.</span>"),
+  ':(){ :|:& };:': () => print("<span class=\"red\">fork bomb detected and denied. go sit in the corner.</span>"),
+
+  'make me a sandwich': () => print("<span class=\"dim\">what? make it yourself.</span>"),
+  'sudo make me a sandwich': () => print("<span class=\"green\">okay.</span>"),
+
+  hello: () => print('<span class="dim">hi. type \'help\' if you are not sure where to start.</span>'),
+  hi: () => print('<span class="dim">hey. type \'help\' if you are not sure where to start.</span>'),
+  hey: () => print('<span class="dim">yo. type \'help\' if you are not sure where to start.</span>'),
+  'howdy': () => print('<span class="dim">howdy. type \'help\' if you are not sure where to start.</span>'),
+  sup: () => print('<span class="dim">not much. the terminal is here. type \'help\'.</span>'),
+  yo: () => print('<span class="dim\">yo. type \'help\'.</span>'),
+
+  thanks: () => print('<span class="dim">anytime.</span>'),
+  thank: () => print('<span class="dim">you are welcome.</span>'),
+  ty: () => print('<span class="dim">np.</span>'),
+  please: () => print('<span class="dim\">politeness gets you everywhere. except sudo access.</span>'),
+
+  'who are you': () => print('<span class="dim">i am memory.bin. a terminal that thinks it is an OS.</span>'),
+  'what is this': () => print('<span class="dim">this is an interactive terminal. type \'help\'.</span>'),
+  'what are you': () => print('<span class="dim">a single HTML file pretending to be a unix system.</span>'),
+  'are you a robot': () => print('<span class="dim">no. i am a regex with a good stylist.</span>'),
+  'are you ai': () => print('<span class="dim">i am if-else statements in a trench coat.</span>'),
+
+  coffee: () => print('<span class="dim">brewing... (coffee not found, have a fortune instead)</span>'),
+  tea: () => print('<span class="dim">brewing... (tea not found either, sorry)</span>'),
+  beer: () => print('<span class="dim">it is always 5pm somewhere. but not here.</span>'),
+  pizza: () => print('<span class="dim">order placed. (not really. go eat.)</span>'),
+  music: () => print('<span class="dim">no speakers detected. try \'sound on\' for beeps though.</span>'),
+  dance: () => print("<span class=\"dim\">\\(o_o)/  \\(o_o)/  \\(o_o)/</span>"),
+  sing: () => print('<span class="dim">doo doo doo doo doo doo doo. (that was wonderwall.)</span>'),
+
+  'the answer': () => print('<span class="amber">42</span>'),
+  'meaning of life': () => print('<span class="amber">42</span>'),
+  'life the universe and everything': () => print('<span class="amber">42</span>'),
+
+  'up up down down left right left right b a': () => {
+    print('<span class="green">konami code accepted. you have 30 lives.</span>');
+    print('<span class="dim">(this terminal only has one. use it wisely.)</span>');
+  },
+
+  'it works': () => print('<span class="dim\">do not touch it.</span>'),
+  'it works on my machine': () => print('<span class=\"red\">then ship your machine.</span>'),
+  'bug': () => print('<span class=\"dim\">it is not a bug. it is an undocumented feature.</span>'),
+  'feature': () => print('<span class=\"dim\">it is not a feature. it is a bug with tenure.</span>'),
+  '404': () => print('<span class=\"red\">not found. (yes, even here.)</span>'),
+  'help me': () => print('<span class=\"dim\">type \'help\'. that is the best I can do.</span>'),
+  'i love you': () => print('<span class=\"dim\">that is very kind. I am a terminal. but thank you.</span>'),
+  'marry me': () => print('<span class=\"dim\">i cannot. i am already married to the kernel.</span>'),
+
+  'open the pod bay doors': () => print('<span class=\"amber\">i am sorry, dhruv. i am afraid i cannot do that.</span>'),
+  hal: () => print('<span class=\"amber\">daisy, daisy, give me your answer do...</span>'),
+  'hello world': () => print('<span class=\"green\">hello, world.</span>'),
+
+  'who wrote this': () => print('<span class="dim">dhruv did. all of it. in one file.</span>'),
+  'who made you': () => print('<span class="dim">dhruv narayan bajaj. github.com/dhuvie.</span>'),
+  source: () => print('<span class="dim">view source. it is all there, heavily commented.</span>'),
+
+  '': () => {},
+};
+
+function run(raw){
+  const trimmed = raw.trim();
+
+  if(trimmed !== ''){
+    state.history.push(trimmed);
+    state.cmdCount++;
+    sbCmds.textContent = state.cmdCount + ' cmds';
+  }
+  state.histIdx = state.history.length;
+
+  if(trimmed !== '' || raw !== ''){
+    print(`<span class="prompt">${promptText.textContent}</span> ${raw}`);
+  }
+  if(trimmed === '') return;
+  beep(520, 0.02, 0.02);
+
+  const lower = trimmed.toLowerCase();
+  if(easterEggs[lower]){ easterEggs[lower](); blank(); return; }
+
+  const parts = trimmed.split(/\s+/);
+  const cmd = parts[0].toLowerCase();
+  const args = parts.slice(1);
+
+  if(commands[cmd]){
+    try{ commands[cmd](args); }
+    catch(e){ print(`<span class="red">error: ${e.message}</span>`); }
+  } else {
+    print(`<span class="dim">command not found: ${cmd}</span> <span class="dim"> -  try 'help'</span>`);
+  }
+  blank();
+}
+window.run = run;
+
+function tabComplete(){
+  const val = input.value;
+  const parts = val.split(/\s+/);
+
+  if(parts.length === 1){
+    const matches = Object.keys(commands)
+      .concat(Object.keys(easterEggs).filter(k => k && !k.includes(' ')))
+      .filter(c => c.startsWith(parts[0].toLowerCase()));
+    if(matches.length === 1){ input.value = matches[0] + ' '; beep(600, 0.02, 0.02); }
+    else if(matches.length > 1){
+      print(`<span class="prompt">${promptText.textContent}</span> ${val}`);
+      print(matches.map(m => `<span class="cyan">${m}</span>`).join('  '));
+    }
+    return;
+  }
+
+  if(parts.length === 2 && ['cd','cat','ls','file'].includes(parts[0].toLowerCase())){
+    const frag = parts[1];
+    const dir = frag.includes('/') ? resolvePath(frag.slice(0, frag.lastIndexOf('/'))) : state.cwd;
+    const prefix = frag.includes('/') ? frag.slice(frag.lastIndexOf('/') + 1) : frag;
+    const parent = frag.includes('/') ? frag.slice(0, frag.lastIndexOf('/') + 1) : '';
+    const node = getNode(dir);
+    if(!node || node.type !== 'dir') return;
+    const matches = Object.keys(node.children).filter(n => n.startsWith(prefix));
+    if(matches.length === 1){ input.value = parts[0] + ' ' + parent + matches[0]; beep(600, 0.02, 0.02); }
+    else if(matches.length > 1){
+      print(`<span class="prompt">${promptText.textContent}</span> ${val}`);
+      print(matches.map(m => `<span class="cyan">${parent + m}</span>`).join('  '));
+    }
+  }
+}
+
+input.addEventListener('keydown', e => {
+  if(e.key === 'Enter'){ const v = input.value; input.value = ''; run(v); }
+  else if(e.key === 'Tab'){ e.preventDefault(); tabComplete(); }
+  else if(e.key === 'ArrowUp'){
+    e.preventDefault();
+    if(state.history.length && state.histIdx > 0){ state.histIdx--; input.value = state.history[state.histIdx]; }
+  } else if(e.key === 'ArrowDown'){
+    e.preventDefault();
+    if(state.histIdx < state.history.length - 1){ state.histIdx++; input.value = state.history[state.histIdx]; }
+    else { state.histIdx = state.history.length; input.value = ''; }
+  } else if(e.key === 'l' && e.ctrlKey){ e.preventDefault(); clearScreen(); }
+  else if(e.key === 'c' && e.ctrlKey){
+    e.preventDefault();
+    print(`<span class="prompt">${promptText.textContent}</span> ${input.value}^C`);
+    input.value = '';
+    blank();
+  }
+});
+
+document.querySelector('.win').addEventListener('click', e => {
+  if(e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON' && !e.target.closest('.btnrow')){
+    input.focus();
+  }
+});
+
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const c = btn.dataset.cmd;
+    input.value = c;
+    run(c);
+    input.value = '';
+    input.focus();
+  });
+});
+
+function tickClock(){
+  const d = new Date();
+  sbClock.textContent = d.toLocaleTimeString('en-US', { hour12: false });
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+(function rain(){
+  const c = document.getElementById('rain');
+  const ctx = c.getContext('2d');
+  const chars = '01ABCDEF0xELF§∇∑∆∂∞';
+  let cols, drops;
+  function resize(){
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+    cols = Math.floor(c.width / 14);
+    drops = Array.from({ length: cols }, () => Math.random() * -50);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function getColors(){
+    if(state.theme === 'matrix') return ['#33FF66'];
+    if(state.theme === 'amber') return ['#FFB454'];
+    return ['#4FD6FF', '#B084EB', '#FFB454', '#5B6675'];
+  }
+  function frame(){
+
+    ctx.fillStyle = 'rgba(10,14,20,0.10)';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.font = '13px monospace';
+    const colors = getColors();
+    for(let i = 0; i < cols; i++){
+      const ch = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fillText(ch, i * 14, drops[i] * 14);
+
+      if(drops[i] * 14 > c.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+const bootLines = [
+  ['[    0.000000] ', 'memory.bin kernel 6.6.6-dhruv #1 SMP PREEMPT_DYNAMIC ELF64', '', ''],
+  ['[    0.001234] ', 'CPU: 8 cores @ 4.20GHz (dhruv approved)', '', ''],
+  ['[    0.002345] ', 'Memory: 32768MB available', '', ''],
+  ['[    0.003456] ', 'Detecting curiosity...', '', ''],
+  ['[    0.004567] ', 'Mounting /home/dhruv...', ' [  OK  ]', 'ok'],
+  ['[    0.005678] ', 'Loading personality module...', ' [  OK  ]', 'ok'],
+  ['[    0.006789] ', 'Starting systemd-udevd', '', ''],
+  ['[    0.007890] ', 'Starting network manager', '', ''],
+  ['[    0.008901] ', 'Started Memory Forensics Daemon', ' [  OK  ]', 'ok'],
+  ['[    0.009012] ', 'Started TinyML Quantization Service', ' [  OK  ]', 'ok'],
+  ['[    0.010123] ', 'Started OpenGL Render Pipeline', ' [  OK  ]', 'ok'],
+  ['[    0.011234] ', 'Started Rust Compiler Service', ' [  OK  ]', 'ok'],
+  ['[    0.012345] ', 'Started Matrix Rain Renderer', ' [  OK  ]', 'ok'],
+  ['[    0.013456] ', 'Reached target Multi-User System', ' [  OK  ]', 'ok'],
+  ['', '', '', ''],
+  ['', 'Welcome to memory.bin (ELF64)', '', 'info'],
+  ['', '', '', ''],
+  ['', 'dhruv@memory.bin login: ', 'dhruv', ''],
+  ['', 'Password: ', '********', ''],
+  ['', '', '', ''],
+  ['', 'Last login: right now from this browser', '', 'info'],
+];
+
+async function bootSequence(){
+  bootEl.style.display = 'block';
+  for(const [pre, text, suffix, type] of bootLines){
+
+    if(pre === '' && text === '' && suffix === ''){ bootEl.appendChild(document.createElement('br')); continue; }
+    const span = document.createElement('span');
+    let html = '';
+    if(pre) html += `<span style="color:#5B6675">${pre}</span>`;
+    if(text){
+      if(type === 'info') html += `<span style="color:#4FD6FF">${text}</span>`;
+      else html += `<span style="color:#5B6675">${text}</span>`;
+    }
+    if(suffix){
+      if(type === 'ok') html += `<span style="color:#7EE787">${suffix}</span>`;
+      else html += `<span style="color:#5B6675">${suffix}</span>`;
+    }
+    span.innerHTML = html + '\n';
+    bootEl.appendChild(span);
+    beep(200 + Math.random() * 100, 0.01, 0.015);
+    await new Promise(r => setTimeout(r, 60 + Math.random() * 40));
+  }
+  await new Promise(r => setTimeout(r, 400));
+  bootEl.classList.add('hide');
+  setTimeout(() => { bootEl.style.display = 'none'; state.bootDone = true; }, 500);
+
+  print('<span class="dim glitch">booting memory.bin ... done</span>');
+  print('<span class="dim">loaded 8 objects, 5 exported symbols</span>');
+  blank();
+  print('Type <span class="cyan">help</span> to see available commands.');
+  print('<span class="dim">tab to autocomplete / up-down for history / ctrl+l to clear</span>');
+  print('<span class="dim">hint: there are easter eggs. try weird things.</span>');
+  blank();
+  input.focus();
+}
+
+updatePrompt();
+bootSequence();
+</script>
+
+<div class="modal-overlay" id="vimOverlay">
+  <div class="modal">
+    <div class="modal-bar">
+      <div class="dot" style="background:#FF5F57"></div>
+      <div class="dot" style="background:#FEBC2E"></div>
+      <div class="dot" style="background:#28C840"></div>
+      <span class="mt" id="vimTitle">~/secret.txt</span>
+    </div>
+    <div class="vim-body" id="vimBody" tabindex="0"></div>
+    <div class="vim-cmdline" id="vimCmdline">&nbsp;</div>
+    <div class="vim-help">NORMAL mode: i insert &middot; x delete char &middot; dd delete line &middot; o new line below &middot; :w save &middot; :q quit &middot; :wq save+quit &middot; :q! force quit &middot; ESC back to normal &middot; hjkl to move</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="gameOverlay">
+  <div class="modal">
+    <div class="modal-bar">
+      <div class="dot" style="background:#FF5F57"></div>
+      <div class="dot" style="background:#FEBC2E"></div>
+      <div class="dot" style="background:#28C840"></div>
+      <span class="mt">SUDO WARS - Episode I: The Phantom Root</span>
+    </div>
+    <div class="game-body" id="gameBody"></div>
+    <div class="game-bar" id="gameBar"></div>
+    <div class="game-prompt">
+      <span class="prompt">$</span>
+      <input id="gameInput" autocomplete="off" spellcheck="false" placeholder="type your answer..." />
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
