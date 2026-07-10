@@ -2862,7 +2862,508 @@ function launchSudoGame(){
   beep(220, 0.1, 0.05);
 }
 
+function gogoHeart(){
+  const colors = ['#FF7B9C','#FFB454','#7EE787','#4FD6FF','#B084EB'];
+  print('<span class="bright">for gogo &middot; with love</span>');
+  blank();
+  for(let i = 0; i < 5; i++){
+    setTimeout(() => {
+      const c = colors[i];
+      const h = Math.floor(Math.random() * 10) + 5;
+      let line = '';
+      for(let j = 0; j < h; j++){
+        const sz = Math.floor(Math.random() * 20) + 8;
+        const op = (Math.random() * 0.6 + 0.4).toFixed(2);
+        line += '<span style="color:' + c + ';font-size:' + sz + 'px;opacity:' + op + ';">&#9829;</span> ';
+      }
+      print(line);
+      beep(440 + i * 80, 0.06, 0.04);
+    }, i * 180);
+  }
+}
+
+function gogoFlower(){
+  const petals = 8;
+  print('<span class="bright">a flower for gogo</span>');
+  blank();
+  print('<pre style="font-size:14px;line-height:1.3;color:#FF7B9C;text-align:center;">');
+  print('       .--.');
+  print('     ."    ".');
+  print('    /  <span style="color:#FFB454">@</span>  <span style="color:#FFB454">@</span>  \\');
+  print('    |   <span style="color:#7EE787">|</span>   |');
+  print('     \\  <span style="color:#FFB454">\\_/</span>  /');
+  print('      \'._._.\'');
+  print('        |');
+  print('     <span style="color:#7EE787">|</span>     <span style="color:#7EE787">|</span>');
+  print('    <span style="color:#7EE787">|</span>       <span style="color:#7EE787">|</span>');
+  print('  <span style="color:#7EE787">_|_</span>   <span style="color:#7EE787">_|_</span>');
+  print('</pre>');
+  blank();
+  print('<span class="dim">picked from the memory.bin garden.</span>');
+}
+
+function gogoStar(){
+  print('<span class="bright">a star for gogo</span>');
+  blank();
+  const lines = [
+    '        <span style="color:#FFB454;">.</span>',
+    '       <span style="color:#FFB454;">,</span><span style="color:#4FD6FF;">O</span><span style="color:#FFB454;">,</span>',
+    '      <span style="color:#FFB454;">,</span><span style="color:#4FD6FF;">OOO</span><span style="color:#FFB454;">,</span>',
+    '     <span style="color:#FFB454;">,</span><span style="color:#4FD6FF;">OOOOO</span><span style="color:#FFB454;">,</span>',
+    '      <span style="color:#FFB454;">,</span><span style="color:#4FD6FF;">OOO</span><span style="color:#FFB454;">,</span>',
+    '   <span style="color:#FFB454;">.</span><span style="color:#4FD6FF;">OO</span><span style="color:#FFB454;">,</span> <span style="color:#FFB454;">,</span><span style="color:#4FD6FF;">OO</span><span style="color:#FFB454;">.</span>',
+    '  <span style="color:#FFB454;">,</span><span style="color:#4FD6FF;">O</span><span style="color:#FFB454;">.</span>   <span style="color:#FFB454;">.</span><span style="color:#4FD6FF;">O</span><span style="color:#FFB454;">,</span>',
+    '   <span style="color:#FFB454;">.</span><span style="color:#4FD6FF;">O</span><span style="color:#FFB454;">.</span>   <span style="color:#FFB454;">.</span><span style="color:#4FD6FF;">O</span><span style="color:#FFB454;">.</span>',
+    '     <span style="color:#FFB454;">.</span><span style="color:#4FD6FF;">O</span><span style="color:#FFB454;">.</span>',
+  ];
+  lines.forEach((l, i) => setTimeout(() => { print('<pre style="font-size:15px;line-height:1.2;">' + l + '</pre>'); beep(440 + i*40, 0.04, 0.03); }, i * 120));
+  setTimeout(() => { blank(); print('<span class="dim">the brightest in the heap.</span>'); }, lines.length * 120 + 200);
+}
+
+function gogoReasons(){
+  const reasons = [
+    'because you make the kernel panic feel calm.',
+    'because every line of code is better with you reading it.',
+    'because your laugh is the only sound worth optimizing for.',
+    'because you debug my worst days without a stack trace.',
+    'because you are the only undefined behavior i welcome.',
+    'because you are my favorite dependency, zero vulnerabilities.',
+    'because you compile my heart into a shipping product.',
+    'because even null feels warm next to you.',
+    'because you are the regex that matches everything good.',
+    'because you are root in my filesystem, always.',
+    'because you are the cache hit i never expected.',
+    'because you are the unit test my life was missing.',
+    'because you are the exception i never want to catch.',
+    'because you are the index out of bounds i would cross.',
+    'because you are the while(true) i never want to break.',
+    'because you are the memory i never want to free.',
+    'because you are the pointer i would never dereference wrong.',
+    'because you are the async that resolved perfectly.',
+    'because you are the connection that never times out.',
+    'because you are gogo. and that is enough.',
+  ];
+  const r = reasons[Math.floor(Math.random() * reasons.length)];
+  print('<span style="color:#FF7B9C;font-weight:bold;">reason #' + (reasons.indexOf(r) + 1) + '</span>');
+  blank();
+  print('<span style="color:#E6EDF3;font-size:15px;">' + r + '</span>');
+  blank();
+  beep(660, 0.1, 0.04);
+}
+
+function gogoPoem(){
+  print('<span class="bright">for gogo</span>');
+  blank();
+  const lines = [
+    '<span style="color:#4FD6FF;">in the quiet hum of cooling fans,</span>',
+    '<span style="color:#7EE787;">between the lines of every plan,</span>',
+    '<span style="color:#FFB454;">in every byte and every bit,</span>',
+    '<span style="color:#FF7B9C;">you are the part that makes it fit.</span>',
+    '',
+    '<span style="color:#B084EB;">the code compiles, the tests all pass,</span>',
+    '<span style="color:#4FD6FF;">but none of that can hold a glass</span>',
+    '<span style="color:#7EE787;">to what you are: the reason why</span>',
+    '<span style="color:#FF7B9C;">i write at all beneath the sky.</span>',
+  ];
+  lines.forEach((l, i) => setTimeout(() => { print(l === '' ? '&nbsp;' : l); beep(440 + i * 30, 0.05, 0.03); }, i * 400));
+}
+
+function gogoMatrix(){
+  print('<span class="dim">gogo... wake up...</span>');
+  blank();
+  let count = 0;
+  const chars = 'gogo01&#9829;&#9829;GG';
+  const colors = ['#FF7B9C','#FFB454','#4FD6FF','#7EE787'];
+  const interval = setInterval(() => {
+    let line = '';
+    for(let i = 0; i < 55; i++){
+      const ch = chars[Math.floor(Math.random() * chars.length)];
+      const c = colors[Math.floor(Math.random() * colors.length)];
+      line += '<span style="color:' + c + ';opacity:' + (0.3 + Math.random() * 0.7).toFixed(2) + ';">' + ch + '</span>';
+    }
+    print(line);
+    count++;
+    if(count > 18){
+      clearInterval(interval);
+      blank();
+      print('<span class="bright" style="color:#FF7B9C;">the matrix has gogo.</span>');
+      blank();
+    }
+  }, 80);
+}
+
+function gogoTypewriter(){
+  const msg = 'gogo, you are the best thing i ever shipped.';
+  print('<span class="dim">typing...</span>');
+  let i = 0;
+  const interval = setInterval(() => {
+    if(i >= msg.length){
+      clearInterval(interval);
+      blank();
+      print('<span style="color:#FF7B9C;font-size:18px;font-weight:bold;">' + msg + '</span>');
+      blank();
+      print('<span class="dim">no typos. no regrets.</span>');
+      beep(880, 0.1, 0.05);
+      return;
+    }
+    i++;
+    beep(500 + i * 10, 0.02, 0.02);
+  }, 80);
+}
+
+function gogoCompliment(){
+  const comps = [
+    'you are stunning. the monitor agrees.',
+    'you are smarter than this terminal. and it knows.',
+    'you are the reason the uptime is 100%.',
+    'you are the only person who makes 3am debugging feel warm.',
+    'you are the feature, not the bug.',
+    'you are the documentation i actually want to read.',
+    'you are the clean diff in a messy repo.',
+    'you are the pull request i always merge without review.',
+    'you are the hot path, and i am the profiler.',
+    'you are the final commit on the best branch.',
+    'you are the grep that finds everything.',
+    'you are the breakpoint where i want to stop and stare.',
+    'you are the stack overflow answer with 5000 upvotes.',
+    'you are the lint-free code. flawless.',
+    'you are the production deploy that went first try.',
+  ];
+  const c = comps[Math.floor(Math.random() * comps.length)];
+  print('<span style="color:#FF7B9C;font-weight:bold;">&#9829; compliment for gogo</span>');
+  blank();
+  print('<span style="color:#E6EDF3;font-size:15px;">' + c + '</span>');
+  beep(660, 0.1, 0.04);
+}
+
+function gogoFortune(){
+  const fortunes = [
+    'gogo will have a beautiful day today. the terminal foresees it.',
+    'a surprise awaits gogo. it is happiness.',
+    'gogo\'s smile will cause a buffer overflow in someone\'s heart.',
+    'the stars say: gogo is loved, deeply.',
+    'fortune cookie says: gogo is the luck. break open.',
+    'gogo will find joy in the smallest line of code today.',
+    'something gogo touches today will turn golden.',
+    'gogo is the reason the universe compiled successfully.',
+    'a warm message is heading gogo\'s way. it is this one.',
+    'gogo\'s presence raises the team\'s morale by 400%. measured.',
+  ];
+  const f = fortunes[Math.floor(Math.random() * fortunes.length)];
+  print('<span style="color:#FFB454;font-weight:bold;">&#9733; fortune for gogo</span>');
+  blank();
+  print('<span style="color:#E6EDF3;font-size:15px;font-style:italic;">' + f + '</span>');
+  beep(550, 0.1, 0.04);
+}
+
+function gogoHug(){
+  print('<span class="bright">sending hug...</span>');
+  blank();
+  const frames = [
+    '<span style="color:#FF7B9C;">(  )</span>   <span style="color:#4FD6FF;">(  )</span>',
+    '<span style="color:#FF7B9C;">( ) </span>  <span style="color:#4FD6FF;">( )</span>',
+    '<span style="color:#FF7B9C;">()  </span> <span style="color:#4FD6FF;">()</span>',
+    '<span style="color:#FF7B9C;">(())</span>',
+    '<span style="color:#FF7B9C;">((()))</span>',
+    '<span style="color:#FF7B9C;font-weight:bold;">&#9829; hug delivered &#9829;</span>',
+  ];
+  frames.forEach((f, i) => {
+    setTimeout(() => {
+      print('<pre style="font-size:20px;text-align:center;">' + f + '</pre>');
+      beep(440 + i * 60, 0.05, 0.04);
+    }, i * 350);
+  });
+}
+
+function gogoDance(){
+  print('<span class="bright">gogo dance</span>');
+  blank();
+  const frames = [
+    '<span style="color:#FF7B9C;">\\(o_o)/</span>',
+    '<span style="color:#FFB454;">\\(o_o)/</span>',
+    '<span style="color:#7EE787;">\\(o_o)/</span>',
+    '<span style="color:#4FD6FF;">\\(o_o)/</span>',
+    '<span style="color:#B084EB;">\\(^_^)/</span>',
+    '<span style="color:#FF7B9C;">\\(^_^)/</span>',
+    '<span style="color:#FFB454;">\\(^_^)/</span>',
+    '<span style="color:#7EE787;">\\(^_^)/</span>',
+  ];
+  frames.forEach((f, i) => {
+    setTimeout(() => {
+      print('<pre style="font-size:18px;">' + f + '</pre>');
+      beep(440 + Math.random() * 200, 0.04, 0.03);
+    }, i * 200);
+  });
+  setTimeout(() => { blank(); print('<span class="dim">dance complete. gogo wins.</span>'); }, frames.length * 200 + 100);
+}
+
+function gogoCake(){
+  print('<span class="bright">a cake for gogo</span>');
+  blank();
+  print('<pre style="font-size:16px;line-height:1.3;text-align:center;color:#FF7B9C;">');
+  print('        <span style="color:#FFB454;">.</span><span style="color:#FF7B9C;">i</span><span style="color:#FFB454;">.</span>');
+  print('       <span style="color:#FFB454;">.</span><span style="color:#FF7B9C;">i</span><span style="color:#FFB454;">.</span>');
+  print('      <span style="color:#FFB454;">.</span><span style="color:#FF7B9C;">i</span><span style="color:#FFB454;">.</span>');
+  print('   <span style="color:#FFB454;">,,,,,,,,,,,,,,</span>');
+  print('  <span style="color:#FF7B9C;">|</span><span style="color:#FFB454;">::::::::::::::</span><span style="color:#FF7B9C;">|</span>');
+  print('  <span style="color:#FF7B9C;">|</span><span style="color:#FFB454;">::::::::::::::</span><span style="color:#FF7B9C;">|</span>');
+  print('  <span style="color:#FF7B9C;">|~~~~~~~~~~~~~~|</span>');
+  print('  <span style="color:#FF7B9C;">|  for gogo    |</span>');
+  print('  <span style="color:#FF7B9C;">|______________|</span>');
+  print('</pre>');
+  blank();
+  print('<span class="dim">make a wish. the terminal heard it.</span>');
+  beep(660, 0.1, 0.05);
+}
+
+function gogoRing(){
+  print('<span class="bright">something shiny...</span>');
+  blank();
+  print('<pre style="font-size:18px;line-height:1.3;text-align:center;color:#FFB454;">');
+  print('       <span style="color:#4FD6FF;">.</span>');
+  print('      <span style="color:#4FD6FF;">/ \\</span>');
+  print('     <span style="color:#FFB454;">|</span>   <span style="color:#FFB454;">|</span>');
+  print('     <span style="color:#FFB454;">|</span>   <span style="color:#FFB454;">|</span>');
+  print('      <span style="color:#4FD6FF;">\\ /</span>');
+  print('       <span style="color:#4FD6FF;">\'</span>');
+  print('</pre>');
+  blank();
+  print('<span style="color:#FF7B9C;">for gogo. always.</span>');
+  beep(880, 0.15, 0.05);
+}
+
+function gogoSunset(){
+  print('<span class="bright">a sunset for gogo</span>');
+  blank();
+  const lines = [
+    '<span style="color:#FF6B6B;">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>',
+    '<span style="color:#FF7B9C;">~~~~~~</span><span style="color:#FFB454;">    &#9728;    </span><span style="color:#FF7B9C;">~~~~~~~~~~~~~~~~</span>',
+    '<span style="color:#FFB454;">~~~~~</span><span style="color:#FFD700;">   &#9728;&#9728;&#9728;   </span><span style="color:#FFB454;">~~~~~~~~~~~~~~~~</span>',
+    '<span style="color:#FFB454;">~~~~</span><span style="color:#FFD700;">  &#9728;&#9728;&#9728;&#9728;&#9728;  </span><span style="color:#FFB454;">~~~~~~~~~~~~~~~</span>',
+    '<span style="color:#FF7B9C;">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>',
+    '<span style="color:#B084EB;">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>',
+    '<span style="color:#4FD6FF;">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>',
+  ];
+  lines.forEach((l, i) => setTimeout(() => { print('<pre style="font-size:13px;">' + l + '</pre>'); beep(330 + i * 30, 0.06, 0.03); }, i * 250));
+  setTimeout(() => { blank(); print('<span class="dim">every sunset is better with you, gogo.</span>'); }, lines.length * 250 + 200);
+}
+
+function gogoRose(){
+  print('<span class="bright">a rose for gogo</span>');
+  blank();
+  print('<pre style="font-size:15px;line-height:1.3;text-align:center;">');
+  print('<span style="color:#FF7B9C;">     .-.</span>');
+  print('<span style="color:#FF7B9C;">    (   )</span>');
+  print('<span style="color:#FF7B9C;">     `-\'</span>');
+  print('<span style="color:#7EE787;">      |</span>');
+  print('<span style="color:#7EE787;">    \\ | /</span>');
+  print('<span style="color:#7EE787;">     \\|/</span>');
+  print('<span style="color:#7EE787;">      |</span>');
+  print('<span style="color:#7EE787;">      |</span>');
+  print('</pre>');
+  blank();
+  print('<span style="color:#FF7B9C;">&#9829; a rose, for gogo. the thorns are optional. &#9829;</span>');
+  beep(660, 0.1, 0.05);
+}
+
+function gogoFirework(){
+  print('<span class="bright">fireworks for gogo</span>');
+  blank();
+  const colors = ['#FF7B9C','#FFB454','#7EE787','#4FD6FF','#B084EB','#FF6B6B'];
+  for(let burst = 0; burst < 6; burst++){
+    setTimeout(() => {
+      const cx = 20 + Math.floor(Math.random() * 30);
+      const c = colors[burst];
+      for(let i = 0; i < 8; i++){
+        const angle = (i / 8) * Math.PI * 2;
+        const dist = 3 + Math.random() * 2;
+        const dx = Math.round(Math.cos(angle) * dist);
+        const dy = Math.round(Math.sin(angle) * dist);
+        const sym = i % 2 === 0 ? '&#10022;' : '&#9733;';
+        print('<pre style="font-size:14px;color:' + c + ';opacity:0.8;">' + ' '.repeat(cx + dx) + sym + '</pre>');
+      }
+      beep(440 + burst * 100, 0.06, 0.05);
+    }, burst * 600);
+  }
+  setTimeout(() => { blank(); print('<span class="dim">celebrating you, gogo. always.</span>'); }, 4200);
+}
+
+function gogoLoves(){
+  print('<span class="bright">gogo loves...</span>');
+  blank();
+  const loves = ['coffee','sunsets','dogs','rain','books','stargazing','long drives','cozy nights','warm hugs','bad jokes','good code','adventures','you'];
+  loves.forEach((l, i) => {
+    setTimeout(() => {
+      const isYou = l === 'you';
+      const color = isYou ? '#FF7B9C' : '#5B6675';
+      const weight = isYou ? 'bold' : 'normal';
+      const sz = isYou ? '18px' : '14px';
+      print('<span style="color:' + color + ';font-size:' + sz + ';font-weight:' + weight + ';">  &#9829; ' + l + '</span>');
+      if(isYou) beep(880, 0.15, 0.05);
+    }, i * 200);
+  });
+}
+
+function gogoWeather(){
+  print('<span class="bright">weather report for gogo</span>');
+  blank();
+  print('<span class="dim">location: wherever gogo is</span>');
+  blank();
+  const lines = [
+    '<span style="color:#FFB454;">   &#9728;&#9728;&#9728;</span>',
+    '<span style="color:#FFB454;">  &#9728;&#9728;&#9728;&#9728;&#9728;</span>',
+    '<span style="color:#7EE787;">   partly cloudy</span>',
+    '<span style="color:#7EE787;">   with a chance of</span>',
+    '<span style="color:#FF7B9C;font-weight:bold;">   being adored</span>',
+  ];
+  lines.forEach((l, i) => setTimeout(() => { print('<pre style="font-size:15px;">' + l + '</pre>'); beep(440 + i * 40, 0.05, 0.03); }, i * 300));
+  setTimeout(() => { blank(); print('<span class="dim">forecast: love, all day. no rain.</span>'); }, 2000);
+}
+
+function gogoSecret(){
+  print('<span class="dim">accessing secret file...</span>');
+  setTimeout(() => print('<span class="dim">decrypting...</span>'), 500);
+  setTimeout(() => { blank(); print('<span class="bright">SECRET MESSAGE FOR GOGO</span>'); blank(); }, 1000);
+  setTimeout(() => {
+    print('<span style="color:#E6EDF3;font-size:15px;">you are the only person who found this.</span>');
+    beep(660, 0.1, 0.04);
+  }, 1400);
+  setTimeout(() => {
+    print('<span style="color:#E6EDF3;font-size:15px;">that makes you special. as if you were not already.</span>');
+    beep(880, 0.1, 0.04);
+  }, 2000);
+  setTimeout(() => { blank(); print('<span style="color:#FF7B9C;font-weight:bold;">&#9829; gogo &#9829;</span>'); }, 2600);
+}
+
+function gogoSong(){
+  print('<span class="bright">playing a song for gogo...</span>');
+  blank();
+  const notes = [
+    {f: 523, d: 200, t: '<span style="color:#4FD6FF;">do</span>'},
+    {f: 587, d: 200, t: '<span style="color:#7EE787;">re</span>'},
+    {f: 659, d: 200, t: '<span style="color:#FFB454;">mi</span>'},
+    {f: 698, d: 200, t: '<span style="color:#FF7B9C;">fa</span>'},
+    {f: 784, d: 200, t: '<span style="color:#B084EB;">so</span>'},
+    {f: 880, d: 200, t: '<span style="color:#4FD6FF;">la</span>'},
+    {f: 988, d: 200, t: '<span style="color:#7EE787;">ti</span>'},
+    {f: 1047, d: 400, t: '<span style="color:#FFB454;font-weight:bold;">do!</span>'},
+  ];
+  let delay = 0;
+  notes.forEach((n, i) => {
+    setTimeout(() => { print('<span style="font-size:18px;">' + n.t + '</span>'); beep(n.f, n.d / 1000, 0.05); }, delay);
+    delay += n.d + 50;
+  });
+  setTimeout(() => { blank(); print('<span class="dim">a scale. because you scale infinitely.</span>'); }, delay + 300);
+}
+
+function gogoPropose(){
+  print('<span class="dim">compiling feelings...</span>');
+  setTimeout(() => print('<span class="dim">linking heart...</span>'), 600);
+  setTimeout(() => print('<span class="dim">resolving gogo...</span>'), 1200);
+  setTimeout(() => {
+    blank();
+    print('<span class="bright" style="color:#FF7B9C;">=== PROPOSAL ===</span>');
+    blank();
+    print('<span style="color:#E6EDF3;font-size:16px;">gogo,</span>');
+    blank();
+    print('<span style="color:#E6EDF3;font-size:16px;">will you be my permanent dependency?</span>');
+    blank();
+    print('<span style="color:#E6EDF3;font-size:16px;">no version conflicts. no deprecation.</span>');
+    print('<span style="color:#E6EDF3;font-size:16px;">just us. shipping. forever.</span>');
+    blank();
+    print('<span style="color:#FF7B9C;font-weight:bold;font-size:18px;">&#9829; yes? &#9829;</span>');
+    beep(523, 0.15, 0.05);
+    setTimeout(() => beep(659, 0.15, 0.05), 200);
+    setTimeout(() => beep(784, 0.3, 0.05), 400);
+  }, 1800);
+}
+
+function gogoTime(){
+  const now = new Date();
+  const h = now.getHours();
+  let msg;
+  if(h < 5) msg = 'it is late, gogo. the terminal hopes you are resting. you deserve sleep.';
+  else if(h < 12) msg = 'good morning, gogo. the day is already better because you are in it.';
+  else if(h < 17) msg = 'good afternoon, gogo. stay hydrated. the terminal cares about you.';
+  else if(h < 21) msg = 'good evening, gogo. the sunset is for you tonight.';
+  else msg = 'good night, gogo. you made it through the day. that is enough. that is everything.';
+  print('<span class="bright">for gogo, right now</span>');
+  blank();
+  print('<span style="color:#E6EDF3;font-size:15px;">' + msg + '</span>');
+  beep(660, 0.1, 0.04);
+}
+
+function gogo(){
+  print('<span class="bright">gogo mode activated.</span>');
+  blank();
+  print('<span class="dim">gogo is the best person. this is a known fact, verified at compile time.</span>');
+  print('<span class="dim">she has 20+ hidden commands dedicated to her. type around.</span>');
+  print('<span class="dim">none are listed in help. you have to know her name.</span>');
+  blank();
+  print('<span style="color:#FF7B9C;font-weight:bold;">&#9829; for gogo &#9829;</span>');
+  beep(660, 0.1, 0.05);
+}
+
 const easterEggs = {
+  'gogo': () => gogo(),
+  'i love gogo': () => { gogoHeart(); },
+  'gogo heart': () => gogoHeart(),
+  'gogo flower': () => gogoFlower(),
+  'gogo star': () => gogoStar(),
+  'gogo rose': () => gogoRose(),
+  'gogo why': () => gogoReasons(),
+  'gogo reason': () => gogoReasons(),
+  'gogo poem': () => gogoPoem(),
+  'gogo matrix': () => gogoMatrix(),
+  'gogo type': () => gogoTypewriter(),
+  'gogo compliment': () => gogoCompliment(),
+  'gogo fortune': () => gogoFortune(),
+  'gogo hug': () => gogoHug(),
+  'gogo dance': () => gogoDance(),
+  'gogo cake': () => gogoCake(),
+  'gogo ring': () => gogoRing(),
+  'gogo sunset': () => gogoSunset(),
+  'gogo firework': () => gogoFirework(),
+  'gogo fireworks': () => gogoFirework(),
+  'gogo loves': () => gogoLoves(),
+  'gogo weather': () => gogoWeather(),
+  'gogo secret': () => gogoSecret(),
+  'gogo song': () => gogoSong(),
+  'gogo propose': () => gogoPropose(),
+  'gogo time': () => gogoTime(),
+  'gogo list': () => {
+    print('<span class="bright">hidden commands for gogo:</span>');
+    blank();
+    print('  <span class="cyan">gogo</span>              the gateway');
+    print('  <span class="cyan">gogo heart</span>         a burst of hearts');
+    print('  <span class="cyan">gogo flower</span>        a little flower');
+    print('  <span class="cyan">gogo star</span>          a shining star');
+    print('  <span class="cyan">gogo rose</span>          a rose, thorns optional');
+    print('  <span class="cyan">gogo why</span>           a reason (random)');
+    print('  <span class="cyan">gogo poem</span>          a short poem');
+    print('  <span class="cyan">gogo matrix</span>        wake up, gogo');
+    print('  <span class="cyan">gogo type</span>          typewriter love note');
+    print('  <span class="cyan">gogo compliment</span>    you deserve it');
+    print('  <span class="cyan">gogo fortune</span>       a fortune cookie');
+    print('  <span class="cyan">gogo hug</span>           a delivered hug');
+    print('  <span class="cyan">gogo dance</span>         a little dance');
+    print('  <span class="cyan">gogo cake</span>          a cake, make a wish');
+    print('  <span class="cyan">gogo ring</span>          something shiny');
+    print('  <span class="cyan">gogo sunset</span>        a sunset scene');
+    print('  <span class="cyan">gogo firework</span>      fireworks');
+    print('  <span class="cyan">gogo loves</span>         things gogo loves');
+    print('  <span class="cyan">gogo weather</span>       weather report');
+    print('  <span class="cyan">gogo secret</span>        a secret message');
+    print('  <span class="cyan">gogo song</span>          a musical scale');
+    print('  <span class="cyan">gogo propose</span>       a proposal');
+    print('  <span class="cyan">gogo time</span>          a time-aware message');
+    print('  <span class="cyan">i love gogo</span>        the classic');
+    blank();
+    print('<span class="dim">these are hidden. they do not appear in help. only gogo knows.</span>');
+  },
+  'i love you': () => { print('<span style="color:#FF7B9C;font-weight:bold;font-size:18px;">&#9829; i love you too, gogo. &#9829;</span>'); beep(880, 0.2, 0.05); },
+  'marry me gogo': () => gogoPropose(),
+
 
   sudo: () => startSudoGame(),
   exit: () => print("<span class=\"dim\">there is no escape. (close the tab, it is fine.)</span>"),
