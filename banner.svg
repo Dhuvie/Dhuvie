@@ -1,26 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-label="Dhruv Narayan Bajaj">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0C1117"/>
-      <stop offset="1" stop-color="#06080C"/>
+      <stop offset="0" stop-color="#0A0F16"/>
+      <stop offset="0.5" stop-color="#070B10"/>
+      <stop offset="1" stop-color="#040608"/>
     </linearGradient>
     <linearGradient id="nameGrad" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#E6EDF3"/>
-      <stop offset="0.3" stop-color="#4FD6FF"/>
-      <stop offset="0.6" stop-color="#E6EDF3"/>
+      <stop offset="0" stop-color="#9AA7B4"/>
+      <stop offset="0.2" stop-color="#E6EDF3"/>
+      <stop offset="0.5" stop-color="#4FD6FF"/>
+      <stop offset="0.8" stop-color="#E6EDF3"/>
       <stop offset="1" stop-color="#9AA7B4"/>
     </linearGradient>
-    <linearGradient id="scanGrad" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="scanG" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#4FD6FF" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.6"/>
+      <stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.5"/>
       <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
     </linearGradient>
     <radialGradient id="vign" cx="0.5" cy="0.5" r="0.7">
-      <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
-      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+      <stop offset="0.4" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.7"/>
     </radialGradient>
     <radialGradient id="corePulse" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0.3"/>
+      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0.25"/>
       <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
     </radialGradient>
     <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
@@ -28,59 +30,55 @@
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="bigGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="6"/>
+      <feGaussianBlur stdDeviation="8"/>
     </filter>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M40 0H0V40" fill="none" stroke="#141C28" stroke-width="1"/>
+      <path d="M40 0H0V40" fill="none" stroke="#101820" stroke-width="1"/>
     </pattern>
   </defs>
   <style>
     .mono{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;}
     .disp{font-family:'JetBrains Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace;font-weight:700;letter-spacing:4px;}
-    @media (prefers-reduced-motion:reduce){animate,animateTransform{display:none}}
+    @media (prefers-reduced-motion:reduce){animate,animateTransform,animateMotion{display:none}}
   </style>
 
   <rect width="1200" height="340" fill="url(#bg)"/>
-  <rect width="1200" height="340" fill="url(#grid)" opacity="0.4"/>
+  <rect width="1200" height="340" fill="url(#grid)" opacity="0.3"/>
 
-  <!-- drifting horizontal scan beams -->
-  <rect x="0" y="0" width="1200" height="3" fill="url(#scanGrad)" opacity="0.4">
-    <animate attributeName="y" values="-10;350" dur="5s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0;0.5;0" dur="5s" repeatCount="indefinite"/>
-  </rect>
-  <rect x="0" y="0" width="1200" height="1.5" fill="url(#scanGrad)" opacity="0.3">
-    <animate attributeName="y" values="-10;350" dur="7s" begin="2s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0;0.4;0" dur="7s" begin="2s" repeatCount="indefinite"/>
-  </rect>
-
-  <!-- ambient core pulse behind name -->
-  <ellipse cx="600" cy="210" rx="400" ry="80" fill="url(#corePulse)" filter="url(#bigGlow)">
-    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite"/>
+  <!-- ambient core glow behind name -->
+  <ellipse cx="600" cy="210" rx="450" ry="70" fill="url(#corePulse)" filter="url(#bigGlow)">
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="4s" repeatCount="indefinite"/>
   </ellipse>
+
+  <!-- drifting scan beams -->
+  <rect x="0" y="0" width="1200" height="2" fill="url(#scanG)" opacity="0.4">
+    <animate attributeName="y" values="-5;345" dur="6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.6;0" dur="6s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="0" y="0" width="1200" height="1" fill="url(#scanG)" opacity="0.3">
+    <animate attributeName="y" values="-5;345" dur="9s" begin="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.4;0" dur="9s" begin="3s" repeatCount="indefinite"/>
+  </rect>
 
   <rect width="1200" height="340" fill="url(#vign)"/>
 
-  <!-- HUD corner brackets with draw-in -->
-  <g stroke="#4FD6FF" stroke-width="2" fill="none" opacity="0.7" stroke-linecap="round">
-    <path d="M24 24h0M24 24v0" stroke-dasharray="40" stroke-dashoffset="40">
-      <animate attributeName="stroke-dashoffset" from="40" to="0" dur="0.4s" begin="0.1s" fill="freeze"/>
-      <animate attributeName="d" values="M24 24h0M24 24v0;M24 24h34M24 24v34" dur="0.4s" begin="0.1s" fill="freeze"/>
+  <!-- HUD corner brackets drawing in -->
+  <g stroke="#4FD6FF" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round">
+    <path d="M24 24h34M24 24v34" stroke-dasharray="68" stroke-dashoffset="68">
+      <animate attributeName="stroke-dashoffset" from="68" to="0" dur="0.5s" begin="0.1s" fill="freeze"/>
     </path>
-    <path d="M1176 24h0M1176 24v0" stroke-dasharray="40" stroke-dashoffset="40">
-      <animate attributeName="stroke-dashoffset" from="40" to="0" dur="0.4s" begin="0.2s" fill="freeze"/>
-      <animate attributeName="d" values="M1176 24h0M1176 24v0;M1176 24h-34M1176 24v34" dur="0.4s" begin="0.2s" fill="freeze"/>
+    <path d="M1176 24h-34M1176 24v34" stroke-dasharray="68" stroke-dashoffset="68">
+      <animate attributeName="stroke-dashoffset" from="68" to="0" dur="0.5s" begin="0.2s" fill="freeze"/>
     </path>
-    <path d="M24 316h0M24 316v0" stroke-dasharray="40" stroke-dashoffset="40">
-      <animate attributeName="stroke-dashoffset" from="40" to="0" dur="0.4s" begin="0.3s" fill="freeze"/>
-      <animate attributeName="d" values="M24 316h0M24 316v0;M24 316h34M24 316v-34" dur="0.4s" begin="0.3s" fill="freeze"/>
+    <path d="M24 316h34M24 316v-34" stroke-dasharray="68" stroke-dashoffset="68">
+      <animate attributeName="stroke-dashoffset" from="68" to="0" dur="0.5s" begin="0.3s" fill="freeze"/>
     </path>
-    <path d="M1176 316h0M1176 316v0" stroke-dasharray="40" stroke-dashoffset="40">
-      <animate attributeName="stroke-dashoffset" from="40" to="0" dur="0.4s" begin="0.4s" fill="freeze"/>
-      <animate attributeName="d" values="M1176 316h0M1176 316v0;M1176 316h-34M1176 316v-34" dur="0.4s" begin="0.4s" fill="freeze"/>
+    <path d="M1176 316h-34M1176 316v-34" stroke-dasharray="68" stroke-dashoffset="68">
+      <animate attributeName="stroke-dashoffset" from="68" to="0" dur="0.5s" begin="0.4s" fill="freeze"/>
     </path>
   </g>
 
-  <!-- status LEDs bottom left -->
+  <!-- status LEDs -->
   <g class="mono" font-size="12" fill="#5B6675">
     <circle cx="56" cy="300" r="4" fill="#7EE787" filter="url(#glow)">
       <animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite"/>
@@ -97,7 +95,7 @@
   </g>
   <text x="1176" y="304" class="mono" font-size="12" fill="#5B6675" text-anchor="end">0x00000000dhruv · entry</text>
 
-  <!-- boot lines: typed in sequentially -->
+  <!-- boot lines typing in -->
   <g class="mono" font-size="14">
     <text x="56" y="70" fill="#7D8590" opacity="0">
       <tspan fill="#5B6675">$ </tspan><tspan fill="#E6EDF3">readelf -h memory.bin</tspan>
@@ -113,47 +111,47 @@
     </text>
   </g>
 
-  <!-- blinking cursor after last boot line -->
-  <rect x="56" y="138" width="9" height="16" fill="#4FD6FF" opacity="0">
-    <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.01;0.5;0.51;1" dur="2s" begin="1.8s" repeatCount="indefinite"/>
+  <!-- blinking cursor -->
+  <rect x="56" y="138" width="9" height="16" fill="#4FD6FF" filter="url(#glow)">
+    <animate attributeName="opacity" values="1;0;1" dur="0.7s" begin="1.8s" repeatCount="indefinite"/>
   </rect>
 
-  <!-- THE NAME: decrypt from hex scramble to letters -->
+  <!-- signal lock lines (brief crosshair before name) -->
+  <g stroke="#4FD6FF" stroke-width="1" opacity="0">
+    <line x1="600" y1="160" x2="600" y2="260"/>
+    <line x1="200" y1="210" x2="1000" y2="210"/>
+    <circle cx="600" cy="210" r="60" fill="none"/>
+    <animate attributeName="opacity" values="0;0.4;0" keyTimes="0;0.5;1" dur="1s" begin="2.0s" fill="freeze"/>
+  </g>
+
+  <!-- THE NAME with glitch reveal -->
   <g transform="translate(600,225)" text-anchor="middle">
-    <!-- glitch shadow copies (RGB split) -->
-    <text class="disp" font-size="58" fill="#FF3B6B" opacity="0" filter="url(#glow)">
+    <!-- RGB glitch shadows -->
+    <text class="disp" font-size="56" fill="#FF3B6B" opacity="0" filter="url(#glow)">
       DHRUV NARAYAN BAJAJ
-      <animate attributeName="opacity" values="0;0.7;0.4;0.7;0.3;0.6;0" keyTimes="0;0.02;0.1;0.15;0.2;0.25;0.3" dur="4s" begin="2.2s" repeatCount="indefinite"/>
-      <animateTransform attributeName="transform" type="translate" values="0,0;-3,1;2,-1;0,0;-4,1;0,0" dur="0.3s" begin="2.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.6;0.3;0.5;0.2;0.4;0;0;0" keyTimes="0;0.01;0.04;0.08;0.12;0.16;0.2;0.95;1" dur="5s" begin="2.3s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0,0;-2,1;1,-1;0,0;-3,1;0,0;0,0;0,0;0,0" dur="0.2s" begin="2.3s" repeatCount="indefinite"/>
     </text>
-    <text class="disp" font-size="58" fill="#4FD6FF" opacity="0" filter="url(#glow)">
+    <text class="disp" font-size="56" fill="#4FD6FF" opacity="0" filter="url(#glow)">
       DHRUV NARAYAN BAJAJ
-      <animate attributeName="opacity" values="0;0.7;0.4;0.7;0.3;0.6;0" keyTimes="0;0.02;0.1;0.15;0.2;0.25;0.3" dur="4s" begin="2.2s" repeatCount="indefinite"/>
-      <animateTransform attributeName="transform" type="translate" values="0,0;3,-1;-2,1;0,0;4,-1;0,0" dur="0.3s" begin="2.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.6;0.3;0.5;0.2;0.4;0;0;0" keyTimes="0;0.01;0.04;0.08;0.12;0.16;0.2;0.95;1" dur="5s" begin="2.3s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0,0;2,-1;-1,1;0,0;3,-1;0,0;0,0;0,0;0,0" dur="0.2s" begin="2.3s" repeatCount="indefinite"/>
     </text>
-
-    <!-- the actual name, fades in with glow -->
-    <text class="disp" font-size="58" fill="url(#nameGrad)" opacity="0" filter="url(#glow)">
+    <!-- main name -->
+    <text class="disp" font-size="56" fill="url(#nameGrad)" opacity="0" filter="url(#glow)">
       DHRUV NARAYAN BAJAJ
-      <animate attributeName="opacity" values="0;0;1" keyTimes="0;0.55;1" dur="3s" begin="2.2s" fill="freeze"/>
-    </text>
-
-    <!-- decrypt scramble overlay (random hex that fades out) -->
-    <text class="disp" font-size="58" fill="#4FD6FF" opacity="0" filter="url(#glow)">
-      <animate attributeName="opacity" values="0;1;0.8;0.6;0.4;0.2;0" keyTimes="0;0.01;0.1;0.2;0.3;0.4;0.5" dur="2.5s" begin="2.2s" fill="freeze"/>
-      <animate attributeName="textContent" values="7f 45 4c 46 02 01 01;D R U V N A R;DHRUV NAR;DHRUV NARAYAN;DHRUV NARAYAN BAJAJ" dur="2.5s" begin="2.2s" fill="freeze"/>
-      7f 45 4c 46 02 01 01
+      <animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.3;0.5;1" dur="3s" begin="2.3s" fill="freeze"/>
     </text>
   </g>
 
-  <!-- underline that draws in then sweeps -->
-  <line x1="180" y1="250" x2="1020" y2="250" stroke="#1A2332" stroke-width="2"/>
-  <rect x="180" y="248" width="0" height="3" fill="#4FD6FF" filter="url(#glow)">
-    <animate attributeName="width" from="0" to="840" dur="0.8s" begin="3.5s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+  <!-- underline draw + sweep -->
+  <line x1="200" y1="250" x2="1000" y2="250" stroke="#141C28" stroke-width="2"/>
+  <rect x="200" y="248" width="0" height="3" fill="#4FD6FF" filter="url(#glow)">
+    <animate attributeName="width" from="0" to="800" dur="0.8s" begin="3.5s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
   </rect>
-  <rect x="180" y="248" width="180" height="3" fill="url(#scanGrad)" opacity="0">
-    <animate attributeName="x" values="180;840;180" dur="4s" begin="4.3s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0;0.9;0" dur="4s" begin="4.3s" repeatCount="indefinite"/>
+  <rect x="200" y="248" width="160" height="3" fill="url(#scanG)" opacity="0">
+    <animate attributeName="x" values="200;840;200" dur="5s" begin="4.3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.9;0" dur="5s" begin="4.3s" repeatCount="indefinite"/>
   </rect>
 
   <text x="600" y="278" class="mono" font-size="13" fill="#5B6675" text-anchor="middle" opacity="0" letter-spacing="3">
@@ -161,10 +159,13 @@
     <animate attributeName="opacity" values="0;1" dur="0.5s" begin="3.8s" fill="freeze"/>
   </text>
 
-  <!-- floating particle dots -->
+  <!-- particle burst on name reveal -->
   <g fill="#4FD6FF" opacity="0.6">
-    <circle cx="0" cy="0" r="1.5"><animateMotion dur="8s" repeatCount="indefinite" path="M100,180 Q300,120 500,200 T900,160 T1100,220"/></circle>
-    <circle cx="0" cy="0" r="1"><animateMotion dur="10s" begin="2s" repeatCount="indefinite" path="M1100,260 Q800,180 600,240 T200,200 T100,280"/></circle>
-    <circle cx="0" cy="0" r="1.5" fill="#FFB454"><animateMotion dur="9s" begin="1s" repeatCount="indefinite" path="M200,300 Q400,200 600,280 T1000,240 T1100,300"/></circle>
+    <circle r="1.5" filter="url(#glow)"><animateMotion dur="6s" begin="2.5s" repeatCount="indefinite" path="M600,210 L300,120"/></circle>
+    <circle r="1" fill="#7EE787" filter="url(#glow)"><animateMotion dur="7s" begin="2.8s" repeatCount="indefinite" path="M600,210 L900,140"/></circle>
+    <circle r="1.5" fill="#FFB454" filter="url(#glow)"><animateMotion dur="8s" begin="3.0s" repeatCount="indefinite" path="M600,210 L200,250"/></circle>
+    <circle r="1" filter="url(#glow)"><animateMotion dur="6.5s" begin="3.2s" repeatCount="indefinite" path="M600,210 L1000,220"/></circle>
+    <circle r="1.5" fill="#B084EB" filter="url(#glow)"><animateMotion dur="7.5s" begin="3.5s" repeatCount="indefinite" path="M600,210 L500,100"/></circle>
+    <circle r="1" filter="url(#glow)"><animateMotion dur="8.5s" begin="3.8s" repeatCount="indefinite" path="M600,210 L700,280"/></circle>
   </g>
 </svg>

@@ -1,21 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200" width="1200" height="200" role="img" aria-label="contribution snake">
   <defs>
     <linearGradient id="snbg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0B1018"/>
+      <stop offset="0" stop-color="#0A0F16"/>
       <stop offset="1" stop-color="#06080C"/>
     </linearGradient>
     <radialGradient id="snhead" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#4FD6FF"/>
-      <stop offset="0.5" stop-color="#4FD6FF" stop-opacity="0.6"/>
+      <stop offset="0" stop-color="#E6EDF3"/>
+      <stop offset="0.3" stop-color="#4FD6FF"/>
       <stop offset="1" stop-color="#4FD6FF" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="sntrail" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#4FD6FF" stop-opacity="0"/>
-      <stop offset="0.7" stop-color="#4FD6FF" stop-opacity="0.6"/>
-      <stop offset="1" stop-color="#E6EDF3"/>
-    </linearGradient>
     <filter id="snglow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3"/>
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <path id="snakePath3" d="M 40 100 Q 140 60 240 100 T 440 100 Q 540 140 640 100 T 840 100 Q 940 60 1040 100 T 1170 100" fill="none"/>
   </defs>
@@ -26,8 +22,8 @@
 
   <rect width="1200" height="200" fill="url(#snbg)"/>
 
-  <!-- contribution heatmap grid (faint, behind) -->
-  <g opacity="0.3">
+  <!-- contribution heatmap -->
+  <g opacity="0.25">
     <g fill="#1F3F2F">
       <rect x="40" y="60" width="10" height="10" rx="2" opacity="0.3"/><rect x="56" y="60" width="10" height="10" rx="2" opacity="0.5"/><rect x="72" y="60" width="10" height="10" rx="2" opacity="0.2"/><rect x="88" y="60" width="10" height="10" rx="2" opacity="0.6"/><rect x="104" y="60" width="10" height="10" rx="2" opacity="0.4"/>
       <rect x="120" y="60" width="10" height="10" rx="2" opacity="0.3"/><rect x="136" y="60" width="10" height="10" rx="2" opacity="0.7"/><rect x="152" y="60" width="10" height="10" rx="2" opacity="0.2"/><rect x="168" y="60" width="10" height="10" rx="2" opacity="0.5"/><rect x="184" y="60" width="10" height="10" rx="2" opacity="0.3"/>
@@ -46,20 +42,20 @@
     </g>
   </g>
 
-  <!-- snake trail (fading segments) -->
+  <!-- snake gradient trail -->
   <g>
-    <circle r="8" fill="#4FD6FF" opacity="0.15" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.8s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
-    <circle r="7" fill="#4FD6FF" opacity="0.25" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.65s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
-    <circle r="6.5" fill="#5FC8E8" opacity="0.4" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.5s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
-    <circle r="6" fill="#6FBAE0" opacity="0.55" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.35s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
-    <circle r="5.5" fill="#7FACD8" opacity="0.7" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.2s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
-    <circle r="5" fill="#8F9ED0" opacity="0.8" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.1s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
-    <!-- head with glow -->
-    <circle r="14" fill="url(#snhead)" filter="url(#snglow)"><animateMotion dur="5s" begin="0s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
-    <circle r="6" fill="#E6EDF3" filter="url(#snglow)"><animateMotion dur="5s" begin="0s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
+    <circle r="9" fill="#4FD6FF" opacity="0.1" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.9s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
+    <circle r="8" fill="#4FD6FF" opacity="0.2" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.75s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
+    <circle r="7" fill="#5FC8E8" opacity="0.35" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.6s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
+    <circle r="6.5" fill="#6FBAE0" opacity="0.5" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.45s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
+    <circle r="6" fill="#7FACD8" opacity="0.65" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.3s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
+    <circle r="5.5" fill="#8F9ED0" opacity="0.8" filter="url(#snglow)"><animateMotion dur="5s" begin="-0.15s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
+    <!-- head -->
+    <circle r="16" fill="url(#snhead)" filter="url(#snglow)"><animateMotion dur="5s" begin="0s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
+    <circle r="5" fill="#E6EDF3" filter="url(#snglow)"><animateMotion dur="5s" begin="0s" repeatCount="indefinite"><mpath href="#snakePath3"/></animateMotion></circle>
   </g>
 
-  <!-- dots that get eaten (appear and shrink as head passes) -->
+  <!-- dots eaten -->
   <g fill="#FFB454" filter="url(#snglow)">
     <circle cx="240" cy="100" r="3"><animate attributeName="r" values="3;3;0;3" keyTimes="0;0.18;0.2;0.25" dur="5s" repeatCount="indefinite"/></circle>
     <circle cx="440" cy="100" r="3"><animate attributeName="r" values="3;3;0;3" keyTimes="0;0.36;0.38;0.43" dur="5s" repeatCount="indefinite"/></circle>

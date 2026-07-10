@@ -57,10 +57,10 @@
 
   .crt-flicker{
     position:fixed; inset:0; pointer-events:none; z-index:102;
-    background:rgba(79,214,255,0.015);
-    animation:flicker 0.15s infinite;
+    background:rgba(79,214,255,0.008);
+    animation:flicker 0.2s infinite;
   }
-  @keyframes flicker{ 0%{opacity:0.92;} 50%{opacity:1;} 100%{opacity:0.96;} }
+  @keyframes flicker{ 0%{opacity:0.95;} 33%{opacity:1;} 66%{opacity:0.97;} 100%{opacity:1;} }
 
   .win{
     position:relative; z-index:1;
@@ -3137,9 +3137,11 @@ async function bootSequence(){
   setTimeout(() => { bootEl.style.display = 'none'; state.bootDone = true; }, 500);
 
   print('<span class="dim glitch">booting memory.bin ... done</span>');
-  print('<span class="dim">loaded 8 objects, 5 exported symbols</span>');
+  print('<span class="dim">loaded 18 symbols, 13 games, 40 easter eggs</span>');
   blank();
-  print('Type <span class="cyan">help</span> to see available commands.');
+  print('<span class="cyan">welcome to memory.bin.</span>');
+  blank();
+  print('Type <span class="cyan">help</span> for commands, <span class="cyan">games</span> to play, or just explore.');
   print('<span class="dim">tab to autocomplete / up-down for history / ctrl+l to clear</span>');
   print('<span class="dim">hint: there are easter eggs. try weird things.</span>');
   blank();
