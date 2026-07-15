@@ -143,17 +143,6 @@ Competitive programming analytics. LeetCode, Codeforces, CodeChef, HackerRank un
 | [EdgeVision](https://github.com/Dhuvie/EdgeVision) | TypeScript | Edge-deployed computer vision |
 | [Codeolio](https://github.com/Dhuvie/Codeolio) | TypeScript | Developer portfolio and snippet tooling |
 | [deadman-crypto-switch](https://github.com/Dhuvie/deadman-crypto-switch) | TypeScript | Dead man's switch for crypto operations |
-| [G0DM0D3](https://github.com/Dhuvie/G0DM0D3) | TypeScript | Liberated AI chat |
-| [ai-engineering-interview-questions](https://github.com/Dhuvie/ai-engineering-interview-questions) | Markdown | AI engineering interview cheat sheet |
-| [free-llm-api-resources](https://github.com/Dhuvie/free-llm-api-resources) | Python | Curated free LLM inference resources |
-| [CommBank-Server](https://github.com/Dhuvie/CommBank-Server) | C# | Banking backend |
-| [CommBank-Web](https://github.com/Dhuvie/CommBank-Web) | TypeScript | Banking web frontend |
-| [school-api-assignment](https://github.com/Dhuvie/school-api-assignment) | JavaScript | API assignment |
-| [claw-code-real](https://github.com/Dhuvie/claw-code-real) | Python | Better harness tools for Claude Code |
-| [claude-code-leak](https://github.com/Dhuvie/claude-code-leak) | TypeScript | Agentic terminal coding tool |
-| [claude-code](https://github.com/Dhuvie/claude-code) | JavaScript | Source reconstructed from source maps |
-| [portfolio](https://github.com/Dhuvie/portfolio) | CSS | The portfolio site |
-
 <br/>
 
 <div align="center">
