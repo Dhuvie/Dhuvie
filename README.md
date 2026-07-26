@@ -20,7 +20,7 @@
 <tr>
 <td width="35%">
 
-<img src="portrait_pixel_build.svg" width="60%" />
+<img src="portrait_pixel_build.svg" width="100%" />
 
 </td>
 <td width="65%">
