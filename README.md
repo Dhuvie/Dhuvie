@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://dhuvie.github.io/Dhuvie/terminal.html">
-    <img src="./banner.svg" alt="Dhruv Narayan Bajaj" width="60%" />
+    <img src="./banner.svg" alt="Dhruv Narayan Bajaj" width="100%" />
   </a>
 </div>
 
@@ -20,7 +20,7 @@
 <tr>
 <td width="35%">
 
-<img src="portrait_pixel_build.svg" width="100%" />
+<img src="portrait_pixel_build.svg" width="60%" />
 
 </td>
 <td width="65%">
