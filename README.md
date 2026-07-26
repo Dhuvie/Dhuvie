@@ -25,11 +25,9 @@
 </td>
 <td width="65%">
 <div align="center">
-**Dhruv Narayan Bajaj / Full-Stack Engineer / Systems Programmer**
+Dhruv Narayan Bajaj / Full-Stack Engineer / Systems Programmer
 
-I ship products end to end, then build the infrastructure underneath them.
-Next.js and TypeScript on the product side. C++, OpenGL, and PyTorch
-on the systems side. Machine learning where it earns its keep.
+I ship products end to end, then build the infrastructure underneath them. Next.js and TypeScript on the product side. C++, OpenGL, and PyTorch on the systems side. Machine learning where it earns its keep.
 </div>
 </td>
 
