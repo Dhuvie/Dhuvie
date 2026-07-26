@@ -18,20 +18,21 @@
 
 <table>
 <tr>
-<td width="65%">
-
-**Dhruv Narayan Bajaj** &nbsp;/&nbsp; Full-Stack Engineer &nbsp;/&nbsp; Systems Programmer
-
-I ship products end to end, then build the infrastructure underneath them.
-Next.js and TypeScript on the product side. Rust, C++, OpenGL, and PyTorch
-on the systems side. Machine learning where it earns its keep.
-
-</td>
 <td width="35%">
 
 <img src="portrait_pixel_build.svg" width="100%" />
 
 </td>
+<td width="65%">
+<div align="center">
+**Dhruv Narayan Bajaj** &nbsp;/&nbsp; Full-Stack Engineer &nbsp;/&nbsp; Systems Programmer
+
+I ship products end to end, then build the infrastructure underneath them.
+Next.js and TypeScript on the product side. Rust, C++, OpenGL, and PyTorch
+on the systems side. Machine learning where it earns its keep.
+</div>
+</td>
+
 </tr>
 </table>
 
