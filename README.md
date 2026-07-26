@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://dhuvie.github.io/Dhuvie/terminal.html">
-    <img src="./banner.svg" alt="Dhruv Narayan Bajaj" width="100%" />
+    <img src="./banner.svg" alt="Dhruv Narayan Bajaj" width="60%" />
   </a>
 </div>
 
@@ -28,7 +28,7 @@
 **Dhruv Narayan Bajaj / Full-Stack Engineer / Systems Programmer**
 
 I ship products end to end, then build the infrastructure underneath them.
-Next.js and TypeScript on the product side. Rust, C++, OpenGL, and PyTorch
+Next.js and TypeScript on the product side. C++, OpenGL, and PyTorch
 on the systems side. Machine learning where it earns its keep.
 </div>
 </td>
